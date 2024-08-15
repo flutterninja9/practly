@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:practly/app/practly_app.dart';
-import 'package:practly/service_locator/service_locator.dart';
+import 'package:speakease/app/practly_app.dart';
+import 'package:speakease/service_locator/service_locator.dart';
 
 Future<void> main() async {
   await initializeDeps();

@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_tts/flutter_tts.dart';
-import 'package:practly/common/enums.dart';
-import 'package:practly/service_locator/service_locator.dart';
-import 'package:practly/services/gemini_service.dart';
+import 'package:speakease/common/enums.dart';
+import 'package:speakease/service_locator/service_locator.dart';
+import 'package:speakease/services/gemini_service.dart';
 
 class SpeakOutAloudScreen extends StatefulWidget {
   const SpeakOutAloudScreen({super.key});
