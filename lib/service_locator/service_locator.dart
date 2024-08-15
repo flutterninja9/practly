@@ -1,6 +1,6 @@
 import 'package:get_it/get_it.dart';
 import 'package:google_gemini/google_gemini.dart';
-import 'package:speakease/services/gemini_service.dart';
+import 'package:practly/services/gemini_service.dart';
 
 final locator = GetIt.I;
 

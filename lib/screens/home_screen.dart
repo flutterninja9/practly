@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:speakease/screens/speak_out_aloud_screen.dart';
-import 'package:speakease/screens/word_of_the_day_screen.dart';
+import 'package:practly/screens/speak_out_aloud_screen.dart';
+import 'package:practly/screens/word_of_the_day_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -38,7 +38,7 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Speak Ease'),
+        title: const Text('Practly'),
       ),
       body: LayoutBuilder(
         builder: (context, constraints) {
