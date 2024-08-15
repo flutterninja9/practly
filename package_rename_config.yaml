@@ -1,0 +1,4 @@
+package_rename_config:
+  android:
+    app_name: SpeakEase
+    package_name: in.bloomsoft.speakease
