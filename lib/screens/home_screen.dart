@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:practly/screens/quiz_screen.dart';
 import 'package:practly/screens/speak_out_aloud_screen.dart';
 import 'package:practly/screens/word_of_the_day_screen.dart';
 
@@ -15,6 +16,7 @@ class _HomeScreenState extends State<HomeScreen> {
   final List<Widget> _screens = [
     const WordOfTheDayScreen(),
     const SpeakOutAloudScreen(),
+    const QuizScreen(),
   ];
 
   final List<BottomNavigationBarItem> _navItems = const [
@@ -25,6 +27,10 @@ class _HomeScreenState extends State<HomeScreen> {
     BottomNavigationBarItem(
       icon: Icon(Icons.record_voice_over),
       label: 'Speak',
+    ),
+    BottomNavigationBarItem(
+      icon: Icon(Icons.quiz),
+      label: 'Quiz',
     ),
   ];
 
