@@ -1,10 +1,10 @@
 import 'dart:async';
-import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:practly/core/enums/enums.dart';
 import 'package:practly/di/di.dart';
 import 'package:practly/core/services/gemini_service.dart';
+import 'package:practly/features/quiz/data/quiz_model.dart';
 
 class QuizScreen extends StatefulWidget {
   const QuizScreen({super.key});
@@ -15,9 +15,7 @@ class QuizScreen extends StatefulWidget {
 
 class _QuizScreenState extends State<QuizScreen> {
   WordComplexity _complexity = WordComplexity.easy;
-  String _sentence = '';
-  Map<String, String> _options = {};
-  String _correctAnswer = '';
+  QuizModel? quizModel;
   String? _selectedAnswer;
   bool _isLoading = false;
   bool _isAnswerSelected = false;
@@ -62,12 +60,8 @@ class _QuizScreenState extends State<QuizScreen> {
   }
 
   void _parseQuizResponse(String response) {
-    final Map<String, dynamic> data = jsonDecode(response);
-
     setState(() {
-      _sentence = data['sentence'] ?? '';
-      _options = Map<String, String>.from(data['options'] ?? {});
-      _correctAnswer = data['correct_answer'] ?? '';
+      quizModel = QuizModel.fromJson(response);
     });
   }
 
@@ -167,31 +161,32 @@ class _QuizScreenState extends State<QuizScreen> {
             child: Padding(
               padding: const EdgeInsets.all(16.0),
               child: Text(
-                _sentence,
+                quizModel!.sentence,
                 style: Theme.of(context).textTheme.headlineSmall,
               ),
             ),
           ),
           const SizedBox(height: 20),
-          ..._options.entries.map((entry) {
-            final bool isSelected = _selectedAnswer == entry.key;
-            final bool isCorrect = entry.key == _correctAnswer;
-            final Color? tileColor = _isAnswerSelected
-                ? (isCorrect
-                    ? const Color(0xFFA5D6A7)
-                    : isSelected
-                        ? const Color(0xFFEF9A9A)
-                        : null)
-                : null;
+          ...quizModel?.options.entries.map((entry) {
+                final bool isSelected = _selectedAnswer == entry.key;
+                final bool isCorrect = entry.key == quizModel?.correctAnswer;
+                final Color? tileColor = _isAnswerSelected
+                    ? (isCorrect
+                        ? const Color(0xFFA5D6A7)
+                        : isSelected
+                            ? const Color(0xFFEF9A9A)
+                            : null)
+                    : null;
 
-            return ListTile(
-              title: Text('${entry.key}) ${entry.value}'),
-              tileColor: tileColor,
-              onTap: _isAnswerSelected
-                  ? null
-                  : () => _handleOptionSelected(entry.key),
-            );
-          }),
+                return ListTile(
+                  title: Text('${entry.key}) ${entry.value}'),
+                  tileColor: tileColor,
+                  onTap: _isAnswerSelected
+                      ? null
+                      : () => _handleOptionSelected(entry.key),
+                );
+              }) ??
+              [],
         ],
       ),
     );
