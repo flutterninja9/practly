@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "1010037891660",
+    "project_id": "speakease-5edcf",
+    "storage_bucket": "speakease-5edcf.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1010037891660:android:54bcf4316aee9dcd778ae9",
+        "android_client_info": {
+          "package_name": "in.bloomsoft.speakease"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBGJJxwuuhHa7jb5_T4WiOpihaNSeY3Zr8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

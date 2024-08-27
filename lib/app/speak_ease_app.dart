@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:practly/screens/home_screen.dart';
 
-class PractlyApp extends StatelessWidget {
-  const PractlyApp({super.key});
+class SpeakEaseApp extends StatelessWidget {
+  const SpeakEaseApp({super.key});
 
   @override
   Widget build(BuildContext context) {
