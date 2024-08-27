@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:practly/screens/home_screen.dart';
+import 'package:practly/features/home/presentation/home_screen.dart';
 
 class SpeakEaseApp extends StatelessWidget {
   const SpeakEaseApp({super.key});

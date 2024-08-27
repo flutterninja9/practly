@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:practly/screens/quiz_screen.dart';
-import 'package:practly/screens/speak_out_aloud_screen.dart';
-import 'package:practly/screens/word_of_the_day_screen.dart';
+import 'package:practly/features/quiz/presentation/quiz_screen.dart';
+import 'package:practly/features/speak_out_aloud/presentation/speak_out_aloud_screen.dart';
+import 'package:practly/features/word_of_the_day/presentation/word_of_the_day_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
