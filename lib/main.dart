@@ -3,6 +3,7 @@ import 'package:practly/app/practly_app.dart';
 import 'package:practly/service_locator/service_locator.dart';
 
 Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
   await initializeDeps();
 
   runApp(const PractlyApp());
