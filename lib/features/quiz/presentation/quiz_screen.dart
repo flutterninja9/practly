@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'dart:convert';
-import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:practly/core/enums/enums.dart';
@@ -63,7 +62,6 @@ class _QuizScreenState extends State<QuizScreen> {
   }
 
   void _parseQuizResponse(String response) {
-    log(response);
     final Map<String, dynamic> data = jsonDecode(response);
 
     setState(() {

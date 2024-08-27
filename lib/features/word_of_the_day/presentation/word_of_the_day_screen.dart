@@ -1,10 +1,9 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_tts/flutter_tts.dart';
 import 'package:practly/core/enums/enums.dart';
 import 'package:practly/di/di.dart';
 import 'package:practly/core/services/gemini_service.dart';
+import 'package:practly/features/word_of_the_day/data/word_of_the_day_model.dart';
 
 class WordOfTheDayScreen extends StatefulWidget {
   const WordOfTheDayScreen({super.key});
@@ -19,10 +18,7 @@ class _WordOfTheDayScreenState extends State<WordOfTheDayScreen>
   late Animation<double> _animation;
   late final FlutterTts _flutterTts;
 
-  String _word = '';
-  String _definition = '';
-  String _example = '';
-  String _usage = '';
+  WordOfTheDayModel? wordOfTheDay;
   bool _isLoading = false;
   WordComplexity _complexity = WordComplexity.easy;
 
@@ -63,12 +59,8 @@ class _WordOfTheDayScreenState extends State<WordOfTheDayScreen>
   }
 
   void _parseResponse(String response) {
-    final Map<String, dynamic> data = json.decode(response);
     setState(() {
-      _word = data['word'] ?? '';
-      _definition = data['definition'] ?? '';
-      _example = data['example'] ?? '';
-      _usage = data['usage'] ?? '';
+      wordOfTheDay = WordOfTheDayModel.fromJson(response);
     });
   }
 
@@ -124,8 +116,8 @@ class _WordOfTheDayScreenState extends State<WordOfTheDayScreen>
   }
 
   Future<void> _speakSentence() async {
-    if (_word.isNotEmpty) {
-      await _flutterTts.speak(_word);
+    if (wordOfTheDay != null && (wordOfTheDay?.word ?? '').isNotEmpty) {
+      await _flutterTts.speak(wordOfTheDay!.word);
     }
   }
 
@@ -160,12 +152,12 @@ class _WordOfTheDayScreenState extends State<WordOfTheDayScreen>
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  _word,
+                  wordOfTheDay!.word,
                   style: Theme.of(context).textTheme.headlineSmall,
                 ),
                 const SizedBox(height: 10),
                 Text(
-                  _definition,
+                  wordOfTheDay!.definition,
                   style: Theme.of(context).textTheme.bodySmall,
                 ),
                 const SizedBox(height: 20),
@@ -174,7 +166,7 @@ class _WordOfTheDayScreenState extends State<WordOfTheDayScreen>
                   style: Theme.of(context).textTheme.bodySmall?.copyWith(
                       fontWeight: FontWeight.bold, color: Colors.blue[700]),
                 ),
-                Text(_example,
+                Text(wordOfTheDay!.example,
                     style: Theme.of(context)
                         .textTheme
                         .bodySmall
@@ -185,7 +177,8 @@ class _WordOfTheDayScreenState extends State<WordOfTheDayScreen>
                   style: Theme.of(context).textTheme.bodySmall?.copyWith(
                       fontWeight: FontWeight.bold, color: Colors.blue[700]),
                 ),
-                Text(_usage, style: Theme.of(context).textTheme.bodySmall),
+                Text(wordOfTheDay!.usage,
+                    style: Theme.of(context).textTheme.bodySmall),
               ],
             ),
           ),
