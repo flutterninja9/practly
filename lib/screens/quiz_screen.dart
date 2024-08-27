@@ -3,9 +3,9 @@ import 'dart:convert';
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
-import 'package:practly/common/enums.dart';
-import 'package:practly/service_locator/service_locator.dart';
-import 'package:practly/services/gemini_service.dart';
+import 'package:practly/core/enums/enums.dart';
+import 'package:practly/di/di.dart';
+import 'package:practly/core/services/gemini_service.dart';
 
 class QuizScreen extends StatefulWidget {
   const QuizScreen({super.key});

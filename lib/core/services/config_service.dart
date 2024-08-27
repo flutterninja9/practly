@@ -1,9 +1,9 @@
 import 'dart:convert';
 
 import 'package:firebase_remote_config/firebase_remote_config.dart';
-import 'package:practly/config/config.dart';
+import 'package:practly/core/config/config.dart';
 
-import 'package:practly/config/env.dart';
+import 'package:practly/core/env/env.dart';
 
 class ConfigService {
   final FirebaseRemoteConfig remoteConfig;

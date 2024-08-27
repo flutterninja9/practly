@@ -1,5 +1,5 @@
 import 'package:google_gemini/google_gemini.dart';
-import 'package:practly/common/enums.dart';
+import 'package:practly/core/enums/enums.dart';
 
 class GenerationService {
   final GoogleGemini _gemini;
