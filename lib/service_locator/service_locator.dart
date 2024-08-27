@@ -12,7 +12,7 @@ final locator = GetIt.I;
 
 Future<void> initializeDeps() async {
   await setupFirebase();
-  await setupConfigs();
+  await loadConfigs();
   setupGemini();
   setupGenerationService();
 }
@@ -21,7 +21,7 @@ Future<void> setupFirebase() async {
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
 }
 
-Future<void> setupConfigs() async {
+Future<void> loadConfigs() async {
   final remoteConfig = FirebaseRemoteConfig.instance;
 
   await remoteConfig.setConfigSettings(RemoteConfigSettings(
@@ -39,7 +39,7 @@ Future<void> setupConfigs() async {
 
 void setupGemini() {
   final gemini = GoogleGemini(
-    apiKey: const String.fromEnvironment("GEMINI_KEY"),
+    apiKey: locator.get<Config>().geminiKey,
   );
 
   locator.registerSingleton<GoogleGemini>(gemini);
