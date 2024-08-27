@@ -3,8 +3,8 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:practly/core/enums/enums.dart';
 import 'package:practly/di/di.dart';
-import 'package:practly/core/services/gemini_service.dart';
 import 'package:practly/features/quiz/data/quiz_model.dart';
+import 'package:practly/features/quiz/data/i_quiz_remote_data_source.dart';
 
 class QuizScreen extends StatefulWidget {
   const QuizScreen({super.key});
@@ -30,7 +30,7 @@ class _QuizScreenState extends State<QuizScreen> {
 
   @override
   void dispose() {
-    _timer?.cancel(); // Cancel the timer if it exists
+    _timer?.cancel();
     super.dispose();
   }
 
@@ -44,9 +44,12 @@ class _QuizScreenState extends State<QuizScreen> {
 
     try {
       final response = await locator
-          .get<GenerationService>()
+          .get<IQuizRemoteDataSource>()
           .generateQuiz(complexity: _complexity);
-      _parseQuizResponse(response);
+
+      setState(() {
+        quizModel = response;
+      });
     } catch (e) {
       if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
@@ -57,12 +60,6 @@ class _QuizScreenState extends State<QuizScreen> {
         _isLoading = false;
       });
     }
-  }
-
-  void _parseQuizResponse(String response) {
-    setState(() {
-      quizModel = QuizModel.fromJson(response);
-    });
   }
 
   void _handleOptionSelected(String selectedOption) {

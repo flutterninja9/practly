@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_tts/flutter_tts.dart';
 import 'package:practly/core/enums/enums.dart';
 import 'package:practly/di/di.dart';
-import 'package:practly/core/services/gemini_service.dart';
+import 'package:practly/features/word_of_the_day/data/i_word_remote_data_source.dart';
 import 'package:practly/features/word_of_the_day/data/word_of_the_day_model.dart';
 
 class WordOfTheDayScreen extends StatefulWidget {
@@ -43,9 +43,12 @@ class _WordOfTheDayScreenState extends State<WordOfTheDayScreen>
 
     try {
       final result = await locator
-          .get<GenerationService>()
+          .get<IWordRemoteDataSource>()
           .generateWordOfTheDay(complexity: _complexity);
-      _parseResponse(result);
+
+      setState(() {
+        wordOfTheDay = result;
+      });
     } catch (e) {
       if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
@@ -56,12 +59,6 @@ class _WordOfTheDayScreenState extends State<WordOfTheDayScreen>
         _isLoading = false;
       });
     }
-  }
-
-  void _parseResponse(String response) {
-    setState(() {
-      wordOfTheDay = WordOfTheDayModel.fromJson(response);
-    });
   }
 
   @override

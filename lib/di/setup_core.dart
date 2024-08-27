@@ -6,13 +6,11 @@ import 'package:practly/core/env/env.dart';
 import 'package:practly/di/di.dart';
 import 'package:practly/firebase_options.dart';
 import 'package:practly/core/services/config_service.dart';
-import 'package:practly/core/services/gemini_service.dart';
 
 Future<void> setupCore() async {
   await _initializeFirebase();
   await _loadConfigs();
   _setupGemini();
-  _setupGenerationService();
 }
 
 Future<void> _initializeFirebase() async {
@@ -41,9 +39,4 @@ void _setupGemini() {
   );
 
   locator.registerSingleton<GoogleGemini>(gemini);
-}
-
-void _setupGenerationService() {
-  locator
-      .registerSingleton<GenerationService>(GenerationService(locator.get()));
 }
