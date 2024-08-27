@@ -54,7 +54,7 @@ android {
                 keyAlias System.getenv()["CM_KEY_ALIAS"]
                 keyPassword System.getenv()["CM_KEY_PASSWORD"]
             } else {
-                storeFile file(System.getenv()["LC_KEYSTORE_PATH"])
+                storeFile file("keystore_name.jks")
                 storePassword System.getenv()["LC_KEY_PASSWORD"]
                 keyAlias System.getenv()["LC_KEY_ALIAS"]
                 keyPassword System.getenv()["LC_KEY_PASSWORD"]
