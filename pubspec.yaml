@@ -39,6 +39,8 @@ dependencies:
   get_it: ^7.7.0
   flutter_tts: ^4.0.2
   firebase_core: ^2.24.2
+  firebase_remote_config: ^4.3.8
+  json_annotation: ^4.9.0
 
 dev_dependencies:
   flutter_test:
@@ -52,6 +54,8 @@ dev_dependencies:
   flutter_lints: ^3.0.0
   package_rename: ^1.7.1
   icons_launcher: ^2.1.7
+  build_runner: ^2.4.12
+  json_serializable: ^6.8.0
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
