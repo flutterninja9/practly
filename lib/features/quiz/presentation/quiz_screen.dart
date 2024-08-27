@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:practly/core/enums/enums.dart';
 import 'package:practly/di/di.dart';
 import 'package:practly/features/quiz/data/quiz_model.dart';
-import 'package:practly/features/quiz/data/i_quiz_remote_data_source.dart';
+import 'package:practly/features/quiz/data/quiz_repository.dart';
 
 class QuizScreen extends StatefulWidget {
   const QuizScreen({super.key});
@@ -43,9 +43,8 @@ class _QuizScreenState extends State<QuizScreen> {
     });
 
     try {
-      final response = await locator
-          .get<IQuizRemoteDataSource>()
-          .generateQuiz(complexity: _complexity);
+      final response =
+          await locator.get<QuizRepository>().getQuiz(complexity: _complexity);
 
       setState(() {
         quizModel = response;

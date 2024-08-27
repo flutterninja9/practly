@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_tts/flutter_tts.dart';
 import 'package:practly/core/enums/enums.dart';
 import 'package:practly/di/di.dart';
-import 'package:practly/features/word_of_the_day/data/i_word_remote_data_source.dart';
 import 'package:practly/features/word_of_the_day/data/word_of_the_day_model.dart';
+import 'package:practly/features/word_of_the_day/data/word_repository.dart';
 
 class WordOfTheDayScreen extends StatefulWidget {
   const WordOfTheDayScreen({super.key});
@@ -42,9 +42,8 @@ class _WordOfTheDayScreenState extends State<WordOfTheDayScreen>
     _animationController.forward(from: 0.0);
 
     try {
-      final result = await locator
-          .get<IWordRemoteDataSource>()
-          .generateWordOfTheDay(complexity: _complexity);
+      final result =
+          await locator.get<WordRepository>().getWord(complexity: _complexity);
 
       setState(() {
         wordOfTheDay = result;

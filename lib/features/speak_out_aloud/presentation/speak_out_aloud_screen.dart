@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_tts/flutter_tts.dart';
 import 'package:practly/core/enums/enums.dart';
 import 'package:practly/di/di.dart';
-import 'package:practly/features/speak_out_aloud/data/i_sentence_remote_data_source.dart';
+import 'package:practly/features/speak_out_aloud/data/sentence_repository.dart';
 import 'package:practly/features/speak_out_aloud/data/speak_out_aloud_model.dart';
 
 class SpeakOutAloudScreen extends StatefulWidget {
@@ -32,8 +32,8 @@ class _SpeakOutAloudScreenState extends State<SpeakOutAloudScreen> {
 
     try {
       final response = await locator
-          .get<ISentenceRemoteDataSource>()
-          .generateSentence(complexity: _complexity);
+          .get<SentenceRepository>()
+          .getSentence(complexity: _complexity);
 
       setState(() {
         speakModel = response;
