@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_tts/flutter_tts.dart';
 import 'package:practly/common/enums.dart';
@@ -39,7 +41,7 @@ class _SpeakOutAloudScreenState extends State<SpeakOutAloudScreen> {
     } catch (e) {
       if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Error generating sentence: $e')),
+        const SnackBar(content: Text('Error generating sentence')),
       );
     } finally {
       setState(() {
@@ -49,22 +51,11 @@ class _SpeakOutAloudScreenState extends State<SpeakOutAloudScreen> {
   }
 
   void _parseSentenceResponse(String response) {
-    final lines = response.split('\n');
+    final Map<String, dynamic> data = json.decode(response);
     setState(() {
-      _sentence = '';
-      _explanation = '';
-      _pronunciationTip = '';
-
-      for (var line in lines) {
-        if (line.startsWith('Practice Sentence:')) {
-          _sentence = line.substring('Practice Sentence:'.length).trim();
-        } else if (line.startsWith('Explanation:')) {
-          _explanation = line.substring('Explanation:'.length).trim();
-        } else if (line.startsWith('Pronunciation Tip:')) {
-          _pronunciationTip =
-              line.substring('Pronunciation Tip:'.length).trim();
-        }
-      }
+      _sentence = data['sentence'] ?? '';
+      _explanation = data['explanation'] ?? '';
+      _pronunciationTip = data['tip'] ?? '';
     });
   }
 
