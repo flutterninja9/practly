@@ -1,8 +1,10 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_remote_config/firebase_remote_config.dart';
+import 'package:flutter_tts/flutter_tts.dart';
 import 'package:google_gemini/google_gemini.dart';
 import 'package:practly/core/config/config.dart';
 import 'package:practly/core/env/env.dart';
+import 'package:practly/core/services/speech_service.dart';
 import 'package:practly/di/di.dart';
 import 'package:practly/firebase_options.dart';
 import 'package:practly/core/services/config_service.dart';
@@ -11,6 +13,7 @@ Future<void> setupCore() async {
   await _initializeFirebase();
   await _loadConfigs();
   _setupGemini();
+  _setupSpeechService();
 }
 
 Future<void> _initializeFirebase() async {
@@ -39,4 +42,8 @@ void _setupGemini() {
   );
 
   locator.registerSingleton<GoogleGemini>(gemini);
+}
+
+void _setupSpeechService() {
+  locator.registerSingleton<SpeechService>(SpeechService(FlutterTts()));
 }

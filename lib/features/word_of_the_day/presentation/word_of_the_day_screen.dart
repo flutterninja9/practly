@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_tts/flutter_tts.dart';
 import 'package:practly/core/async/async_page.dart';
+import 'package:practly/core/services/speech_service.dart';
 import 'package:practly/core/widgets/complexity_selector.dart';
 import 'package:practly/di/di.dart';
 import 'package:practly/features/word_of_the_day/buisness_logic/word_of_the_day_notifier.dart';
@@ -16,14 +16,14 @@ class WordOfTheDayScreen extends StatefulWidget {
 class _WordOfTheDayScreenState extends State<WordOfTheDayScreen>
     with SingleTickerProviderStateMixin {
   late final WordOfTheDayNotifier notifier;
-  late final FlutterTts _flutterTts;
+  late final SpeechService speechService;
 
   @override
   void initState() {
     super.initState();
     notifier = locator.get<WordOfTheDayNotifier>();
     notifier.generateWord();
-    _flutterTts = FlutterTts();
+    speechService = locator.get();
   }
 
   @override
@@ -84,7 +84,7 @@ class _WordOfTheDayScreenState extends State<WordOfTheDayScreen>
                               child: const Text('Generate New Word'),
                             ),
                             ElevatedButton(
-                              onPressed: () => _speakWord(model.word),
+                              onPressed: () => speechService.speak(model.word),
                               child: const Text('Hear Word'),
                             ),
                           ],
@@ -97,10 +97,6 @@ class _WordOfTheDayScreenState extends State<WordOfTheDayScreen>
         ),
       ),
     );
-  }
-
-  Future<void> _speakWord(String word) async {
-    await _flutterTts.speak(word);
   }
 
   Widget _buildWordContent(WordOfTheDayModel model) {

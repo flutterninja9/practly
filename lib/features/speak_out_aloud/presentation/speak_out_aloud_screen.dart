@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_tts/flutter_tts.dart';
 import 'package:practly/core/async/async_page.dart';
+import 'package:practly/core/services/speech_service.dart';
 import 'package:practly/core/widgets/complexity_selector.dart';
 import 'package:practly/di/di.dart';
 import 'package:practly/features/speak_out_aloud/buisness_logic/speak_out_aloud_notifier.dart';
@@ -15,18 +15,14 @@ class SpeakOutAloudScreen extends StatefulWidget {
 
 class _SpeakOutAloudScreenState extends State<SpeakOutAloudScreen> {
   late final SpeakOutAloudNotifier notifier;
-  late final FlutterTts _flutterTts;
+  late final SpeechService speechService;
 
   @override
   void initState() {
     super.initState();
     notifier = locator.get();
     notifier.generateSentence();
-    _flutterTts = FlutterTts();
-  }
-
-  Future<void> _speakSentence(String sentence) async {
-    await _flutterTts.speak(sentence);
+    speechService = locator.get();
   }
 
   @override
@@ -83,7 +79,8 @@ class _SpeakOutAloudScreenState extends State<SpeakOutAloudScreen> {
                             child: const Text('Generate New Sentence'),
                           ),
                           ElevatedButton(
-                            onPressed: () => _speakSentence(model.sentence),
+                            onPressed: () =>
+                                speechService.speak(model.sentence),
                             child: const Text('Hear Sentence'),
                           ),
                         ],
