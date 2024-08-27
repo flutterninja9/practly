@@ -1,10 +1,9 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_tts/flutter_tts.dart';
 import 'package:practly/core/enums/enums.dart';
 import 'package:practly/di/di.dart';
 import 'package:practly/core/services/gemini_service.dart';
+import 'package:practly/features/speak_out_aloud/data/speak_out_aloud_model.dart';
 
 class SpeakOutAloudScreen extends StatefulWidget {
   const SpeakOutAloudScreen({super.key});
@@ -15,9 +14,7 @@ class SpeakOutAloudScreen extends StatefulWidget {
 
 class _SpeakOutAloudScreenState extends State<SpeakOutAloudScreen> {
   WordComplexity _complexity = WordComplexity.easy;
-  String _sentence = '';
-  String _explanation = '';
-  String _pronunciationTip = '';
+  SpeakOutAloudModel? speakModel;
   bool _isLoading = false;
   late final FlutterTts _flutterTts;
 
@@ -51,17 +48,12 @@ class _SpeakOutAloudScreenState extends State<SpeakOutAloudScreen> {
   }
 
   void _parseSentenceResponse(String response) {
-    final Map<String, dynamic> data = json.decode(response);
-    setState(() {
-      _sentence = data['sentence'] ?? '';
-      _explanation = data['explanation'] ?? '';
-      _pronunciationTip = data['tip'] ?? '';
-    });
+    speakModel = SpeakOutAloudModel.fromJson(response);
   }
 
   Future<void> _speakSentence() async {
-    if (_sentence.isNotEmpty) {
-      await _flutterTts.speak(_sentence);
+    if (speakModel != null && speakModel!.sentence.isNotEmpty) {
+      await _flutterTts.speak(speakModel!.sentence);
     }
   }
 
@@ -130,7 +122,7 @@ class _SpeakOutAloudScreenState extends State<SpeakOutAloudScreen> {
             child: Padding(
               padding: const EdgeInsets.all(16.0),
               child: Text(
-                _sentence,
+                speakModel!.sentence,
                 style: Theme.of(context).textTheme.headlineSmall,
               ),
             ),
@@ -143,7 +135,7 @@ class _SpeakOutAloudScreenState extends State<SpeakOutAloudScreen> {
                 .bodySmall
                 ?.copyWith(fontWeight: FontWeight.bold),
           ),
-          Text(_explanation),
+          Text(speakModel!.explanation),
           const SizedBox(height: 20),
           Text(
             'Pronunciation Tip:',
@@ -152,7 +144,7 @@ class _SpeakOutAloudScreenState extends State<SpeakOutAloudScreen> {
                 .bodyMedium
                 ?.copyWith(fontWeight: FontWeight.bold),
           ),
-          Text(_pronunciationTip),
+          Text(speakModel!.tip),
         ],
       ),
     );
