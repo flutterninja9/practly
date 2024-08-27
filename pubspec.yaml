@@ -43,6 +43,8 @@ dependencies:
   json_annotation: ^4.9.0
   flutter_native_splash: ^2.4.1
   freezed_annotation: ^2.4.4
+  firebase_crashlytics: ^3.4.9
+  firebase_analytics: ^10.8.0
 
 dev_dependencies:
   flutter_test:
