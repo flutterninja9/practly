@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_tts/flutter_tts.dart';
 import 'package:practly/common/enums.dart';
@@ -40,10 +42,6 @@ class _WordOfTheDayScreenState extends State<WordOfTheDayScreen>
   Future<void> _generateWord() async {
     setState(() {
       _isLoading = true;
-      _word = 'Loading...';
-      _definition = '';
-      _example = '';
-      _usage = '';
     });
     _animationController.forward(from: 0.0);
 
@@ -53,10 +51,10 @@ class _WordOfTheDayScreenState extends State<WordOfTheDayScreen>
           .generateWordOfTheDay(complexity: _complexity);
       _parseResponse(result);
     } catch (e) {
-      setState(() {
-        _word = 'Error';
-        _definition = 'Failed to generate word. Please try again.';
-      });
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Error generating word')),
+      );
     } finally {
       setState(() {
         _isLoading = false;
@@ -65,19 +63,12 @@ class _WordOfTheDayScreenState extends State<WordOfTheDayScreen>
   }
 
   void _parseResponse(String response) {
-    final lines = response.split('\n');
+    final Map<String, dynamic> data = json.decode(response);
     setState(() {
-      for (var line in lines) {
-        if (line.startsWith('Word:')) {
-          _word = line.substring(5).trim();
-        } else if (line.startsWith('Definition:')) {
-          _definition = line.substring(11).trim();
-        } else if (line.startsWith('Example:')) {
-          _example = line.substring(8).trim();
-        } else if (line.startsWith('Usage:')) {
-          _usage = line.substring(6).trim();
-        }
-      }
+      _word = data['word'] ?? '';
+      _definition = data['definition'] ?? '';
+      _example = data['example'] ?? '';
+      _usage = data['usage'] ?? '';
     });
   }
 

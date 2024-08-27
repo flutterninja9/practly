@@ -53,7 +53,7 @@ class _QuizScreenState extends State<QuizScreen> {
     } catch (e) {
       if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Error generating quiz: $e')),
+        const SnackBar(content: Text('Error generating quiz')),
       );
     } finally {
       setState(() {

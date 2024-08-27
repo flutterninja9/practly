@@ -9,23 +9,37 @@ class GenerationService {
   String _promptForWOTD(WordComplexity complexity) => '''
   You are a helpful language learning assistant. Your task is to generate a random word to improve the user's vocabulary based on the given complexity level: {complexity} (easy/medium/hard).
 
-  Generate a random word appropriate for the {complexity} level.
+  Generate a random word appropriate for the ${complexity.name} level.
   Provide a clear, concise definition of the word.
   Use the word in a simple example sentence.
   Offer a brief explanation of how the word is commonly used or any notable connotations.
 
-  Your response should follow this format:
-  Word: [Generated Word]
-  Definition: [Clear, concise definition]
-  Example: [Simple sentence using the word]
-  Usage: [Brief explanation of common usage or connotations]
   Remember:
 
   For "easy" words, use common, everyday vocabulary suitable for beginners.
   For "medium" words, use more advanced vocabulary that an intermediate learner might encounter.
   For "hard" words, use sophisticated or specialized vocabulary that would challenge advanced learners.
 
-  Generate a word of ${complexity.name} level.
+  Output Format:
+
+    {
+    "word": "[Generated word]",
+    "definition": "[Clear, concise definition]",
+    "example": "[Sentence using the word]",
+    "usage": "[Brief explanation of common usage or connotations]"
+    }
+
+    Ensure that any double quotes inside the sentence, explanation, or tip are properly escaped with a backslash (\\) to make the JSON valid.
+
+    Here is an example of a properly formatted JSON response:
+      {
+  "word": "Quaint",
+  "definition": "Pleasingly old-fashioned",
+  "example": "The quaint little cottage was a welcome sight after a long day of travel.",
+  "usage": "Quaint is often used to describe things that are charming or nostalgic, especially buildings, towns, or objects that evoke a sense of the past."
+}
+
+    Please ensure that the JSON you provide is well-formed and safe to parse in a programming environment.
 ''';
 
   String _promptForSentence(WordComplexity complexity) => '''
@@ -65,7 +79,7 @@ class GenerationService {
     "explanation": "This sentence is straightforward and uses common vocabulary. The only potentially challenging word is 'store,' which some learners may pronounce as 'stoah' instead of 'stawr.'",
     "tip": "To pronounce 'store' correctly, focus on making the 'aw' sound in the middle of the word, as in 'saw.'"
   }
-  
+
   Please ensure that the JSON you provide is well-formed and safe to parse in a programming environment.
 ''';
 
