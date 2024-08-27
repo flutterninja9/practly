@@ -1,10 +1,10 @@
-import 'dart:async';
-
 import 'package:flutter/material.dart';
-import 'package:practly/core/enums/enums.dart';
+import 'package:practly/core/async/async_page.dart';
+import 'package:practly/core/async/async_value.dart';
+import 'package:practly/core/widgets/complexity_selector.dart';
 import 'package:practly/di/di.dart';
+import 'package:practly/features/quiz/business_logic/quiz_notifier.dart';
 import 'package:practly/features/quiz/data/quiz_model.dart';
-import 'package:practly/features/quiz/data/quiz_repository.dart';
 
 class QuizScreen extends StatefulWidget {
   const QuizScreen({super.key});
@@ -14,77 +14,19 @@ class QuizScreen extends StatefulWidget {
 }
 
 class _QuizScreenState extends State<QuizScreen> {
-  WordComplexity _complexity = WordComplexity.easy;
-  QuizModel? quizModel;
-  String? _selectedAnswer;
-  bool _isLoading = false;
-  bool _isAnswerSelected = false;
-  int _countdown = 0;
-  Timer? _timer;
+  late final QuizNotifier notifier;
 
   @override
   void initState() {
     super.initState();
-    _generateQuiz();
+    notifier = locator.get();
+    notifier.generateQuiz();
   }
 
   @override
   void dispose() {
-    _timer?.cancel();
+    notifier.dispose();
     super.dispose();
-  }
-
-  Future<void> _generateQuiz() async {
-    setState(() {
-      _isLoading = true;
-      _isAnswerSelected = false;
-      _selectedAnswer = null;
-      _countdown = 0;
-    });
-
-    try {
-      final response =
-          await locator.get<QuizRepository>().getQuiz(complexity: _complexity);
-
-      setState(() {
-        quizModel = response;
-      });
-    } catch (e) {
-      if (!mounted) return;
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Error generating quiz')),
-      );
-    } finally {
-      setState(() {
-        _isLoading = false;
-      });
-    }
-  }
-
-  void _handleOptionSelected(String selectedOption) {
-    setState(() {
-      _selectedAnswer = selectedOption;
-      _isAnswerSelected = true;
-      _startCountdown(2);
-    });
-  }
-
-  void _startCountdown(int seconds) {
-    setState(() {
-      _countdown = seconds;
-    });
-
-    _timer?.cancel(); // Cancel any previous timer
-    _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
-      if (_countdown > 1) {
-        setState(() {
-          _countdown--;
-        });
-      } else {
-        timer.cancel();
-        _generateQuiz(); // Move to the next question
-      }
-    });
   }
 
   @override
@@ -100,55 +42,62 @@ class _QuizScreenState extends State<QuizScreen> {
               style: Theme.of(context).textTheme.headlineMedium,
             ),
             const SizedBox(height: 20),
-            _buildComplexitySelector(),
+            AnimatedBuilder(
+              animation: notifier,
+              builder: (context, child) {
+                return ComplexitySelector(
+                  initialValue: notifier.complexity,
+                  onChanged: (val) {
+                    notifier.setComplexity(val);
+                    notifier.generateQuiz();
+                  },
+                );
+              },
+            ),
             const SizedBox(height: 20),
             Expanded(
-              child: _isLoading
-                  ? const Center(child: CircularProgressIndicator())
-                  : _buildQuizContent(),
+              child: AnimatedBuilder(
+                animation: notifier,
+                builder: (context, child) {
+                  return AsyncPage(
+                    asyncValue: notifier.state,
+                    dataBuilder: _buildQuizContent,
+                    onRetry: notifier.generateQuiz,
+                  );
+                },
+              ),
             ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                ElevatedButton.icon(
-                  onPressed: _isLoading ? null : _generateQuiz,
-                  icon: const Icon(Icons.skip_next),
-                  label: const Text('Skip'),
-                ),
-                if (_isAnswerSelected && _countdown > 0)
-                  Center(
-                    child: Text(
-                      'Next question in $_countdown seconds...',
-                      style: const TextStyle(
-                          fontSize: 16, fontWeight: FontWeight.bold),
-                    ),
-                  ),
-              ],
-            ),
+            AnimatedBuilder(
+                animation: notifier,
+                builder: (context, child) {
+                  final isLoading = notifier.state is Loading;
+
+                  return Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      ElevatedButton.icon(
+                        onPressed: isLoading ? null : notifier.generateQuiz,
+                        icon: const Icon(Icons.skip_next),
+                        label: const Text('Skip'),
+                      ),
+                      if (notifier.isAnswerSelected && notifier.countdown > 0)
+                        Center(
+                          child: Text(
+                            'Next question in ${notifier.countdown} seconds...',
+                            style: const TextStyle(
+                                fontSize: 16, fontWeight: FontWeight.bold),
+                          ),
+                        ),
+                    ],
+                  );
+                }),
           ],
         ),
       ),
     );
   }
 
-  Widget _buildComplexitySelector() {
-    return SegmentedButton<WordComplexity>(
-      segments: const [
-        ButtonSegment(value: WordComplexity.easy, label: Text('Easy')),
-        ButtonSegment(value: WordComplexity.medium, label: Text('Medium')),
-        ButtonSegment(value: WordComplexity.hard, label: Text('Hard')),
-      ],
-      selected: {_complexity},
-      onSelectionChanged: (Set<WordComplexity> newSelection) {
-        setState(() {
-          _complexity = newSelection.first;
-        });
-        _generateQuiz();
-      },
-    );
-  }
-
-  Widget _buildQuizContent() {
+  Widget _buildQuizContent(QuizModel model) {
     return SingleChildScrollView(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -157,32 +106,31 @@ class _QuizScreenState extends State<QuizScreen> {
             child: Padding(
               padding: const EdgeInsets.all(16.0),
               child: Text(
-                quizModel!.sentence,
+                model.sentence,
                 style: Theme.of(context).textTheme.headlineSmall,
               ),
             ),
           ),
           const SizedBox(height: 20),
-          ...quizModel?.options.entries.map((entry) {
-                final bool isSelected = _selectedAnswer == entry.key;
-                final bool isCorrect = entry.key == quizModel?.correctAnswer;
-                final Color? tileColor = _isAnswerSelected
-                    ? (isCorrect
-                        ? const Color(0xFFA5D6A7)
-                        : isSelected
-                            ? const Color(0xFFEF9A9A)
-                            : null)
-                    : null;
+          ...model.options.entries.map((entry) {
+            final bool isSelected = notifier.selectedAnswer == entry.key;
+            final bool isCorrect = entry.key == model.correctAnswer;
+            final Color? tileColor = notifier.isAnswerSelected
+                ? (isCorrect
+                    ? const Color(0xFFA5D6A7)
+                    : isSelected
+                        ? const Color(0xFFEF9A9A)
+                        : null)
+                : null;
 
-                return ListTile(
-                  title: Text('${entry.key}) ${entry.value}'),
-                  tileColor: tileColor,
-                  onTap: _isAnswerSelected
-                      ? null
-                      : () => _handleOptionSelected(entry.key),
-                );
-              }) ??
-              [],
+            return ListTile(
+              title: Text('${entry.key}) ${entry.value}'),
+              tileColor: tileColor,
+              onTap: notifier.isAnswerSelected
+                  ? null
+                  : () => notifier.handleOptionSelected(entry.key),
+            );
+          }),
         ],
       ),
     );

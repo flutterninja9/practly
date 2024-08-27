@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_tts/flutter_tts.dart';
 import 'package:practly/core/async/async_page.dart';
-import 'package:practly/core/enums/enums.dart';
+import 'package:practly/core/widgets/complexity_selector.dart';
 import 'package:practly/di/di.dart';
 import 'package:practly/features/speak_out_aloud/buisness_logic/speak_out_aloud_notifier.dart';
 import 'package:practly/features/speak_out_aloud/data/speak_out_aloud_model.dart';
@@ -42,7 +42,18 @@ class _SpeakOutAloudScreenState extends State<SpeakOutAloudScreen> {
               style: Theme.of(context).textTheme.headlineMedium,
             ),
             const SizedBox(height: 20),
-            _buildComplexitySelector(),
+            AnimatedBuilder(
+              animation: notifier,
+              builder: (context, child) {
+                return ComplexitySelector(
+                  initialValue: notifier.complexity,
+                  onChanged: (val) {
+                    notifier.setComplexity(val);
+                    notifier.generateSentence();
+                  },
+                );
+              },
+            ),
             const SizedBox(height: 20),
             Expanded(
               child: AnimatedBuilder(
@@ -84,26 +95,6 @@ class _SpeakOutAloudScreenState extends State<SpeakOutAloudScreen> {
         ),
       ),
     );
-  }
-
-  Widget _buildComplexitySelector() {
-    return AnimatedBuilder(
-        animation: notifier,
-        builder: (context, child) {
-          return SegmentedButton<WordComplexity>(
-            segments: const [
-              ButtonSegment(value: WordComplexity.easy, label: Text('Easy')),
-              ButtonSegment(
-                  value: WordComplexity.medium, label: Text('Medium')),
-              ButtonSegment(value: WordComplexity.hard, label: Text('Hard')),
-            ],
-            selected: {notifier.complexity},
-            onSelectionChanged: (Set<WordComplexity> newSelection) {
-              notifier.setComplexity(newSelection.first);
-              notifier.generateSentence();
-            },
-          );
-        });
   }
 
   Widget _buildSentenceContent(SpeakOutAloudModel model) {
