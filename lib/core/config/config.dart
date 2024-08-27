@@ -9,4 +9,7 @@ class Config {
   Config({required this.geminiKey});
 
   factory Config.fromJson(Map<String, dynamic> json) => _$ConfigFromJson(json);
+
+  @override
+  String toString() => 'Config(geminiKey: $geminiKey)';
 }
