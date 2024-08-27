@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_tts/flutter_tts.dart';
+import 'package:practly/core/async/async_page.dart';
 import 'package:practly/core/enums/enums.dart';
 import 'package:practly/di/di.dart';
-import 'package:practly/features/speak_out_aloud/data/sentence_repository.dart';
+import 'package:practly/features/speak_out_aloud/buisness_logic/speak_out_aloud_notifier.dart';
 import 'package:practly/features/speak_out_aloud/data/speak_out_aloud_model.dart';
 
 class SpeakOutAloudScreen extends StatefulWidget {
@@ -13,47 +14,19 @@ class SpeakOutAloudScreen extends StatefulWidget {
 }
 
 class _SpeakOutAloudScreenState extends State<SpeakOutAloudScreen> {
-  WordComplexity _complexity = WordComplexity.easy;
-  SpeakOutAloudModel? speakModel;
-  bool _isLoading = false;
+  late final SpeakOutAloudNotifier notifier;
   late final FlutterTts _flutterTts;
 
   @override
   void initState() {
     super.initState();
+    notifier = locator.get();
+    notifier.generateSentence();
     _flutterTts = FlutterTts();
-    _generateSentence();
   }
 
-  Future<void> _generateSentence() async {
-    setState(() {
-      _isLoading = true;
-    });
-
-    try {
-      final response = await locator
-          .get<SentenceRepository>()
-          .getSentence(complexity: _complexity);
-
-      setState(() {
-        speakModel = response;
-      });
-    } catch (e) {
-      if (!mounted) return;
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Error generating sentence')),
-      );
-    } finally {
-      setState(() {
-        _isLoading = false;
-      });
-    }
-  }
-
-  Future<void> _speakSentence() async {
-    if (speakModel != null && speakModel!.sentence.isNotEmpty) {
-      await _flutterTts.speak(speakModel!.sentence);
-    }
+  Future<void> _speakSentence(String sentence) async {
+    await _flutterTts.speak(sentence);
   }
 
   @override
@@ -72,23 +45,41 @@ class _SpeakOutAloudScreenState extends State<SpeakOutAloudScreen> {
             _buildComplexitySelector(),
             const SizedBox(height: 20),
             Expanded(
-              child: _isLoading
-                  ? const Center(child: CircularProgressIndicator())
-                  : _buildSentenceContent(),
+              child: AnimatedBuilder(
+                animation: notifier,
+                builder: (context, child) {
+                  return AsyncPage(
+                    asyncValue: notifier.state,
+                    dataBuilder: _buildSentenceContent,
+                    onRetry: notifier.generateSentence,
+                  );
+                },
+              ),
             ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                ElevatedButton(
-                  onPressed: _isLoading ? null : _generateSentence,
-                  child: const Text('Generate New Sentence'),
-                ),
-                ElevatedButton(
-                  onPressed: _isLoading ? null : _speakSentence,
-                  child: const Text('Hear Sentence'),
-                ),
-              ],
-            ),
+            AnimatedBuilder(
+                animation: notifier,
+                builder: (context, child) {
+                  return AsyncPage(
+                    asyncValue: notifier.state,
+                    errorBuilder: () => const SizedBox.shrink(),
+                    loadingBuilder: () => const SizedBox.shrink(),
+                    dataBuilder: (model) {
+                      return Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          ElevatedButton(
+                            onPressed: notifier.generateSentence,
+                            child: const Text('Generate New Sentence'),
+                          ),
+                          ElevatedButton(
+                            onPressed: () => _speakSentence(model.sentence),
+                            child: const Text('Hear Sentence'),
+                          ),
+                        ],
+                      );
+                    },
+                  );
+                }),
           ],
         ),
       ),
@@ -96,23 +87,26 @@ class _SpeakOutAloudScreenState extends State<SpeakOutAloudScreen> {
   }
 
   Widget _buildComplexitySelector() {
-    return SegmentedButton<WordComplexity>(
-      segments: const [
-        ButtonSegment(value: WordComplexity.easy, label: Text('Easy')),
-        ButtonSegment(value: WordComplexity.medium, label: Text('Medium')),
-        ButtonSegment(value: WordComplexity.hard, label: Text('Hard')),
-      ],
-      selected: {_complexity},
-      onSelectionChanged: (Set<WordComplexity> newSelection) {
-        setState(() {
-          _complexity = newSelection.first;
+    return AnimatedBuilder(
+        animation: notifier,
+        builder: (context, child) {
+          return SegmentedButton<WordComplexity>(
+            segments: const [
+              ButtonSegment(value: WordComplexity.easy, label: Text('Easy')),
+              ButtonSegment(
+                  value: WordComplexity.medium, label: Text('Medium')),
+              ButtonSegment(value: WordComplexity.hard, label: Text('Hard')),
+            ],
+            selected: {notifier.complexity},
+            onSelectionChanged: (Set<WordComplexity> newSelection) {
+              notifier.setComplexity(newSelection.first);
+              notifier.generateSentence();
+            },
+          );
         });
-        _generateSentence();
-      },
-    );
   }
 
-  Widget _buildSentenceContent() {
+  Widget _buildSentenceContent(SpeakOutAloudModel model) {
     return SingleChildScrollView(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -121,7 +115,7 @@ class _SpeakOutAloudScreenState extends State<SpeakOutAloudScreen> {
             child: Padding(
               padding: const EdgeInsets.all(16.0),
               child: Text(
-                speakModel!.sentence,
+                model.sentence,
                 style: Theme.of(context).textTheme.headlineSmall,
               ),
             ),
@@ -134,7 +128,7 @@ class _SpeakOutAloudScreenState extends State<SpeakOutAloudScreen> {
                 .bodySmall
                 ?.copyWith(fontWeight: FontWeight.bold),
           ),
-          Text(speakModel!.explanation),
+          Text(model.explanation),
           const SizedBox(height: 20),
           Text(
             'Pronunciation Tip:',
@@ -143,7 +137,7 @@ class _SpeakOutAloudScreenState extends State<SpeakOutAloudScreen> {
                 .bodyMedium
                 ?.copyWith(fontWeight: FontWeight.bold),
           ),
-          Text(speakModel!.tip),
+          Text(model.tip),
         ],
       ),
     );

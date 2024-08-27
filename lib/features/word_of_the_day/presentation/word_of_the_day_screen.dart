@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_tts/flutter_tts.dart';
+import 'package:practly/core/async/async_page.dart';
 import 'package:practly/core/enums/enums.dart';
 import 'package:practly/di/di.dart';
+import 'package:practly/features/word_of_the_day/buisness_logic/word_of_the_day_notifier.dart';
 import 'package:practly/features/word_of_the_day/data/word_of_the_day_model.dart';
-import 'package:practly/features/word_of_the_day/data/word_repository.dart';
 
 class WordOfTheDayScreen extends StatefulWidget {
   const WordOfTheDayScreen({super.key});
@@ -14,56 +15,15 @@ class WordOfTheDayScreen extends StatefulWidget {
 
 class _WordOfTheDayScreenState extends State<WordOfTheDayScreen>
     with SingleTickerProviderStateMixin {
-  late AnimationController _animationController;
-  late Animation<double> _animation;
+  late final WordOfTheDayNotifier _wotdNotifier;
   late final FlutterTts _flutterTts;
-
-  WordOfTheDayModel? wordOfTheDay;
-  bool _isLoading = false;
-  WordComplexity _complexity = WordComplexity.easy;
 
   @override
   void initState() {
     super.initState();
+    _wotdNotifier = locator.get<WordOfTheDayNotifier>();
+    _wotdNotifier.generateWord();
     _flutterTts = FlutterTts();
-    _animationController = AnimationController(
-      duration: const Duration(milliseconds: 500),
-      vsync: this,
-    );
-    _animation =
-        CurvedAnimation(parent: _animationController, curve: Curves.easeInOut);
-    _generateWord();
-  }
-
-  Future<void> _generateWord() async {
-    setState(() {
-      _isLoading = true;
-    });
-    _animationController.forward(from: 0.0);
-
-    try {
-      final result =
-          await locator.get<WordRepository>().getWord(complexity: _complexity);
-
-      setState(() {
-        wordOfTheDay = result;
-      });
-    } catch (e) {
-      if (!mounted) return;
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Error generating word')),
-      );
-    } finally {
-      setState(() {
-        _isLoading = false;
-      });
-    }
-  }
-
-  @override
-  void dispose() {
-    _animationController.dispose();
-    super.dispose();
   }
 
   @override
@@ -83,27 +43,44 @@ class _WordOfTheDayScreenState extends State<WordOfTheDayScreen>
               _buildComplexitySelector(),
               const SizedBox(height: 20),
               Expanded(
-                child: _isLoading
-                    ? const Center(child: CircularProgressIndicator())
-                    : _buildWordContent(),
+                child: AnimatedBuilder(
+                    animation: _wotdNotifier,
+                    builder: (context, child) {
+                      return AsyncPage(
+                        asyncValue: _wotdNotifier.state,
+                        dataBuilder: _buildWordContent,
+                        onRetry: _wotdNotifier.generateWord,
+                      );
+                    }),
               ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  ElevatedButton(
-                    onPressed: _isLoading ? null : _generateWord,
-                    style: ElevatedButton.styleFrom(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 20, vertical: 12),
-                    ),
-                    child: const Text('Generate New Word'),
-                  ),
-                  ElevatedButton(
-                    onPressed: _isLoading ? null : _speakSentence,
-                    child: const Text('Hear Word'),
-                  ),
-                ],
-              ),
+              AnimatedBuilder(
+                  animation: _wotdNotifier,
+                  builder: (context, child) {
+                    return AsyncPage(
+                      asyncValue: _wotdNotifier.state,
+                      loadingBuilder: () => const SizedBox.shrink(),
+                      errorBuilder: () => const SizedBox.shrink(),
+                      dataBuilder: (model) {
+                        return Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            ElevatedButton(
+                              onPressed: _wotdNotifier.generateWord,
+                              style: ElevatedButton.styleFrom(
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 20, vertical: 12),
+                              ),
+                              child: const Text('Generate New Word'),
+                            ),
+                            ElevatedButton(
+                              onPressed: () => _speakWord(model.word),
+                              child: const Text('Hear Word'),
+                            ),
+                          ],
+                        );
+                      },
+                    );
+                  }),
             ],
           ),
         ),
@@ -111,72 +88,68 @@ class _WordOfTheDayScreenState extends State<WordOfTheDayScreen>
     );
   }
 
-  Future<void> _speakSentence() async {
-    if (wordOfTheDay != null && (wordOfTheDay?.word ?? '').isNotEmpty) {
-      await _flutterTts.speak(wordOfTheDay!.word);
-    }
+  Future<void> _speakWord(String word) async {
+    await _flutterTts.speak(word);
   }
 
   Widget _buildComplexitySelector() {
-    return SegmentedButton<WordComplexity>(
-      segments: const [
-        ButtonSegment(value: WordComplexity.easy, label: Text('Easy')),
-        ButtonSegment(value: WordComplexity.medium, label: Text('Medium')),
-        ButtonSegment(value: WordComplexity.hard, label: Text('Hard')),
-      ],
-      selected: {_complexity},
-      onSelectionChanged: (Set<WordComplexity> newSelection) {
-        setState(() {
-          _complexity = newSelection.first;
+    return AnimatedBuilder(
+        animation: _wotdNotifier,
+        builder: (context, child) {
+          return SegmentedButton<WordComplexity>(
+            segments: const [
+              ButtonSegment(value: WordComplexity.easy, label: Text('Easy')),
+              ButtonSegment(
+                  value: WordComplexity.medium, label: Text('Medium')),
+              ButtonSegment(value: WordComplexity.hard, label: Text('Hard')),
+            ],
+            selected: {_wotdNotifier.complexity},
+            onSelectionChanged: (Set<WordComplexity> newSelection) {
+              _wotdNotifier.setComplexity(newSelection.first);
+              _wotdNotifier.generateWord();
+            },
+          );
         });
-        _generateWord();
-      },
-    );
   }
 
-  Widget _buildWordContent() {
+  Widget _buildWordContent(WordOfTheDayModel model) {
     return SingleChildScrollView(
-      child: FadeTransition(
-        opacity: _animation,
-        child: Card(
-          elevation: 5,
-          shape:
-              RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
-          child: Padding(
-            padding: const EdgeInsets.all(20.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  wordOfTheDay!.word,
-                  style: Theme.of(context).textTheme.headlineSmall,
-                ),
-                const SizedBox(height: 10),
-                Text(
-                  wordOfTheDay!.definition,
-                  style: Theme.of(context).textTheme.bodySmall,
-                ),
-                const SizedBox(height: 20),
-                Text(
-                  'Example:',
-                  style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                      fontWeight: FontWeight.bold, color: Colors.blue[700]),
-                ),
-                Text(wordOfTheDay!.example,
-                    style: Theme.of(context)
-                        .textTheme
-                        .bodySmall
-                        ?.copyWith(fontStyle: FontStyle.italic)),
-                const SizedBox(height: 20),
-                Text(
-                  'Usage:',
-                  style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                      fontWeight: FontWeight.bold, color: Colors.blue[700]),
-                ),
-                Text(wordOfTheDay!.usage,
-                    style: Theme.of(context).textTheme.bodySmall),
-              ],
-            ),
+      child: Card(
+        elevation: 5,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
+        child: Padding(
+          padding: const EdgeInsets.all(20.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                model.word,
+                style: Theme.of(context).textTheme.headlineSmall,
+              ),
+              const SizedBox(height: 10),
+              Text(
+                model.definition,
+                style: Theme.of(context).textTheme.bodySmall,
+              ),
+              const SizedBox(height: 20),
+              Text(
+                'Example:',
+                style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                    fontWeight: FontWeight.bold, color: Colors.blue[700]),
+              ),
+              Text(model.example,
+                  style: Theme.of(context)
+                      .textTheme
+                      .bodySmall
+                      ?.copyWith(fontStyle: FontStyle.italic)),
+              const SizedBox(height: 20),
+              Text(
+                'Usage:',
+                style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                    fontWeight: FontWeight.bold, color: Colors.blue[700]),
+              ),
+              Text(model.usage, style: Theme.of(context).textTheme.bodySmall),
+            ],
           ),
         ),
       ),
