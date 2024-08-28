@@ -46,6 +46,7 @@ dependencies:
   firebase_crashlytics: ^3.4.9
   firebase_analytics: ^10.8.0
   speech_to_text: ^7.0.0
+  shadcn_ui: ^0.8.1
 
 dev_dependencies:
   flutter_test:

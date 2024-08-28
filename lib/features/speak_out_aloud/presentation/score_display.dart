@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:shadcn_ui/shadcn_ui.dart';
 
 class ScoreDisplay extends StatelessWidget {
   final int score;
@@ -37,11 +38,7 @@ class ScoreDisplay extends StatelessWidget {
         child: Text(
           feedbackMessage,
           textAlign: TextAlign.center,
-          style: const TextStyle(
-            fontSize: 22,
-            color: Colors.black87,
-            fontWeight: FontWeight.w600,
-          ),
+          style: ShadTheme.of(context).textTheme.h4,
         ),
       ),
     );

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:practly/core/extensions/string_extensions.dart';
 
 import 'package:practly/core/services/text_to_speech_service.dart';
+import 'package:shadcn_ui/shadcn_ui.dart';
 
 class SpeakableText extends StatelessWidget {
   const SpeakableText({
@@ -26,11 +27,8 @@ class SpeakableText extends StatelessWidget {
 
       return TextSpan(
         text: "$word ",
-        style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-              color: spokenWords.contains(normalizedWord)
-                  ? Colors.green
-                  : Colors.black,
-            ),
+        style: ShadTheme.of(context).textTheme.h2.copyWith(
+            color: spokenWords.contains(normalizedWord) ? Colors.green : null),
       );
     }).toList();
   }

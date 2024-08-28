@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:shadcn_ui/shadcn_ui.dart';
 import 'async_value.dart';
 
 class AsyncPage<T> extends StatelessWidget {
@@ -55,10 +56,10 @@ class _ErrorWidget extends StatelessWidget {
             style: TextStyle(color: Colors.red),
           ),
           if (onRetry != null)
-            ElevatedButton(
+            ShadButton.destructive(
               onPressed: onRetry,
               child: const Text('Retry'),
-            ),
+            )
         ],
       ),
     );
