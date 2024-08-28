@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
+
 import 'package:practly/core/async/async_page.dart';
-import 'package:practly/core/services/speech_service.dart';
+import 'package:practly/core/services/text_to_speech_service.dart';
 import 'package:practly/core/widgets/complexity_selector.dart';
 import 'package:practly/di/di.dart';
 import 'package:practly/features/speak_out_aloud/buisness_logic/speak_out_aloud_notifier.dart';
-import 'package:practly/features/speak_out_aloud/data/speak_out_aloud_model.dart';
+import 'package:practly/features/speak_out_aloud/presentation/score_display.dart';
+import 'package:practly/features/speak_out_aloud/presentation/speak_out_aloud_content.dart';
 
 class SpeakOutAloudScreen extends StatefulWidget {
   const SpeakOutAloudScreen({super.key});
@@ -15,7 +17,7 @@ class SpeakOutAloudScreen extends StatefulWidget {
 
 class _SpeakOutAloudScreenState extends State<SpeakOutAloudScreen> {
   late final SpeakOutAloudNotifier notifier;
-  late final SpeechService speechService;
+  late final TextToSpeechService speechService;
 
   @override
   void initState() {
@@ -23,6 +25,12 @@ class _SpeakOutAloudScreenState extends State<SpeakOutAloudScreen> {
     notifier = locator.get();
     notifier.generateSentence();
     speechService = locator.get();
+  }
+
+  @override
+  void dispose() {
+    notifier.dispose();
+    super.dispose();
   }
 
   @override
@@ -57,7 +65,11 @@ class _SpeakOutAloudScreenState extends State<SpeakOutAloudScreen> {
                 builder: (context, child) {
                   return AsyncPage(
                     asyncValue: notifier.state,
-                    dataBuilder: _buildSentenceContent,
+                    dataBuilder: (model) => SpeakOutAloudContent(
+                      model: model,
+                      speechService: speechService,
+                      spokenWordsStream: notifier.stt.spokenWords,
+                    ),
                     onRetry: notifier.generateSentence,
                   );
                 },
@@ -71,62 +83,41 @@ class _SpeakOutAloudScreenState extends State<SpeakOutAloudScreen> {
                     errorBuilder: () => const SizedBox.shrink(),
                     loadingBuilder: () => const SizedBox.shrink(),
                     dataBuilder: (model) {
-                      return Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          ElevatedButton(
-                            onPressed: notifier.generateSentence,
-                            child: const Text('Generate New Sentence'),
-                          ),
-                          ElevatedButton(
-                            onPressed: () =>
-                                speechService.speak(model.sentence),
-                            child: const Text('Hear Sentence'),
-                          ),
-                        ],
+                      final enableButton = notifier.enableSpeechButton;
+
+                      return Center(
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            IconButton.filledTonal(
+                              onPressed: enableButton
+                                  ? () {
+                                      notifier.listen();
+                                    }
+                                  : null,
+                              iconSize: 36,
+                              icon: const Icon(Icons.mic),
+                            ),
+                            ScoreDisplay(score: notifier.score),
+                            if (notifier.score > 5)
+                              IconButton.filledTonal(
+                                onPressed: () async {
+                                  notifier.onError();
+                                  notifier.generateSentence();
+                                },
+                                iconSize: 36,
+                                icon: const Icon(Icons.navigate_next_sharp),
+                              )
+                            else
+                              const SizedBox.shrink(),
+                          ],
+                        ),
                       );
                     },
                   );
                 }),
           ],
         ),
-      ),
-    );
-  }
-
-  Widget _buildSentenceContent(SpeakOutAloudModel model) {
-    return SingleChildScrollView(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Card(
-            child: Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: Text(
-                model.sentence,
-                style: Theme.of(context).textTheme.headlineSmall,
-              ),
-            ),
-          ),
-          const SizedBox(height: 20),
-          Text(
-            'Explanation:',
-            style: Theme.of(context)
-                .textTheme
-                .bodySmall
-                ?.copyWith(fontWeight: FontWeight.bold),
-          ),
-          Text(model.explanation),
-          const SizedBox(height: 20),
-          Text(
-            'Pronunciation Tip:',
-            style: Theme.of(context)
-                .textTheme
-                .bodyMedium
-                ?.copyWith(fontWeight: FontWeight.bold),
-          ),
-          Text(model.tip),
-        ],
       ),
     );
   }
