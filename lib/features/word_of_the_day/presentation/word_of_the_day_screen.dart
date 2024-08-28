@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:practly/core/async/async_page.dart';
-import 'package:practly/core/services/speech_service.dart';
+import 'package:practly/core/services/text_to_speech_service.dart';
 import 'package:practly/core/widgets/complexity_selector.dart';
 import 'package:practly/di/di.dart';
 import 'package:practly/features/word_of_the_day/buisness_logic/word_of_the_day_notifier.dart';
@@ -16,7 +16,7 @@ class WordOfTheDayScreen extends StatefulWidget {
 class _WordOfTheDayScreenState extends State<WordOfTheDayScreen>
     with SingleTickerProviderStateMixin {
   late final WordOfTheDayNotifier notifier;
-  late final SpeechService speechService;
+  late final TextToSpeechService speechService;
 
   @override
   void initState() {

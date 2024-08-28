@@ -13,5 +13,5 @@ void setupSpeakOutAloud() {
       .registerSingleton<SentenceRepository>(SentenceRepository(locator.get()));
 
   locator.registerFactory<SpeakOutAloudNotifier>(
-      () => SpeakOutAloudNotifier(locator.get()));
+      () => SpeakOutAloudNotifier(locator.get(), locator.get()));
 }

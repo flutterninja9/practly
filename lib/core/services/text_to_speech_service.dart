@@ -1,9 +1,9 @@
 import 'package:flutter_tts/flutter_tts.dart';
 
-class SpeechService {
+class TextToSpeechService {
   final FlutterTts _tts;
 
-  SpeechService(this._tts);
+  TextToSpeechService(this._tts);
 
   Future<void> speak(String words) async {
     await _tts.speak(words);
