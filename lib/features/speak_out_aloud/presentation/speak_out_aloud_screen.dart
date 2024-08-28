@@ -5,6 +5,7 @@ import 'package:practly/core/services/text_to_speech_service.dart';
 import 'package:practly/core/widgets/complexity_selector.dart';
 import 'package:practly/di/di.dart';
 import 'package:practly/features/speak_out_aloud/buisness_logic/speak_out_aloud_notifier.dart';
+import 'package:practly/features/speak_out_aloud/presentation/score_display.dart';
 import 'package:practly/features/speak_out_aloud/presentation/speak_out_aloud_content.dart';
 
 class SpeakOutAloudScreen extends StatefulWidget {
@@ -97,14 +98,18 @@ class _SpeakOutAloudScreenState extends State<SpeakOutAloudScreen> {
                               iconSize: 36,
                               icon: const Icon(Icons.mic),
                             ),
-                            IconButton.filledTonal(
-                              onPressed: () async {
-                                notifier.onError();
-                                notifier.generateSentence();
-                              },
-                              iconSize: 36,
-                              icon: const Icon(Icons.refresh),
-                            ),
+                            ScoreDisplay(score: notifier.score),
+                            if (notifier.score > 5)
+                              IconButton.filledTonal(
+                                onPressed: () async {
+                                  notifier.onError();
+                                  notifier.generateSentence();
+                                },
+                                iconSize: 36,
+                                icon: const Icon(Icons.navigate_next_sharp),
+                              )
+                            else
+                              const SizedBox.shrink(),
                           ],
                         ),
                       );

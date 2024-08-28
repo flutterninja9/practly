@@ -4,6 +4,7 @@ import 'package:flutter_tts/flutter_tts.dart';
 import 'package:google_gemini/google_gemini.dart';
 import 'package:practly/core/config/config.dart';
 import 'package:practly/core/env/env.dart';
+import 'package:practly/core/services/score_logic.dart';
 import 'package:practly/core/services/speech_to_text_service.dart';
 import 'package:practly/core/services/text_to_speech_service.dart';
 import 'package:practly/di/di.dart';
@@ -15,6 +16,7 @@ Future<void> setupCore() async {
   await _initializeFirebase();
   await _loadConfigs();
   _setupGemini();
+  _setupScoreLogic();
   _setupSpeechToTextService();
   _setupTextToSpeechService();
 }
@@ -56,4 +58,8 @@ void _setupTextToSpeechService() {
   locator.registerFactory<SpeechToText>(() => SpeechToText());
   locator.registerFactory<SpeechToTextService>(
       () => SpeechToTextService(locator.get()));
+}
+
+void _setupScoreLogic() {
+  locator.registerSingleton<ScoreLogic>(ScoreLogic());
 }
