@@ -7,6 +7,7 @@ import 'package:practly/di/di.dart';
 import 'package:practly/features/speak_out_aloud/buisness_logic/speak_out_aloud_notifier.dart';
 import 'package:practly/features/speak_out_aloud/presentation/score_display.dart';
 import 'package:practly/features/speak_out_aloud/presentation/speak_out_aloud_content.dart';
+import 'package:shadcn_ui/shadcn_ui.dart';
 
 class SpeakOutAloudScreen extends StatefulWidget {
   const SpeakOutAloudScreen({super.key});
@@ -43,7 +44,7 @@ class _SpeakOutAloudScreenState extends State<SpeakOutAloudScreen> {
           children: [
             Text(
               'Speak Out Aloud',
-              style: Theme.of(context).textTheme.headlineMedium,
+              style: ShadTheme.of(context).textTheme.h1,
             ),
             const SizedBox(height: 20),
             AnimatedBuilder(
@@ -89,24 +90,24 @@ class _SpeakOutAloudScreenState extends State<SpeakOutAloudScreen> {
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            IconButton.filledTonal(
-                              onPressed: enableButton
-                                  ? () {
-                                      notifier.listen();
-                                    }
-                                  : null,
-                              iconSize: 36,
+                            ShadButton.outline(
+                              size: ShadButtonSize.lg,
                               icon: const Icon(Icons.mic),
+                              enabled: enableButton,
+                              onPressed: () {
+                                notifier.listen();
+                              },
                             ),
                             ScoreDisplay(score: notifier.score),
                             if (notifier.score > 5)
-                              IconButton.filledTonal(
+                              ShadButton.outline(
+                                size: ShadButtonSize.lg,
+                                icon: const Icon(Icons.navigate_next_sharp),
+                                enabled: enableButton,
                                 onPressed: () async {
                                   notifier.onError();
                                   notifier.generateSentence();
                                 },
-                                iconSize: 36,
-                                icon: const Icon(Icons.navigate_next_sharp),
                               )
                             else
                               const SizedBox.shrink(),

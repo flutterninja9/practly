@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:practly/core/extensions/context_extensions.dart';
 import 'package:practly/features/quiz/presentation/quiz_screen.dart';
 import 'package:practly/features/speak_out_aloud/presentation/speak_out_aloud_screen.dart';
 import 'package:practly/features/word_of_the_day/presentation/word_of_the_day_screen.dart';
@@ -88,6 +89,9 @@ class _HomeScreenState extends State<HomeScreen> {
         ),
         BottomNavigationBar(
           currentIndex: _selectedIndex,
+          selectedItemColor: context.isDarkMode ? Colors.white : Colors.black,
+          unselectedItemColor:
+              context.isDarkMode ? Colors.white38 : Colors.black38,
           onTap: _onItemTapped,
           items: _navItems,
         ),

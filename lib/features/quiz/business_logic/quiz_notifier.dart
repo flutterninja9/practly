@@ -45,7 +45,6 @@ class QuizNotifier extends AsyncNotifier<QuizModel> {
     _isAnswerSelected = false;
     _selectedAnswer = null;
     _countdown = 0;
-
     execute(
       () => _repository.getQuiz(complexity: complexity),
     );

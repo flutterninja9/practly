@@ -5,6 +5,7 @@ import 'package:practly/core/widgets/complexity_selector.dart';
 import 'package:practly/di/di.dart';
 import 'package:practly/features/quiz/business_logic/quiz_notifier.dart';
 import 'package:practly/features/quiz/data/quiz_model.dart';
+import 'package:shadcn_ui/shadcn_ui.dart';
 
 class QuizScreen extends StatefulWidget {
   const QuizScreen({super.key});
@@ -39,7 +40,7 @@ class _QuizScreenState extends State<QuizScreen> {
           children: [
             Text(
               'Quiz',
-              style: Theme.of(context).textTheme.headlineMedium,
+              style: ShadTheme.of(context).textTheme.h1,
             ),
             const SizedBox(height: 20),
             AnimatedBuilder(
@@ -75,17 +76,19 @@ class _QuizScreenState extends State<QuizScreen> {
                   return Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      ElevatedButton.icon(
+                      ShadButton(
                         onPressed: isLoading ? null : notifier.generateQuiz,
-                        icon: const Icon(Icons.skip_next),
-                        label: const Text('Skip'),
+                        icon: const Icon(
+                          Icons.navigate_next,
+                          size: 16,
+                        ),
+                        child: const Text('Next'),
                       ),
                       if (notifier.isAnswerSelected && notifier.countdown > 0)
                         Center(
                           child: Text(
                             'Next question in ${notifier.countdown} seconds...',
-                            style: const TextStyle(
-                                fontSize: 16, fontWeight: FontWeight.bold),
+                            style: ShadTheme.of(context).textTheme.muted,
                           ),
                         ),
                     ],
@@ -102,13 +105,11 @@ class _QuizScreenState extends State<QuizScreen> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Card(
-            child: Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: Text(
-                model.sentence,
-                style: Theme.of(context).textTheme.headlineSmall,
-              ),
+          ShadCard(
+            padding: const EdgeInsets.all(18),
+            child: Text(
+              model.sentence,
+              style: ShadTheme.of(context).textTheme.h3,
             ),
           ),
           const SizedBox(height: 20),
@@ -124,7 +125,10 @@ class _QuizScreenState extends State<QuizScreen> {
                 : null;
 
             return ListTile(
-              title: Text('${entry.key}) ${entry.value}'),
+              title: Text(
+                '${entry.key}) ${entry.value}',
+                style: ShadTheme.of(context).textTheme.p,
+              ),
               tileColor: tileColor,
               onTap: notifier.isAnswerSelected
                   ? null
