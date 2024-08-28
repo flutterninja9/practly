@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:practly/core/async/async_page.dart';
 import 'package:practly/core/services/text_to_speech_service.dart';
 import 'package:practly/core/widgets/complexity_selector.dart';
+import 'package:practly/core/widgets/speakable.dart';
 import 'package:practly/di/di.dart';
 import 'package:practly/features/word_of_the_day/buisness_logic/word_of_the_day_notifier.dart';
 import 'package:practly/features/word_of_the_day/data/word_of_the_day_model.dart';
@@ -73,7 +74,7 @@ class _WordOfTheDayScreenState extends State<WordOfTheDayScreen>
                       errorBuilder: () => const SizedBox.shrink(),
                       dataBuilder: (model) {
                         return Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             ElevatedButton(
                               onPressed: notifier.generateWord,
@@ -82,10 +83,6 @@ class _WordOfTheDayScreenState extends State<WordOfTheDayScreen>
                                     horizontal: 20, vertical: 12),
                               ),
                               child: const Text('Generate New Word'),
-                            ),
-                            ElevatedButton(
-                              onPressed: () => speechService.speak(model.word),
-                              child: const Text('Hear Word'),
                             ),
                           ],
                         );
@@ -109,10 +106,7 @@ class _WordOfTheDayScreenState extends State<WordOfTheDayScreen>
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(
-                model.word,
-                style: Theme.of(context).textTheme.headlineSmall,
-              ),
+              SpeakableText(tts: speechService, sentence: model.word),
               const SizedBox(height: 10),
               Text(
                 model.definition,
