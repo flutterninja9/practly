@@ -12,6 +12,8 @@ import 'package:shadcn_ui/shadcn_ui.dart';
 class SpeakOutAloudScreen extends StatefulWidget {
   const SpeakOutAloudScreen({super.key});
 
+  static String get route => "/speak";
+
   @override
   State<SpeakOutAloudScreen> createState() => _SpeakOutAloudScreenState();
 }

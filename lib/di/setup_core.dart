@@ -1,8 +1,10 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_remote_config/firebase_remote_config.dart';
 import 'package:flutter_tts/flutter_tts.dart';
+import 'package:go_router/go_router.dart';
 import 'package:google_gemini/google_gemini.dart';
 import 'package:practly/core/config/config.dart';
+import 'package:practly/core/navigation/app_router.dart';
 import 'package:practly/core/services/score_logic.dart';
 import 'package:practly/core/services/speech_to_text_service.dart';
 import 'package:practly/core/services/text_to_speech_service.dart';
@@ -20,6 +22,7 @@ Future<void> setupCore() async {
   _setupScoreLogic();
   _setupSpeechToTextService();
   _setupTextToSpeechService();
+  _setupRouter();
 }
 
 Future<void> _initializeFirebase() async {
@@ -71,4 +74,10 @@ void _setupTextToSpeechService() {
 
 void _setupScoreLogic() {
   locator.registerSingleton<ScoreLogic>(ScoreLogic());
+}
+
+void _setupRouter() {
+  final router = AppRouter();
+
+  locator.registerSingleton<GoRouter>(router.getRouter);
 }
