@@ -9,7 +9,6 @@ class SpeakEaseApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final router = locator.get<GoRouter>();
-
     return ShadApp.materialRouter(
       title: 'SpeakEase',
       debugShowCheckedModeBanner: false,

@@ -12,7 +12,20 @@
           "package_name": "in.dev.bloomsoft.speakease"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "1078697604293-ok86kktpqlusgh6i0q4n2do6ch6qsgdc.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "in.dev.bloomsoft.speakease",
+            "certificate_hash": "3197c5b0a58009fcd767a39ce2298110b5f29ed7"
+          }
+        },
+        {
+          "client_id": "1078697604293-8r1148nk15p64crud4pkijvbpbd5cfc6.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
           "current_key": "AIzaSyA0qviO3LqqcfRTyUbgYY06WctP8CG2bb0"
@@ -20,7 +33,12 @@
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1078697604293-8r1148nk15p64crud4pkijvbpbd5cfc6.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
         }
       }
     }
