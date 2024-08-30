@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "1078697604293",
+    "project_id": "dev-speakease",
+    "storage_bucket": "dev-speakease.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1078697604293:android:2b288db9c6adf1e8526cac",
+        "android_client_info": {
+          "package_name": "in.dev.bloomsoft.speakease"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA0qviO3LqqcfRTyUbgYY06WctP8CG2bb0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

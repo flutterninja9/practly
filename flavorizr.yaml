@@ -1,0 +1,31 @@
+flavors:
+  dev:
+    app:
+      name: "[Dev]SpeakEase"
+      icon: "assets/logo.png"
+
+    android:
+      applicationId: "in.dev.bloomsoft.speakease"
+      firebase:
+        config: "configs/google-services.json"
+      resValues:
+        env:
+          type: "string"
+          value: "dev"
+
+    ide: "vscode"
+  prod:
+    app:
+      name: "SpeakEase"
+      icon: "assets/logo.png"
+  
+    android:
+      applicationId: "in.bloomsoft.speakease"
+      firebase:
+        config: "configs/google-services.json"
+      resValues:
+        env:
+          type: "string"
+          value: "prod"
+    
+    ide: "vscode"
