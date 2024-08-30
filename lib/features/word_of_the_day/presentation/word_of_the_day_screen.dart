@@ -11,6 +11,8 @@ import 'package:practly/features/word_of_the_day/buisness_logic/word_of_the_day_
 class WordOfTheDayScreen extends StatefulWidget {
   const WordOfTheDayScreen({super.key});
 
+  static String get route => "/learn";
+
   @override
   State<WordOfTheDayScreen> createState() => _WordOfTheDayScreenState();
 }

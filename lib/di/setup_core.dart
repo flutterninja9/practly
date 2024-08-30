@@ -1,12 +1,15 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_remote_config/firebase_remote_config.dart';
 import 'package:flutter_tts/flutter_tts.dart';
+import 'package:go_router/go_router.dart';
 import 'package:google_gemini/google_gemini.dart';
 import 'package:practly/core/config/config.dart';
+import 'package:practly/core/navigation/app_router.dart';
 import 'package:practly/core/services/score_logic.dart';
 import 'package:practly/core/services/speech_to_text_service.dart';
 import 'package:practly/core/services/text_to_speech_service.dart';
 import 'package:practly/di/di.dart';
+import 'package:practly/core/navigation/auth_notifier.dart';
 import 'package:practly/firebase_options/firebase_options.dart';
 import 'package:practly/core/services/config_service.dart';
 import 'package:practly/firebase_options/firebase_options.dev.dart';
@@ -15,15 +18,23 @@ import 'package:speech_to_text/speech_to_text.dart';
 
 Future<void> setupCore() async {
   await _initializeFirebase();
+  _initializeFirebaseAuth();
   await _loadConfigs();
   _setupGemini();
   _setupScoreLogic();
   _setupSpeechToTextService();
   _setupTextToSpeechService();
+  _setupRouter();
 }
 
 Future<void> _initializeFirebase() async {
   await Firebase.initializeApp(options: _getFirebaseConfig());
+}
+
+void _initializeFirebaseAuth() {
+  final notifier = FirebaseAuthNotifier();
+
+  locator.registerSingleton<FirebaseAuthNotifier>(notifier);
 }
 
 FirebaseOptions _getFirebaseConfig() {
@@ -71,4 +82,10 @@ void _setupTextToSpeechService() {
 
 void _setupScoreLogic() {
   locator.registerSingleton<ScoreLogic>(ScoreLogic());
+}
+
+void _setupRouter() {
+  final router = AppRouter();
+
+  locator.registerSingleton<GoRouter>(router.getRouter);
 }

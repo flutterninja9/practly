@@ -10,6 +10,8 @@ import 'package:shadcn_ui/shadcn_ui.dart';
 class QuizScreen extends StatefulWidget {
   const QuizScreen({super.key});
 
+  static String get route => "/quiz";
+
   @override
   State<QuizScreen> createState() => _QuizScreenState();
 }
