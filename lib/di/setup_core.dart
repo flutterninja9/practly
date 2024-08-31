@@ -1,10 +1,16 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_remote_config/firebase_remote_config.dart';
 import 'package:flutter_tts/flutter_tts.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_gemini/google_gemini.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:practly/core/config/config.dart';
 import 'package:practly/core/navigation/app_router.dart';
+import 'package:practly/core/services/ad_service.dart';
+import 'package:practly/core/services/app_info_service.dart';
+import 'package:practly/core/services/database_service.dart';
 import 'package:practly/core/services/score_logic.dart';
 import 'package:practly/core/services/speech_to_text_service.dart';
 import 'package:practly/core/services/text_to_speech_service.dart';
@@ -18,21 +24,25 @@ import 'package:speech_to_text/speech_to_text.dart';
 
 Future<void> setupCore() async {
   await _initializeFirebase();
-  _initializeFirebaseAuth();
   await _loadConfigs();
+  _setupAppVersionService();
+  _setupDatabaseService();
+  _initializeFirebaseAuth();
   _setupGemini();
   _setupScoreLogic();
   _setupSpeechToTextService();
   _setupTextToSpeechService();
   _setupRouter();
+  _setupAdService();
 }
 
 Future<void> _initializeFirebase() async {
   await Firebase.initializeApp(options: _getFirebaseConfig());
+  locator.registerSingleton<FirebaseAuth>(FirebaseAuth.instance);
 }
 
 void _initializeFirebaseAuth() {
-  final notifier = FirebaseAuthNotifier();
+  final notifier = FirebaseAuthNotifier(locator.get());
 
   locator.registerSingleton<FirebaseAuthNotifier>(notifier);
 }
@@ -50,7 +60,7 @@ Future<void> _loadConfigs() async {
 
   await remoteConfig.setConfigSettings(RemoteConfigSettings(
     fetchTimeout: const Duration(minutes: 1),
-    minimumFetchInterval: const Duration(hours: 1),
+    minimumFetchInterval: const Duration(minutes: 15),
   ));
 
   locator.registerSingleton<ConfigService>(
@@ -88,4 +98,27 @@ void _setupRouter() {
   final router = AppRouter();
 
   locator.registerSingleton<GoRouter>(router.getRouter);
+}
+
+void _setupDatabaseService() {
+  locator.registerSingleton<FirebaseFirestore>(FirebaseFirestore.instance);
+  locator.registerSingleton<DatabaseService>(DatabaseService(
+    locator.get(),
+    locator.get(),
+    locator.get(),
+  ));
+}
+
+void _setupAdService() {
+  locator.registerSingleton<MobileAds>(MobileAds.instance);
+  locator.registerSingleton<AdService>(AdService(
+    locator.get(),
+    locator.get(),
+    locator.get(),
+  ));
+  locator.get<AdService>().initializeAds();
+}
+
+void _setupAppVersionService() {
+  locator.registerSingleton<AppInfoService>(AppInfoService(locator.get()));
 }

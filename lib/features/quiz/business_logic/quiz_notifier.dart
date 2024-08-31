@@ -1,11 +1,15 @@
 import 'dart:async';
 
 import 'package:practly/core/async/async_notifier.dart';
+import 'package:practly/core/services/ad_service.dart';
+import 'package:practly/core/services/database_service.dart';
 import 'package:practly/features/quiz/data/quiz_model.dart';
 import 'package:practly/features/quiz/data/quiz_repository.dart';
 
 class QuizNotifier extends AsyncNotifier<QuizModel> {
   final QuizRepository _repository;
+  final DatabaseService _databaseService;
+  final AdService _adService;
 
   String? _selectedAnswer;
 
@@ -39,7 +43,8 @@ class QuizNotifier extends AsyncNotifier<QuizModel> {
 
   Timer? timer;
 
-  QuizNotifier(this._repository);
+  QuizNotifier(this._repository, this._databaseService, this._adService)
+      : super(_databaseService, _adService);
 
   void generateQuiz() {
     _isAnswerSelected = false;

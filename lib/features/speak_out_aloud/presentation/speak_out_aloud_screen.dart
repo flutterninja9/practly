@@ -84,6 +84,7 @@ class _SpeakOutAloudScreenState extends State<SpeakOutAloudScreen> {
                   return AsyncPage(
                     asyncValue: notifier.state,
                     errorBuilder: () => const SizedBox.shrink(),
+                    outOfCreditsBuilder: () => const SizedBox.shrink(),
                     loadingBuilder: () => const SizedBox.shrink(),
                     dataBuilder: (model) {
                       final enableButton = notifier.enableSpeechButton;

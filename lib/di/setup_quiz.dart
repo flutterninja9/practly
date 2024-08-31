@@ -11,5 +11,9 @@ void setupQuiz() {
 
   locator.registerSingleton<QuizRepository>(QuizRepository(locator.get()));
 
-  locator.registerFactory<QuizNotifier>(() => QuizNotifier(locator.get()));
+  locator.registerFactory<QuizNotifier>(() => QuizNotifier(
+        locator.get(),
+        locator.get(),
+        locator.get(),
+      ));
 }

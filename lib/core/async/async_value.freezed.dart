@@ -21,6 +21,7 @@ mixin _$AsyncValue<T> {
     required TResult Function() loading,
     required TResult Function(T value) data,
     required TResult Function() empty,
+    required TResult Function() outOfCredits,
     required TResult Function(Object error) error,
   }) =>
       throw _privateConstructorUsedError;
@@ -29,6 +30,7 @@ mixin _$AsyncValue<T> {
     TResult? Function()? loading,
     TResult? Function(T value)? data,
     TResult? Function()? empty,
+    TResult? Function()? outOfCredits,
     TResult? Function(Object error)? error,
   }) =>
       throw _privateConstructorUsedError;
@@ -37,6 +39,7 @@ mixin _$AsyncValue<T> {
     TResult Function()? loading,
     TResult Function(T value)? data,
     TResult Function()? empty,
+    TResult Function()? outOfCredits,
     TResult Function(Object error)? error,
     required TResult orElse(),
   }) =>
@@ -46,6 +49,7 @@ mixin _$AsyncValue<T> {
     required TResult Function(Loading<T> value) loading,
     required TResult Function(Data<T> value) data,
     required TResult Function(Empty<T> value) empty,
+    required TResult Function(OutOfCredits<T> value) outOfCredits,
     required TResult Function(Error<T> value) error,
   }) =>
       throw _privateConstructorUsedError;
@@ -54,6 +58,7 @@ mixin _$AsyncValue<T> {
     TResult? Function(Loading<T> value)? loading,
     TResult? Function(Data<T> value)? data,
     TResult? Function(Empty<T> value)? empty,
+    TResult? Function(OutOfCredits<T> value)? outOfCredits,
     TResult? Function(Error<T> value)? error,
   }) =>
       throw _privateConstructorUsedError;
@@ -62,6 +67,7 @@ mixin _$AsyncValue<T> {
     TResult Function(Loading<T> value)? loading,
     TResult Function(Data<T> value)? data,
     TResult Function(Empty<T> value)? empty,
+    TResult Function(OutOfCredits<T> value)? outOfCredits,
     TResult Function(Error<T> value)? error,
     required TResult orElse(),
   }) =>
@@ -133,6 +139,7 @@ class _$LoadingImpl<T> implements Loading<T> {
     required TResult Function() loading,
     required TResult Function(T value) data,
     required TResult Function() empty,
+    required TResult Function() outOfCredits,
     required TResult Function(Object error) error,
   }) {
     return loading();
@@ -144,6 +151,7 @@ class _$LoadingImpl<T> implements Loading<T> {
     TResult? Function()? loading,
     TResult? Function(T value)? data,
     TResult? Function()? empty,
+    TResult? Function()? outOfCredits,
     TResult? Function(Object error)? error,
   }) {
     return loading?.call();
@@ -155,6 +163,7 @@ class _$LoadingImpl<T> implements Loading<T> {
     TResult Function()? loading,
     TResult Function(T value)? data,
     TResult Function()? empty,
+    TResult Function()? outOfCredits,
     TResult Function(Object error)? error,
     required TResult orElse(),
   }) {
@@ -170,6 +179,7 @@ class _$LoadingImpl<T> implements Loading<T> {
     required TResult Function(Loading<T> value) loading,
     required TResult Function(Data<T> value) data,
     required TResult Function(Empty<T> value) empty,
+    required TResult Function(OutOfCredits<T> value) outOfCredits,
     required TResult Function(Error<T> value) error,
   }) {
     return loading(this);
@@ -181,6 +191,7 @@ class _$LoadingImpl<T> implements Loading<T> {
     TResult? Function(Loading<T> value)? loading,
     TResult? Function(Data<T> value)? data,
     TResult? Function(Empty<T> value)? empty,
+    TResult? Function(OutOfCredits<T> value)? outOfCredits,
     TResult? Function(Error<T> value)? error,
   }) {
     return loading?.call(this);
@@ -192,6 +203,7 @@ class _$LoadingImpl<T> implements Loading<T> {
     TResult Function(Loading<T> value)? loading,
     TResult Function(Data<T> value)? data,
     TResult Function(Empty<T> value)? empty,
+    TResult Function(OutOfCredits<T> value)? outOfCredits,
     TResult Function(Error<T> value)? error,
     required TResult orElse(),
   }) {
@@ -278,6 +290,7 @@ class _$DataImpl<T> implements Data<T> {
     required TResult Function() loading,
     required TResult Function(T value) data,
     required TResult Function() empty,
+    required TResult Function() outOfCredits,
     required TResult Function(Object error) error,
   }) {
     return data(value);
@@ -289,6 +302,7 @@ class _$DataImpl<T> implements Data<T> {
     TResult? Function()? loading,
     TResult? Function(T value)? data,
     TResult? Function()? empty,
+    TResult? Function()? outOfCredits,
     TResult? Function(Object error)? error,
   }) {
     return data?.call(value);
@@ -300,6 +314,7 @@ class _$DataImpl<T> implements Data<T> {
     TResult Function()? loading,
     TResult Function(T value)? data,
     TResult Function()? empty,
+    TResult Function()? outOfCredits,
     TResult Function(Object error)? error,
     required TResult orElse(),
   }) {
@@ -315,6 +330,7 @@ class _$DataImpl<T> implements Data<T> {
     required TResult Function(Loading<T> value) loading,
     required TResult Function(Data<T> value) data,
     required TResult Function(Empty<T> value) empty,
+    required TResult Function(OutOfCredits<T> value) outOfCredits,
     required TResult Function(Error<T> value) error,
   }) {
     return data(this);
@@ -326,6 +342,7 @@ class _$DataImpl<T> implements Data<T> {
     TResult? Function(Loading<T> value)? loading,
     TResult? Function(Data<T> value)? data,
     TResult? Function(Empty<T> value)? empty,
+    TResult? Function(OutOfCredits<T> value)? outOfCredits,
     TResult? Function(Error<T> value)? error,
   }) {
     return data?.call(this);
@@ -337,6 +354,7 @@ class _$DataImpl<T> implements Data<T> {
     TResult Function(Loading<T> value)? loading,
     TResult Function(Data<T> value)? data,
     TResult Function(Empty<T> value)? empty,
+    TResult Function(OutOfCredits<T> value)? outOfCredits,
     TResult Function(Error<T> value)? error,
     required TResult orElse(),
   }) {
@@ -403,6 +421,7 @@ class _$EmptyImpl<T> implements Empty<T> {
     required TResult Function() loading,
     required TResult Function(T value) data,
     required TResult Function() empty,
+    required TResult Function() outOfCredits,
     required TResult Function(Object error) error,
   }) {
     return empty();
@@ -414,6 +433,7 @@ class _$EmptyImpl<T> implements Empty<T> {
     TResult? Function()? loading,
     TResult? Function(T value)? data,
     TResult? Function()? empty,
+    TResult? Function()? outOfCredits,
     TResult? Function(Object error)? error,
   }) {
     return empty?.call();
@@ -425,6 +445,7 @@ class _$EmptyImpl<T> implements Empty<T> {
     TResult Function()? loading,
     TResult Function(T value)? data,
     TResult Function()? empty,
+    TResult Function()? outOfCredits,
     TResult Function(Object error)? error,
     required TResult orElse(),
   }) {
@@ -440,6 +461,7 @@ class _$EmptyImpl<T> implements Empty<T> {
     required TResult Function(Loading<T> value) loading,
     required TResult Function(Data<T> value) data,
     required TResult Function(Empty<T> value) empty,
+    required TResult Function(OutOfCredits<T> value) outOfCredits,
     required TResult Function(Error<T> value) error,
   }) {
     return empty(this);
@@ -451,6 +473,7 @@ class _$EmptyImpl<T> implements Empty<T> {
     TResult? Function(Loading<T> value)? loading,
     TResult? Function(Data<T> value)? data,
     TResult? Function(Empty<T> value)? empty,
+    TResult? Function(OutOfCredits<T> value)? outOfCredits,
     TResult? Function(Error<T> value)? error,
   }) {
     return empty?.call(this);
@@ -462,6 +485,7 @@ class _$EmptyImpl<T> implements Empty<T> {
     TResult Function(Loading<T> value)? loading,
     TResult Function(Data<T> value)? data,
     TResult Function(Empty<T> value)? empty,
+    TResult Function(OutOfCredits<T> value)? outOfCredits,
     TResult Function(Error<T> value)? error,
     required TResult orElse(),
   }) {
@@ -474,6 +498,129 @@ class _$EmptyImpl<T> implements Empty<T> {
 
 abstract class Empty<T> implements AsyncValue<T> {
   const factory Empty() = _$EmptyImpl<T>;
+}
+
+/// @nodoc
+abstract class _$$OutOfCreditsImplCopyWith<T, $Res> {
+  factory _$$OutOfCreditsImplCopyWith(_$OutOfCreditsImpl<T> value,
+          $Res Function(_$OutOfCreditsImpl<T>) then) =
+      __$$OutOfCreditsImplCopyWithImpl<T, $Res>;
+}
+
+/// @nodoc
+class __$$OutOfCreditsImplCopyWithImpl<T, $Res>
+    extends _$AsyncValueCopyWithImpl<T, $Res, _$OutOfCreditsImpl<T>>
+    implements _$$OutOfCreditsImplCopyWith<T, $Res> {
+  __$$OutOfCreditsImplCopyWithImpl(
+      _$OutOfCreditsImpl<T> _value, $Res Function(_$OutOfCreditsImpl<T>) _then)
+      : super(_value, _then);
+
+  /// Create a copy of AsyncValue
+  /// with the given fields replaced by the non-null parameter values.
+}
+
+/// @nodoc
+
+class _$OutOfCreditsImpl<T> implements OutOfCredits<T> {
+  const _$OutOfCreditsImpl();
+
+  @override
+  String toString() {
+    return 'AsyncValue<$T>.outOfCredits()';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType && other is _$OutOfCreditsImpl<T>);
+  }
+
+  @override
+  int get hashCode => runtimeType.hashCode;
+
+  @override
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function() loading,
+    required TResult Function(T value) data,
+    required TResult Function() empty,
+    required TResult Function() outOfCredits,
+    required TResult Function(Object error) error,
+  }) {
+    return outOfCredits();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult? Function()? loading,
+    TResult? Function(T value)? data,
+    TResult? Function()? empty,
+    TResult? Function()? outOfCredits,
+    TResult? Function(Object error)? error,
+  }) {
+    return outOfCredits?.call();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function()? loading,
+    TResult Function(T value)? data,
+    TResult Function()? empty,
+    TResult Function()? outOfCredits,
+    TResult Function(Object error)? error,
+    required TResult orElse(),
+  }) {
+    if (outOfCredits != null) {
+      return outOfCredits();
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(Loading<T> value) loading,
+    required TResult Function(Data<T> value) data,
+    required TResult Function(Empty<T> value) empty,
+    required TResult Function(OutOfCredits<T> value) outOfCredits,
+    required TResult Function(Error<T> value) error,
+  }) {
+    return outOfCredits(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult? Function(Loading<T> value)? loading,
+    TResult? Function(Data<T> value)? data,
+    TResult? Function(Empty<T> value)? empty,
+    TResult? Function(OutOfCredits<T> value)? outOfCredits,
+    TResult? Function(Error<T> value)? error,
+  }) {
+    return outOfCredits?.call(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(Loading<T> value)? loading,
+    TResult Function(Data<T> value)? data,
+    TResult Function(Empty<T> value)? empty,
+    TResult Function(OutOfCredits<T> value)? outOfCredits,
+    TResult Function(Error<T> value)? error,
+    required TResult orElse(),
+  }) {
+    if (outOfCredits != null) {
+      return outOfCredits(this);
+    }
+    return orElse();
+  }
+}
+
+abstract class OutOfCredits<T> implements AsyncValue<T> {
+  const factory OutOfCredits() = _$OutOfCreditsImpl<T>;
 }
 
 /// @nodoc
@@ -545,6 +692,7 @@ class _$ErrorImpl<T> implements Error<T> {
     required TResult Function() loading,
     required TResult Function(T value) data,
     required TResult Function() empty,
+    required TResult Function() outOfCredits,
     required TResult Function(Object error) error,
   }) {
     return error(this.error);
@@ -556,6 +704,7 @@ class _$ErrorImpl<T> implements Error<T> {
     TResult? Function()? loading,
     TResult? Function(T value)? data,
     TResult? Function()? empty,
+    TResult? Function()? outOfCredits,
     TResult? Function(Object error)? error,
   }) {
     return error?.call(this.error);
@@ -567,6 +716,7 @@ class _$ErrorImpl<T> implements Error<T> {
     TResult Function()? loading,
     TResult Function(T value)? data,
     TResult Function()? empty,
+    TResult Function()? outOfCredits,
     TResult Function(Object error)? error,
     required TResult orElse(),
   }) {
@@ -582,6 +732,7 @@ class _$ErrorImpl<T> implements Error<T> {
     required TResult Function(Loading<T> value) loading,
     required TResult Function(Data<T> value) data,
     required TResult Function(Empty<T> value) empty,
+    required TResult Function(OutOfCredits<T> value) outOfCredits,
     required TResult Function(Error<T> value) error,
   }) {
     return error(this);
@@ -593,6 +744,7 @@ class _$ErrorImpl<T> implements Error<T> {
     TResult? Function(Loading<T> value)? loading,
     TResult? Function(Data<T> value)? data,
     TResult? Function(Empty<T> value)? empty,
+    TResult? Function(OutOfCredits<T> value)? outOfCredits,
     TResult? Function(Error<T> value)? error,
   }) {
     return error?.call(this);
@@ -604,6 +756,7 @@ class _$ErrorImpl<T> implements Error<T> {
     TResult Function(Loading<T> value)? loading,
     TResult Function(Data<T> value)? data,
     TResult Function(Empty<T> value)? empty,
+    TResult Function(OutOfCredits<T> value)? outOfCredits,
     TResult Function(Error<T> value)? error,
     required TResult orElse(),
   }) {

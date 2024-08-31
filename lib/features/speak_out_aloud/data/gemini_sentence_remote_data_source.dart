@@ -13,6 +13,6 @@ class GeminiSentenceRemoteDataSource extends ISentenceRemoteDataSource {
     WordComplexity complexity = WordComplexity.easy,
   }) async {
     final res = await _gemini.generateFromText(prompt(complexity));
-    return SpeakOutAloudModel.fromJson(res.text);
+    return SpeakOutAloudModel.fromJson(res.text, complexity);
   }
 }

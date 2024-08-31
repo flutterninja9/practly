@@ -1,17 +1,26 @@
 import 'package:practly/core/async/async_notifier.dart';
+import 'package:practly/core/services/ad_service.dart';
+import 'package:practly/core/services/database_service.dart';
 import 'package:practly/features/word_of_the_day/data/word_of_the_day_model.dart';
 import 'package:practly/features/word_of_the_day/data/word_repository.dart';
 
 class WordOfTheDayNotifier extends AsyncNotifier<WordOfTheDayModel> {
   final WordRepository _repository;
+  final DatabaseService _databaseService;
+  final AdService _adService;
 
-  WordOfTheDayNotifier(this._repository);
+  WordOfTheDayNotifier(
+    this._repository,
+    this._databaseService,
+    this._adService,
+  ) : super(_databaseService, _adService);
 
-
-  void generateWord() {
+  Future<void> generateWord() async {
     execute(
-      () => _repository
-          .getWord(complexity: complexity),
+      () => _repository.getWord(complexity: complexity).then((word) {
+        _databaseService.saveWordOfTheDay(word);
+        return word;
+      }),
     );
   }
 }

@@ -64,9 +64,9 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
             children: [
               Center(
                 child: ShadAvatar(
-                  user?.photoURL ?? kFallbackProfileImageUrl,
+                  user?.displayPictureUrl ?? kFallbackProfileImageUrl,
                   placeholder: Text(
-                    user?.displayName?.substring(0, 1).toUpperCase() ?? 'U',
+                    user?.name?.substring(0, 1).toUpperCase() ?? 'U',
                     style: ShadTheme.of(context).textTheme.h2,
                   ),
                 ),
@@ -96,16 +96,6 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                 onPressed: _signOut,
                 child: const Text('Sign Out'),
               ),
-              const SizedBox(height: 24),
-              if (user?.providerData
-                      .any((info) => info.providerId == 'google.com') ??
-                  false)
-                const ShadAlert.raw(
-                  variant: ShadAlertVariant.primary,
-                  title: Text('Google Account Linked'),
-                  description:
-                      Text('Your profile is linked to your Google account.'),
-                ),
             ],
           ),
         ),

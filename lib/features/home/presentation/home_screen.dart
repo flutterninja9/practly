@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:practly/core/extensions/context_extensions.dart';
+import 'package:practly/core/user/user_model.dart';
+import 'package:practly/features/home/widgets/credits_remaining_widget.dart';
 import 'package:practly/features/home/widgets/profile_pic.dart';
 import 'package:practly/features/quiz/presentation/quiz_screen.dart';
 import 'package:practly/features/speak_out_aloud/presentation/speak_out_aloud_screen.dart';
@@ -18,6 +20,8 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  late final UserModel userModel;
+
   int _getSelectedIndex() {
     final currentRoute = context.currentRoute;
 
@@ -67,7 +71,7 @@ class _HomeScreenState extends State<HomeScreen> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('SpeakEase'),
-        actions: const [ProfilePic()],
+        actions: const [CreditsRemainingWidget(), ProfilePic()],
       ),
       body: LayoutBuilder(
         builder: (context, constraints) {

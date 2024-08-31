@@ -12,6 +12,10 @@ void setupWordOfTheDay() {
   locator.registerSingleton<WordRepository>(WordRepository(locator.get()));
 
   locator.registerFactory<WordOfTheDayNotifier>(
-    () => WordOfTheDayNotifier(locator.get()),
+    () => WordOfTheDayNotifier(
+      locator.get(),
+      locator.get(),
+      locator.get(),
+    ),
   );
 }

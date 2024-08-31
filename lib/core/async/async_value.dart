@@ -7,5 +7,6 @@ class AsyncValue<T> with _$AsyncValue<T> {
   const factory AsyncValue.loading() = Loading<T>;
   const factory AsyncValue.data(T value) = Data<T>;
   const factory AsyncValue.empty() = Empty<T>;
+  const factory AsyncValue.outOfCredits() = OutOfCredits<T>;
   const factory AsyncValue.error(Object error) = Error<T>;
 }
