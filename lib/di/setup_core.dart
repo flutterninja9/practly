@@ -9,6 +9,7 @@ import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:practly/core/config/config.dart';
 import 'package:practly/core/navigation/app_router.dart';
 import 'package:practly/core/services/ad_service.dart';
+import 'package:practly/core/services/app_info_service.dart';
 import 'package:practly/core/services/database_service.dart';
 import 'package:practly/core/services/score_logic.dart';
 import 'package:practly/core/services/speech_to_text_service.dart';
@@ -24,6 +25,7 @@ import 'package:speech_to_text/speech_to_text.dart';
 Future<void> setupCore() async {
   await _initializeFirebase();
   await _loadConfigs();
+  _setupAppVersionService();
   _setupDatabaseService();
   _initializeFirebaseAuth();
   _setupGemini();
@@ -58,7 +60,7 @@ Future<void> _loadConfigs() async {
 
   await remoteConfig.setConfigSettings(RemoteConfigSettings(
     fetchTimeout: const Duration(minutes: 1),
-    minimumFetchInterval: const Duration(hours: 1),
+    minimumFetchInterval: const Duration(seconds: 1),
   ));
 
   locator.registerSingleton<ConfigService>(
@@ -115,4 +117,8 @@ void _setupAdService() {
     locator.get(),
   ));
   locator.get<AdService>().initializeAds();
+}
+
+void _setupAppVersionService() {
+  locator.registerSingleton<AppInfoService>(AppInfoService(locator.get()));
 }

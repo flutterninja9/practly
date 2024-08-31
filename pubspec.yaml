@@ -53,6 +53,10 @@ dependencies:
   lucide_icons: ^0.257.0
   cloud_firestore: ^4.14.0
   google_mobile_ads: ^5.1.0
+  device_info_plus: ^10.1.2
+  version: ^3.0.2
+  package_info_plus: ^8.0.2
+  url_launcher: ^6.3.0
 
 dev_dependencies:
   flutter_test:
