@@ -73,28 +73,33 @@ class _QuizScreenState extends State<QuizScreen> {
             AnimatedBuilder(
                 animation: notifier,
                 builder: (context, child) {
-                  final isLoading = notifier.state is Loading;
+                  final busyState = notifier.state is Loading ||
+                      notifier.state is OutOfCredits;
 
-                  return Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      ShadButton(
-                        onPressed: isLoading ? null : notifier.generateQuiz,
-                        icon: const Icon(
-                          Icons.navigate_next,
-                          size: 16,
-                        ),
-                        child: const Text('Next'),
-                      ),
-                      if (notifier.isAnswerSelected && notifier.countdown > 0)
-                        Center(
-                          child: Text(
-                            'Next question in ${notifier.countdown} seconds...',
-                            style: ShadTheme.of(context).textTheme.muted,
+                  if (!busyState) {
+                    return Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        ShadButton(
+                          onPressed: busyState ? null : notifier.generateQuiz,
+                          icon: const Icon(
+                            Icons.navigate_next,
+                            size: 16,
                           ),
+                          child: const Text('Next'),
                         ),
-                    ],
-                  );
+                        if (notifier.isAnswerSelected && notifier.countdown > 0)
+                          Center(
+                            child: Text(
+                              'Next question in ${notifier.countdown} seconds...',
+                              style: ShadTheme.of(context).textTheme.muted,
+                            ),
+                          ),
+                      ],
+                    );
+                  }
+
+                  return const SizedBox.shrink();
                 }),
           ],
         ),

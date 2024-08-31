@@ -13,6 +13,6 @@ class GeminiWordRemoteDataSource extends IWordRemoteDataSource {
     WordComplexity complexity = WordComplexity.easy,
   }) async {
     final res = await _gemini.generateFromText(prompt(complexity));
-    return WordOfTheDayModel.fromJson(res.text);
+    return WordOfTheDayModel.fromJson(res.text, complexity);
   }
 }

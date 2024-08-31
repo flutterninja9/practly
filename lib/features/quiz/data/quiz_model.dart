@@ -23,6 +23,14 @@ class QuizModel {
     );
   }
 
+  Map<String, dynamic> toMap() {
+    return <String, dynamic>{
+      'sentence': sentence,
+      'options': options,
+      'correctAnswer': correctAnswer,
+    };
+  }
+
   @override
   String toString() {
     return 'QuizModel(sentence: $sentence, options: $options, correctAnswer: $correctAnswer)';

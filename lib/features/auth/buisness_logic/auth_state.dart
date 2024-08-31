@@ -1,9 +1,13 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/widgets.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:practly/core/services/database_service.dart';
+import 'package:practly/core/user/user_model.dart';
+import 'package:practly/di/di.dart';
 
 class AuthState extends ChangeNotifier {
   final FirebaseAuth _auth = FirebaseAuth.instance;
+  final DatabaseService _databaseService = locator.get();
   final GoogleSignIn _googleSignIn = GoogleSignIn();
 
   bool isLoading = false;
@@ -41,8 +45,21 @@ class AuthState extends ChangeNotifier {
       String email, String password) async {
     try {
       setLoading(true);
-      await _auth.createUserWithEmailAndPassword(
-          email: email, password: password);
+      final creds = await _auth.createUserWithEmailAndPassword(
+        email: email,
+        password: password,
+      );
+
+      if (creds.additionalUserInfo?.isNewUser ?? false) {
+        await _databaseService.createUserProfile(
+          UserModel.fromEmailAndId(
+            id: creds.user!.uid,
+            email: creds.user?.email,
+            name: creds.user?.displayName,
+            dpUrl: creds.user?.photoURL,
+          ),
+        );
+      }
       setErrorMessage(null);
     } on FirebaseAuthException catch (e) {
       setErrorMessage(e.message);
@@ -61,7 +78,18 @@ class AuthState extends ChangeNotifier {
         accessToken: googleAuth?.accessToken,
         idToken: googleAuth?.idToken,
       );
-      await _auth.signInWithCredential(credential);
+      final creds = await _auth.signInWithCredential(credential);
+
+      if (creds.additionalUserInfo?.isNewUser ?? false) {
+        await _databaseService.createUserProfile(
+          UserModel.fromEmailAndId(
+            id: creds.user!.uid,
+            email: creds.user?.email,
+            name: creds.user?.displayName,
+            dpUrl: creds.user?.photoURL,
+          ),
+        );
+      }
       setErrorMessage(null);
     } catch (e) {
       setErrorMessage(e.toString());
@@ -73,7 +101,18 @@ class AuthState extends ChangeNotifier {
   Future<void> signInAnonymously() async {
     try {
       setLoading(true);
-      await _auth.signInAnonymously();
+      final creds = await _auth.signInAnonymously();
+
+      if (creds.additionalUserInfo?.isNewUser ?? false) {
+        await _databaseService.createUserProfile(
+          UserModel.fromEmailAndId(
+            id: creds.user!.uid,
+            email: creds.user?.email,
+            name: creds.user?.displayName,
+            dpUrl: creds.user?.photoURL,
+          ),
+        );
+      }
       setErrorMessage(null);
     } catch (e) {
       setErrorMessage(e.toString());

@@ -78,6 +78,7 @@ class _WordOfTheDayScreenState extends State<WordOfTheDayScreen>
                   builder: (context, child) {
                     return AsyncPage(
                       asyncValue: notifier.state,
+                      outOfCreditsBuilder: () => const SizedBox.shrink(),
                       loadingBuilder: () => const SizedBox.shrink(),
                       errorBuilder: () => const SizedBox.shrink(),
                       dataBuilder: (model) {

@@ -1,4 +1,6 @@
 import 'package:practly/core/async/async_notifier.dart';
+import 'package:practly/core/services/ad_service.dart';
+import 'package:practly/core/services/database_service.dart';
 import 'package:practly/core/services/score_logic.dart';
 import 'package:practly/core/services/speech_to_text_service.dart';
 import 'package:practly/features/speak_out_aloud/data/sentence_repository.dart';
@@ -8,6 +10,8 @@ class SpeakOutAloudNotifier extends AsyncNotifier<SpeakOutAloudModel> {
   final SentenceRepository _repository;
   final ScoreLogic _scoreLogic;
   final SpeechToTextService stt;
+  final DatabaseService _databaseService;
+  final AdService _adService;
 
   int _score = 0;
 
@@ -29,12 +33,24 @@ class SpeakOutAloudNotifier extends AsyncNotifier<SpeakOutAloudModel> {
     notifyListeners();
   }
 
-  SpeakOutAloudNotifier(this._repository, this.stt, this._scoreLogic);
+  SpeakOutAloudNotifier(
+    this._repository,
+    this.stt,
+    this._scoreLogic,
+    this._databaseService,
+    this._adService,
+  ) : super(
+          _databaseService,
+          _adService,
+        );
 
   void generateSentence() {
     score = 0;
     execute(
-      () => _repository.getSentence(complexity: complexity),
+      () => _repository.getSentence(complexity: complexity).then((sentence) {
+        _databaseService.saveSpeakOutLoud(sentence);
+        return sentence;
+      }),
     );
   }
 
