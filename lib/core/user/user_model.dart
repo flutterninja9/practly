@@ -20,8 +20,13 @@ class UserModel {
     required this.displayPictureUrl,
   });
 
-  factory UserModel.fromEmailAndId(
-      {required String id, String? email, String? name, String? dpUrl}) {
+  factory UserModel.fromEmailAndId({
+    required String id,
+    required int creditsForNewUser,
+    String? email,
+    String? name,
+    String? dpUrl,
+  }) {
     return UserModel(
       id: id,
       name: name,
@@ -29,7 +34,7 @@ class UserModel {
       displayPictureUrl: dpUrl,
       createdAt: DateTime.now(),
       lastLogin: DateTime.now(),
-      subscription: SubscriptionInfo.empty(),
+      subscription: SubscriptionInfo.empty(creditsForNewUser),
     );
   }
 
@@ -86,8 +91,8 @@ class SubscriptionInfo {
     this.expiresAt,
   });
 
-  factory SubscriptionInfo.empty() {
-    return SubscriptionInfo(type: 'free', generationLimit: kMaxCredits);
+  factory SubscriptionInfo.empty(int creditsForNewUser) {
+    return SubscriptionInfo(type: 'free', generationLimit: creditsForNewUser);
   }
 
   factory SubscriptionInfo.fromMap(Map<String, dynamic> map) {

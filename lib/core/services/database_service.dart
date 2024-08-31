@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:practly/core/config/config.dart';
 import 'package:practly/core/user/user_model.dart';
 import 'package:practly/features/quiz/data/quiz_model.dart';
 import 'package:practly/features/speak_out_aloud/data/speak_out_aloud_model.dart';
@@ -11,10 +12,15 @@ import 'package:practly/features/word_of_the_day/data/word_of_the_day_model.dart
 class DatabaseService {
   final FirebaseFirestore _firestore;
   final FirebaseAuth _firebaseAuth;
+  final Config _config;
 
   User? get _user => _firebaseAuth.currentUser;
 
-  DatabaseService(this._firestore, this._firebaseAuth);
+  DatabaseService(
+    this._firestore,
+    this._firebaseAuth,
+    this._config,
+  );
 
   /// Creates a new user profile in Firestore.
   ///
@@ -152,10 +158,11 @@ class DatabaseService {
   }
 
   Future<void> updateGenerationLimit() async {
-    await _firestore
-        .collection('users')
-        .doc(_user!.uid)
-        .update({'subscription.generationLimit': FieldValue.increment(5)});
+    await _firestore.collection('users').doc(_user!.uid).update({
+      'subscription.generationLimit': FieldValue.increment(
+        _config.creditsForAdWatch,
+      )
+    });
   }
 
   /// Retrieves the user's current ad watch count.

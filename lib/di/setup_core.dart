@@ -23,9 +23,9 @@ import 'package:speech_to_text/speech_to_text.dart';
 
 Future<void> setupCore() async {
   await _initializeFirebase();
+  await _loadConfigs();
   _setupDatabaseService();
   _initializeFirebaseAuth();
-  await _loadConfigs();
   _setupGemini();
   _setupScoreLogic();
   _setupSpeechToTextService();
@@ -100,8 +100,11 @@ void _setupRouter() {
 
 void _setupDatabaseService() {
   locator.registerSingleton<FirebaseFirestore>(FirebaseFirestore.instance);
-  locator.registerSingleton<DatabaseService>(
-      DatabaseService(locator.get(), locator.get()));
+  locator.registerSingleton<DatabaseService>(DatabaseService(
+    locator.get(),
+    locator.get(),
+    locator.get(),
+  ));
 }
 
 void _setupAdService() {
