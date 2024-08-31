@@ -6,6 +6,7 @@ part 'config.g.dart';
 @JsonSerializable()
 class Config {
   final String geminiKey;
+  final String rewardedInterstitialAdId;
   final int creditsForNewUser;
   final int creditsForAdWatch;
 
@@ -13,6 +14,7 @@ class Config {
     required this.geminiKey,
     required this.creditsForNewUser,
     required this.creditsForAdWatch,
+    required this.rewardedInterstitialAdId,
   });
 
   factory Config.fromJson(Map<String, dynamic> json) => _$ConfigFromJson(json);
@@ -22,10 +24,12 @@ class Config {
       geminiKey: map["geminiKey"]!.asString(),
       creditsForNewUser: map["creditsForNewUser"]!.asInt(),
       creditsForAdWatch: map["creditsForAdWatch"]!.asInt(),
+      rewardedInterstitialAdId: map["rewardedInterstitialAdId"]!.asString(),
     );
   }
 
   @override
-  String toString() =>
-      'Config(geminiKey: $geminiKey, creditsForNewUser: $creditsForNewUser, creditsForAdWatch: $creditsForAdWatch)';
+  String toString() {
+    return 'Config(geminiKey: $geminiKey, rewardedInterstitialAdId: $rewardedInterstitialAdId, creditsForNewUser: $creditsForNewUser, creditsForAdWatch: $creditsForAdWatch)';
+  }
 }

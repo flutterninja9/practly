@@ -109,6 +109,10 @@ void _setupDatabaseService() {
 
 void _setupAdService() {
   locator.registerSingleton<MobileAds>(MobileAds.instance);
-  locator.registerSingleton<AdService>(AdService(locator.get(), locator.get()));
+  locator.registerSingleton<AdService>(AdService(
+    locator.get(),
+    locator.get(),
+    locator.get(),
+  ));
   locator.get<AdService>().initializeAds();
 }

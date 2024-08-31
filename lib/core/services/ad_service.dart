@@ -1,12 +1,18 @@
 import 'package:flutter/foundation.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
+import 'package:practly/core/config/config.dart';
 import 'database_service.dart';
 
 class AdService {
   final DatabaseService _databaseService;
   final MobileAds _adService;
+  final Config _config;
 
-  AdService(this._databaseService, this._adService);
+  AdService(
+    this._databaseService,
+    this._adService,
+    this._config,
+  );
 
   Future<void> initializeAds() async {
     await _adService.initialize();
@@ -16,7 +22,7 @@ class AdService {
     await RewardedInterstitialAd.load(
       adUnitId: kDebugMode
           ? 'ca-app-pub-3940256099942544/5354046379'
-          : 'ca-app-pub-6987498065169755/8976301575',
+          : _config.rewardedInterstitialAdId,
       request: const AdRequest(),
       rewardedInterstitialAdLoadCallback: RewardedInterstitialAdLoadCallback(
         onAdLoaded: (ad) async {
