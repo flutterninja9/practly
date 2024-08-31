@@ -16,6 +16,8 @@ class AuthState extends ChangeNotifier {
   bool obscure = false;
   String? errorMessage;
 
+  bool get allowAnonymousSignups => _config.allowAnonymousSignups;
+
   void setLoading(bool value) {
     isLoading = value;
     notifyListeners();

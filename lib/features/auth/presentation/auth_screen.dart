@@ -149,13 +149,8 @@ class _AuthScreenState extends State<AuthScreen> {
                               ],
                             ),
                           ),
-                          const SizedBox(height: 16),
-                          ShadButton.ghost(
-                            onPressed: _authState.isLoading
-                                ? null
-                                : _authState.signInAnonymously,
-                            child: const Text('Continue as Guest'),
-                          ),
+                          if (_authState.allowAnonymousSignups)
+                            _AnonymousSignInButton(authState: _authState),
                           const SizedBox(height: 24),
                           Row(
                             mainAxisAlignment: MainAxisAlignment.center,
@@ -187,10 +182,11 @@ class _AuthScreenState extends State<AuthScreen> {
                   ),
                 ),
               ),
-              if(_authState.isLoading) const Align(
-                alignment: Alignment.bottomCenter,
-                child: SafeArea(child: LinearProgressIndicator()),
-              ),
+              if (_authState.isLoading)
+                const Align(
+                  alignment: Alignment.bottomCenter,
+                  child: SafeArea(child: LinearProgressIndicator()),
+                ),
             ],
           );
         },
@@ -215,5 +211,27 @@ class _AuthScreenState extends State<AuthScreen> {
     _emailController.dispose();
     _passwordController.dispose();
     super.dispose();
+  }
+}
+
+class _AnonymousSignInButton extends StatelessWidget {
+  const _AnonymousSignInButton({
+    super.key,
+    required AuthState authState,
+  }) : _authState = authState;
+
+  final AuthState _authState;
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        const SizedBox(height: 16),
+        ShadButton.ghost(
+          onPressed: _authState.isLoading ? null : _authState.signInAnonymously,
+          child: const Text('Continue as Guest'),
+        ),
+      ],
+    );
   }
 }
