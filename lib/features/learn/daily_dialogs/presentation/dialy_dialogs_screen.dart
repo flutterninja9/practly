@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:practly/core/constants.dart';
+import 'package:practly/core/mixins/feature_toggle_mixin.dart';
 import 'package:practly/core/widgets/header.dart';
 import 'package:practly/core/async/async_page.dart';
 import 'package:practly/di/di.dart';
@@ -13,7 +15,7 @@ class DailyDialogsScreen extends StatefulWidget {
 }
 
 class _DailyDialogsScreenState extends State<DailyDialogsScreen>
-    with SingleTickerProviderStateMixin {
+    with SingleTickerProviderStateMixin, FeatureToggleMixin {
   late final DailyDialogsNotifier notifier;
 
   @override
@@ -25,6 +27,10 @@ class _DailyDialogsScreenState extends State<DailyDialogsScreen>
 
   @override
   Widget build(BuildContext context) {
+    if (!isEnabled(kDialyDialogFeatureConstant)) {
+      return const SizedBox.shrink();
+    }
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
