@@ -38,6 +38,11 @@ class DatabaseService {
     await _firestore.collection('users').doc(user.id).set(user.toMap());
   }
 
+  Future<void> updateUserProfile(
+      String userId, Map<String, String> updates) async {
+    await _firestore.collection('users').doc(userId).update(updates);
+  }
+
   /// Retrieves the current user's profile from Firestore.
   ///
   /// Call this method when you need to display or use the user's profile information.

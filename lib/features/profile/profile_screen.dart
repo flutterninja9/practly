@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:practly/core/constants.dart';
 import 'package:practly/core/navigation/auth_notifier.dart';
+import 'package:practly/core/services/database_service.dart';
 import 'package:practly/di/di.dart';
 import 'package:shadcn_ui/shadcn_ui.dart';
 
@@ -16,6 +17,7 @@ class UserProfileScreen extends StatefulWidget {
 
 class _UserProfileScreenState extends State<UserProfileScreen> {
   late final FirebaseAuthNotifier authNotifier;
+  late final DatabaseService databaseService;
   final _displayNameController = TextEditingController();
   final _emailController = TextEditingController();
   bool _isEditing = false;
@@ -23,6 +25,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
   @override
   void initState() {
     super.initState();
+    databaseService = locator.get();
     authNotifier = locator.get();
     _loadUserData();
   }
@@ -105,13 +108,23 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
 
   void _saveChanges() async {
     try {
-      await FirebaseAuth.instance.currentUser
-          ?.updateDisplayName(_displayNameController.text);
-      const t = ShadToast.raw(
+      final user = FirebaseAuth.instance.currentUser;
+      final newName = _displayNameController.text;
+      if (newName.isNotEmpty) {
+        await user?.updateDisplayName(newName);
+        await databaseService.updateUserProfile(user!.uid, {"name": newName});
+
+        const t = ShadToast.raw(
           variant: ShadToastVariant.primary,
-          title: Text('Profile updated successfully'));
-      if (!mounted) return;
-      ShadToaster.maybeOf(context)?.show(t);
+          title: Text('Profile updated successfully'),
+        );
+        if (!mounted) return;
+        ShadToaster.maybeOf(context)?.show(t);
+      } else {
+        const t = ShadToast.destructive(title: Text('Name cannot be empty'));
+        if (!mounted) return;
+        ShadToaster.maybeOf(context)?.show(t);
+      }
     } catch (e) {
       const t = ShadToast.destructive(title: Text('Failed to update profile'));
       if (!mounted) return;
