@@ -1,0 +1,143 @@
+[
+    {
+        "title": "Grocery Shopping",
+        "description": "Learn phrases and vocabulary needed to navigate a grocery store, ask for prices, and understand product labels. Practice common dialogues with store clerks.",
+        "exercises": [
+            {
+                "type": "quiz",
+                "sentence": "Where can I find the ____?",
+                "options": {
+                    "a": "bread",
+                    "b": "breads",
+                    "c": "breades",
+                    "d": "breading"
+                },
+                "correct_answer": "a"
+            },
+            {
+                "type": "quiz",
+                "sentence": "How much does this ____ cost?",
+                "options": {
+                    "a": "items",
+                    "b": "item",
+                    "c": "itemed",
+                    "d": "iteming"
+                },
+                "correct_answer": "b"
+            },
+            {
+                "type": "quiz",
+                "sentence": "Could you please ____ me the price?",
+                "options": {
+                    "a": "tell",
+                    "b": "saying",
+                    "c": "speak",
+                    "d": "telling"
+                },
+                "correct_answer": "a"
+            },
+            {
+                "type": "quiz",
+                "sentence": "Do you have any fresh ____?",
+                "options": {
+                    "a": "vegetables",
+                    "b": "vegetable",
+                    "c": "vegetabled",
+                    "d": "vegetabling"
+                },
+                "correct_answer": "a"
+            },
+            {
+                "type": "sentence",
+                "sentence": "Can you show me where the dairy products are?",
+                "explanation": "Dairy products include items like milk, cheese, and yogurt.",
+                "tip": "Pronounce 'dairy' as 'day-ree'."
+            },
+            {
+                "type": "quiz",
+                "sentence": "I would like a kilogram of ____.",
+                "options": {
+                    "a": "apples",
+                    "b": "apple",
+                    "c": "applese",
+                    "d": "appling"
+                },
+                "correct_answer": "a"
+            },
+            {
+                "type": "sentence",
+                "sentence": "How much is a loaf of bread?",
+                "explanation": "A 'loaf' refers to a single unit of bread.",
+                "tip": "Emphasize the 'o' in 'loaf' as in 'low'."
+            },
+            {
+                "type": "quiz",
+                "sentence": "Excuse me, do you sell ____ products?",
+                "options": {
+                    "a": "organic",
+                    "b": "organically",
+                    "c": "organism",
+                    "d": "organing"
+                },
+                "correct_answer": "a"
+            },
+            {
+                "type": "sentence",
+                "sentence": "Can I pay with a credit card?",
+                "explanation": "A 'credit card' is a common form of payment.",
+                "tip": "Practice the smooth transition between 'credit' and 'card'."
+            },
+            {
+                "type": "quiz",
+                "sentence": "I need a dozen ____.",
+                "options": {
+                    "a": "eggs",
+                    "b": "egg",
+                    "c": "egged",
+                    "d": "egging"
+                },
+                "correct_answer": "a"
+            },
+            {
+                "type": "sentence",
+                "sentence": "Do you have any discounts on these items?",
+                "explanation": "A 'discount' is a reduction in price.",
+                "tip": "Pronounce 'discount' with emphasis on the first syllable."
+            },
+            {
+                "type": "quiz",
+                "sentence": "Could you help me carry these ____?",
+                "options": {
+                    "a": "bags",
+                    "b": "bag",
+                    "c": "baged",
+                    "d": "bagging"
+                },
+                "correct_answer": "a"
+            },
+            {
+                "type": "sentence",
+                "sentence": "Where is the checkout counter?",
+                "explanation": "The 'checkout counter' is where you pay for your items.",
+                "tip": "Pronounce 'checkout' as one word with a slight pause between 'check' and 'out'."
+            },
+            {
+                "type": "quiz",
+                "sentence": "Do you need a ____?",
+                "options": {
+                    "a": "receipt",
+                    "b": "receiving",
+                    "c": "receiptful",
+                    "d": "receipting"
+                },
+                "correct_answer": "a"
+            },
+            {
+                "type": "sentence",
+                "sentence": "Can you double-bag this, please?",
+                "explanation": "To 'double-bag' means to use two bags for extra strength.",
+                "tip": "Focus on the 'b' sounds in 'double-bag'."
+            }
+        ]
+    }
+]
