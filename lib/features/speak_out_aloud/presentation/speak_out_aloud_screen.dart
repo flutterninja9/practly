@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
 
 import 'package:practly/core/async/async_page.dart';
+import 'package:practly/core/excercise_widgets/speak/speak_excercise_screen.dart';
 import 'package:practly/core/services/text_to_speech_service.dart';
 import 'package:practly/core/widgets/complexity_selector.dart';
 import 'package:practly/di/di.dart';
 import 'package:practly/features/speak_out_aloud/buisness_logic/speak_out_aloud_notifier.dart';
-import 'package:practly/features/speak_out_aloud/presentation/score_display.dart';
-import 'package:practly/features/speak_out_aloud/presentation/speak_out_aloud_content.dart';
 import 'package:shadcn_ui/shadcn_ui.dart';
 
 class SpeakOutAloudScreen extends StatefulWidget {
@@ -61,65 +60,20 @@ class _SpeakOutAloudScreenState extends State<SpeakOutAloudScreen> {
                 );
               },
             ),
-            const SizedBox(height: 20),
             Expanded(
               child: AnimatedBuilder(
-                animation: notifier,
-                builder: (context, child) {
-                  return AsyncPage(
-                    asyncValue: notifier.state,
-                    dataBuilder: (model) => SpeakOutAloudContent(
-                      model: model,
-                      speechService: speechService,
-                      spokenWordsStream: notifier.stt.spokenWords,
-                    ),
-                    onRetry: notifier.generateSentence,
-                  );
-                },
-              ),
+                  animation: notifier,
+                  builder: (context, child) {
+                    return AsyncPage(
+                      asyncValue: notifier.state,
+                      onRetry: notifier.generateSentence,
+                      dataBuilder: (model) => SpeakExcerciseScreen(
+                        model: model,
+                        onRequestNext: notifier.generateSentence,
+                      ),
+                    );
+                  }),
             ),
-            AnimatedBuilder(
-                animation: notifier,
-                builder: (context, child) {
-                  return AsyncPage(
-                    asyncValue: notifier.state,
-                    errorBuilder: () => const SizedBox.shrink(),
-                    outOfCreditsBuilder: () => const SizedBox.shrink(),
-                    loadingBuilder: () => const SizedBox.shrink(),
-                    dataBuilder: (model) {
-                      final enableButton = notifier.enableSpeechButton;
-
-                      return Center(
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            ShadButton.outline(
-                              size: ShadButtonSize.lg,
-                              icon: const Icon(Icons.mic),
-                              enabled: enableButton,
-                              onPressed: () {
-                                notifier.listen();
-                              },
-                            ),
-                            ScoreDisplay(score: notifier.score),
-                            if (notifier.score > 5)
-                              ShadButton.outline(
-                                size: ShadButtonSize.lg,
-                                icon: const Icon(Icons.navigate_next_sharp),
-                                enabled: enableButton,
-                                onPressed: () async {
-                                  notifier.onError();
-                                  notifier.generateSentence();
-                                },
-                              )
-                            else
-                              const SizedBox.shrink(),
-                          ],
-                        ),
-                      );
-                    },
-                  );
-                }),
           ],
         ),
       ),

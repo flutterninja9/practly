@@ -17,8 +17,6 @@ void setupSpeakOutAloud() {
       locator.get(),
       locator.get(),
       locator.get(),
-      locator.get(),
-      locator.get(),
     ),
   );
 }
