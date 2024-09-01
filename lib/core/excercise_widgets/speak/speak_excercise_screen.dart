@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:practly/core/excercise_widgets/speak/speak_excercise_viewmodel.dart';
 import 'package:practly/di/di.dart';
 import 'package:practly/features/speak_out_aloud/data/speak_out_aloud_model.dart';
-import 'package:practly/features/speak_out_aloud/presentation/score_display.dart';
-import 'package:practly/features/speak_out_aloud/presentation/speak_out_aloud_content.dart';
+import 'package:practly/core/excercise_widgets/speak/score_display.dart';
+import 'package:practly/core/excercise_widgets/speak/speak_out_aloud_content.dart';
 import 'package:shadcn_ui/shadcn_ui.dart';
 
 class SpeakExcerciseScreen extends StatefulWidget {
