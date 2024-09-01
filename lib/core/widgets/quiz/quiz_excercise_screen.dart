@@ -8,10 +8,12 @@ class QuizExcerciseScreen extends StatefulWidget {
   const QuizExcerciseScreen({
     super.key,
     required this.model,
+    required this.autoNext,
     required this.onRequestNext,
   });
 
   final QuizModel model;
+  final bool autoNext;
   final Function() onRequestNext;
 
   @override
@@ -23,14 +25,11 @@ class _QuizExcerciseScreenState extends State<QuizExcerciseScreen> {
 
   @override
   void initState() {
-    viewModel = QuizExcerciseViewModel(widget.model);
+    viewModel = QuizExcerciseViewModel(
+      widget.model,
+      widget.autoNext,
+    );
     super.initState();
-  }
-
-  @override
-  void dispose() {
-    viewModel.dispose();
-    super.dispose();
   }
 
   @override
@@ -51,26 +50,16 @@ class _QuizExcerciseScreenState extends State<QuizExcerciseScreen> {
                       viewModel.handleOptionSelected(val, widget.onRequestNext),
                 ),
               ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  ShadButton(
-                    onPressed: widget.onRequestNext,
-                    icon: const Icon(
-                      Icons.navigate_next,
-                      size: 16,
-                    ),
-                    child: const Text('Next'),
-                  ),
-                  if (viewModel.isAnswerSelected && viewModel.countdown > 0)
-                    Center(
-                      child: Text(
-                        'Next question in ${viewModel.countdown} seconds...',
-                        style: ShadTheme.of(context).textTheme.muted,
-                      ),
-                    ),
-                ],
-              ),
+              if (!widget.autoNext && viewModel.isAnswerSelected)
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    ShadButton.link(
+                      onPressed: widget.onRequestNext,
+                      child: const Text("Next"),
+                    )
+                  ],
+                ),
             ],
           );
         });

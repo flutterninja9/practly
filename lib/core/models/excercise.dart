@@ -10,7 +10,9 @@ abstract class Exercise {
   Map<String, dynamic> toMap();
 
   static Exercise fromMap(
-      Map<String, dynamic> map, WordComplexity? complexity) {
+    Map<String, dynamic> map,
+    WordComplexity? complexity,
+  ) {
     switch (map['type']) {
       case 'quiz':
         return QuizModel.fromMap(map);

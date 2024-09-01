@@ -74,7 +74,7 @@ class _SpeakExcerciseScreenState extends State<SpeakExcerciseScreen> {
                         enabled: viewmodel.enableSpeechButton,
                         onPressed: () async {
                           viewmodel.onError();
-                          widget.onRequestNext();
+                          await widget.onRequestNext();
                         },
                       )
                     else

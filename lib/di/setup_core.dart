@@ -80,8 +80,8 @@ void _setupGemini() {
 }
 
 void _setupSpeechToTextService() {
-  locator.registerSingleton<TextToSpeechService>(
-      TextToSpeechService(FlutterTts()));
+  locator.registerFactory<TextToSpeechService>(
+      () => TextToSpeechService(FlutterTts()));
 }
 
 void _setupTextToSpeechService() {

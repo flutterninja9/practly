@@ -8,6 +8,7 @@ import 'package:practly/di/di.dart';
 import 'package:practly/core/navigation/auth_notifier.dart';
 import 'package:practly/features/auth/presentation/auth_screen.dart';
 import 'package:practly/features/home/presentation/home_screen.dart';
+import 'package:practly/features/learn/exercise/presentation/exercise_screen.dart';
 import 'package:practly/features/learn/presentation/learn_screen.dart';
 import 'package:practly/features/profile/profile_screen.dart';
 import 'package:practly/features/quiz/presentation/quiz_screen.dart';
@@ -52,6 +53,13 @@ class AppRouter {
           path: UserProfileScreen.route,
           builder: (context, state) {
             return const UserProfileScreen();
+          }),
+      GoRoute(
+          path: ExerciseScreen.route,
+          builder: (context, state) {
+            return ExerciseScreen(
+              id: state.pathParameters["id"]!,
+            );
           }),
       ShellRoute(
         builder: (context, state, child) {

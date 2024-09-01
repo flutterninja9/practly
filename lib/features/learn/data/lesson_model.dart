@@ -5,23 +5,27 @@ import 'package:practly/core/enums/enums.dart';
 
 import 'package:practly/core/models/excercise.dart';
 
-class DailyDialogModel {
+class LessonModel {
+  final String id;
   final String title;
   final String description;
   final List<Exercise>? exercises;
 
-  DailyDialogModel({
+  LessonModel({
+    required this.id,
     required this.title,
     required this.description,
     required this.exercises,
   });
 
-  DailyDialogModel copyWith({
+  LessonModel copyWith({
+    String? id,
     String? title,
     String? description,
     List<Exercise>? exercises,
   }) {
-    return DailyDialogModel(
+    return LessonModel(
+      id: id ?? this.id,
       title: title ?? this.title,
       description: description ?? this.description,
       exercises: exercises ?? this.exercises,
@@ -30,17 +34,20 @@ class DailyDialogModel {
 
   Map<String, dynamic> toMap() {
     return <String, dynamic>{
+      'id': id,
       'title': title,
       'description': description,
       'exercises': exercises?.map((x) => x.toMap()).toList() ?? [],
     };
   }
 
-  factory DailyDialogModel.fromMap(
+  factory LessonModel.fromMap(
+    String id,
     Map<String, dynamic> map,
     WordComplexity? complexity,
   ) {
-    return DailyDialogModel(
+    return LessonModel(
+      id: id,
       title: map['title'] as String,
       description: map['description'] as String,
       exercises: List<Exercise>.from(
@@ -57,23 +64,25 @@ class DailyDialogModel {
 
   String toJson() => json.encode(toMap());
 
-  factory DailyDialogModel.fromJson(
-          String source, WordComplexity? complexity) =>
-      DailyDialogModel.fromMap(
+  factory LessonModel.fromJson(
+          String source, String id, WordComplexity? complexity) =>
+      LessonModel.fromMap(
+        id,
         json.decode(source) as Map<String, dynamic>,
         complexity,
       );
 
   @override
   String toString() =>
-      'DailyDialog(title: $title, description: $description, exercises: $exercises)';
+      'LessonModel(title: $title, description: $description, exercises: $exercises)';
 
   @override
-  bool operator ==(covariant DailyDialogModel other) {
+  bool operator ==(covariant LessonModel other) {
     if (identical(this, other)) return true;
 
     return other.title == title &&
         other.description == description &&
+        other.id == id &&
         listEquals(other.exercises, exercises);
   }
 

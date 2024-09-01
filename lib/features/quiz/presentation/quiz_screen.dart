@@ -57,6 +57,7 @@ class _QuizScreenState extends State<QuizScreen> {
                       onRetry: notifier.generateQuiz,
                       dataBuilder: (model) => QuizExcerciseScreen(
                         model: model,
+                        autoNext: false,
                         onRequestNext: notifier.generateQuiz,
                       ),
                     );

@@ -1,5 +1,6 @@
 import 'package:practly/core/enums/enums.dart';
-import 'package:practly/features/learn/data/daily_dialogs_model.dart';
+import 'package:practly/core/models/excercise.dart';
+import 'package:practly/features/learn/data/lesson_model.dart';
 import 'package:practly/features/learn/data/i_learn_remote_data_source.dart';
 import 'package:practly/features/learn/data/word_of_the_day_model.dart';
 
@@ -10,13 +11,17 @@ class LearnRepository {
 
   Future<WordOfTheDayModel> getWord({
     WordComplexity complexity = WordComplexity.easy,
-  }) async {
+  }) {
     return _remoteDataSource.generateWordOfTheDay(complexity: complexity);
   }
 
-  Future<List<DailyDialogModel>> getDailyDialogs({
+  Future<List<LessonModel>> getDailyDialogs({
     WordComplexity complexity = WordComplexity.easy,
-  }) async {
-    return _remoteDataSource.getDailyDialogs(complexity: complexity);
+  }) {
+    return _remoteDataSource.getLessons(complexity: complexity);
+  }
+
+  Future<List<Exercise>> getExercises(String id) {
+    return _remoteDataSource.getExercises(id);
   }
 }

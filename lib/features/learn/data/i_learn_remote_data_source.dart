@@ -1,5 +1,6 @@
 import 'package:practly/core/enums/enums.dart';
-import 'package:practly/features/learn/data/daily_dialogs_model.dart';
+import 'package:practly/core/models/excercise.dart';
+import 'package:practly/features/learn/data/lesson_model.dart';
 import 'package:practly/features/learn/data/word_of_the_day_model.dart';
 
 abstract class ILearnRemoteDataSource {
@@ -43,7 +44,9 @@ abstract class ILearnRemoteDataSource {
     WordComplexity complexity = WordComplexity.easy,
   });
 
-  Future<List<DailyDialogModel>> getDailyDialogs({
+  Future<List<LessonModel>> getLessons({
     WordComplexity complexity = WordComplexity.easy,
   });
+
+  Future<List<Exercise>> getExercises(String id);
 }

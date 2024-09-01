@@ -1,9 +1,11 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:practly/core/config/config.dart';
+import 'package:practly/core/navigation/auth_notifier.dart';
 import 'package:practly/core/user/user_model.dart';
 import 'package:practly/core/models/quiz/quiz_model.dart';
 import 'package:practly/core/models/speak/speak_out_aloud_model.dart';
+import 'package:practly/di/di.dart';
 import 'package:practly/features/learn/data/word_of_the_day_model.dart';
 
 class DatabaseService {
@@ -24,7 +26,9 @@ class DatabaseService {
   }
 
   Future<void> updateUserProfile(
-      String userId, Map<String, String> updates) async {
+    String userId,
+    Map<String, String> updates,
+  ) async {
     await _firestore.collection('users').doc(userId).update(updates);
   }
 
@@ -101,5 +105,30 @@ class DatabaseService {
     return _firestore.collection('users').doc(_user!.uid).snapshots().map((e) =>
         (e.data() as Map<String, dynamic>)['subscription']['generationLimit'] ??
         0);
+  }
+
+  Future<void> setEnrollment(String lessonId) async {
+    await _firestore.collection('users').doc(_user!.uid).update({
+      'progress.currentLesson': lessonId,
+    });
+  }
+
+  Future<void> clearEnrollment() async {
+    await _firestore.collection('users').doc(_user!.uid).update({
+      'progress.currentLesson': FieldValue.delete(),
+    });
+  }
+
+  Future<void> markAsDone(String lessonId) async {
+    await clearEnrollment();
+    final authNotifier = locator.get<FirebaseAuthNotifier>();
+    final user = await getUserProfile(authNotifier.signedInUser!.id);
+    authNotifier.signedInUser = user;
+    final completedLessons = user?.progress?.completedLessons ?? [];
+    completedLessons.add(lessonId);
+
+    await _firestore.collection('users').doc(_user!.uid).update({
+      'progress.completedLessons': completedLessons,
+    });
   }
 }
