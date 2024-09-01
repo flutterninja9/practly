@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:practly/features/word_of_the_day/presentation/word_of_the_day_content.dart';
+import 'package:practly/core/widgets/header.dart';
 import 'package:shadcn_ui/shadcn_ui.dart';
 
 import 'package:practly/core/async/async_page.dart';
@@ -7,6 +7,7 @@ import 'package:practly/core/services/text_to_speech_service.dart';
 import 'package:practly/core/widgets/complexity_selector.dart';
 import 'package:practly/di/di.dart';
 import 'package:practly/features/word_of_the_day/buisness_logic/word_of_the_day_notifier.dart';
+import 'package:practly/features/word_of_the_day/presentation/word_of_the_day_content.dart';
 
 class WordOfTheDayScreen extends StatefulWidget {
   const WordOfTheDayScreen({super.key});
@@ -39,10 +40,7 @@ class _WordOfTheDayScreenState extends State<WordOfTheDayScreen>
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(
-                'Word of the Day',
-                style: ShadTheme.of(context).textTheme.h1,
-              ),
+              const Header(title: 'Word of the Day'),
               const SizedBox(height: 20),
               AnimatedBuilder(
                 animation: notifier,

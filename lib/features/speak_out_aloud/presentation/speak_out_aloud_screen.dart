@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 
 import 'package:practly/core/async/async_page.dart';
+import 'package:practly/core/widgets/header.dart';
 import 'package:practly/core/widgets/speak/speak_excercise_screen.dart';
 import 'package:practly/core/services/text_to_speech_service.dart';
 import 'package:practly/core/widgets/complexity_selector.dart';
 import 'package:practly/di/di.dart';
 import 'package:practly/features/speak_out_aloud/buisness_logic/speak_out_aloud_notifier.dart';
-import 'package:shadcn_ui/shadcn_ui.dart';
 
 class SpeakOutAloudScreen extends StatefulWidget {
   const SpeakOutAloudScreen({super.key});
@@ -43,10 +43,7 @@ class _SpeakOutAloudScreenState extends State<SpeakOutAloudScreen> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(
-              'Speak Out Aloud',
-              style: ShadTheme.of(context).textTheme.h1,
-            ),
+            const Header(title: 'Speak Out Aloud'),
             const SizedBox(height: 20),
             AnimatedBuilder(
               animation: notifier,
