@@ -8,10 +8,10 @@ import 'package:practly/di/di.dart';
 import 'package:practly/core/navigation/auth_notifier.dart';
 import 'package:practly/features/auth/presentation/auth_screen.dart';
 import 'package:practly/features/home/presentation/home_screen.dart';
+import 'package:practly/features/learn/presentation/learn_screen.dart';
 import 'package:practly/features/profile/profile_screen.dart';
 import 'package:practly/features/quiz/presentation/quiz_screen.dart';
 import 'package:practly/features/speak_out_aloud/presentation/speak_out_aloud_screen.dart';
-import 'package:practly/features/word_of_the_day/presentation/word_of_the_day_screen.dart';
 
 class AppRouter {
   GoRouter getRouter = GoRouter(
@@ -37,7 +37,7 @@ class AppRouter {
       }
 
       if (authNotifier.isSignedIn && isSigningIn) {
-        return WordOfTheDayScreen.route;
+        return LearnScreen.route;
       }
 
       return null;
@@ -60,9 +60,9 @@ class AppRouter {
         routes: [
           // learn
           GoRoute(
-            path: WordOfTheDayScreen.route,
+            path: LearnScreen.route,
             pageBuilder: (context, state) =>
-                const NoTransitionPage(child: WordOfTheDayScreen()),
+                const NoTransitionPage(child: LearnScreen()),
           ),
           // speak
           GoRoute(

@@ -1,5 +1,5 @@
 import 'package:practly/core/enums/enums.dart';
-import 'package:practly/features/word_of_the_day/data/word_of_the_day_model.dart';
+import 'package:practly/features/learn/data/word_of_the_day_model.dart';
 
 abstract class IWordRemoteDataSource {
   String prompt(WordComplexity complexity) => '''
