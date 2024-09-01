@@ -1,7 +1,7 @@
 import 'package:practly/core/async/async_notifier.dart';
 import 'package:practly/core/services/ad_service.dart';
 import 'package:practly/core/services/database_service.dart';
-import 'package:practly/features/quiz/data/quiz_model.dart';
+import 'package:practly/core/models/quiz/quiz_model.dart';
 import 'package:practly/features/quiz/data/quiz_repository.dart';
 
 class QuizNotifier extends AsyncNotifier<QuizModel> {

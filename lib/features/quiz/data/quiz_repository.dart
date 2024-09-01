@@ -1,6 +1,6 @@
 import 'package:practly/core/enums/enums.dart';
 import 'package:practly/features/quiz/data/i_quiz_remote_data_source.dart';
-import 'package:practly/features/quiz/data/quiz_model.dart';
+import 'package:practly/core/models/quiz/quiz_model.dart';
 
 class QuizRepository {
   final IQuizRemoteDataSource _remoteDataSource;

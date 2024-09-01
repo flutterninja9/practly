@@ -4,8 +4,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:practly/core/config/config.dart';
 import 'package:practly/core/user/user_model.dart';
-import 'package:practly/features/quiz/data/quiz_model.dart';
-import 'package:practly/features/speak_out_aloud/data/speak_out_aloud_model.dart';
+import 'package:practly/core/models/quiz/quiz_model.dart';
+import 'package:practly/core/models/speak/speak_out_aloud_model.dart';
 import 'package:practly/features/word_of_the_day/data/word_of_the_day_model.dart';
 
 /// DatabaseService handles all interactions with Cloud Firestore.

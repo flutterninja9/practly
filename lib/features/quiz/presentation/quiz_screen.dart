@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:practly/core/excercise_widgets/quiz/quiz_excercise_screen.dart';
+import 'package:practly/core/widgets/quiz/quiz_excercise_screen.dart';
 import 'package:shadcn_ui/shadcn_ui.dart';
 
 import 'package:practly/core/async/async_page.dart';

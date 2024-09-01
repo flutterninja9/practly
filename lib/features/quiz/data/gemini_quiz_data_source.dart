@@ -1,6 +1,6 @@
 import 'package:google_gemini/google_gemini.dart';
 import 'package:practly/core/enums/enums.dart';
-import 'package:practly/features/quiz/data/quiz_model.dart';
+import 'package:practly/core/models/quiz/quiz_model.dart';
 import 'package:practly/features/quiz/data/i_quiz_remote_data_source.dart';
 
 class GeminiQuizDataSource extends IQuizRemoteDataSource {

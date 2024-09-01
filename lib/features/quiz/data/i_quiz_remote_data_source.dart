@@ -1,5 +1,5 @@
 import 'package:practly/core/enums/enums.dart';
-import 'package:practly/features/quiz/data/quiz_model.dart';
+import 'package:practly/core/models/quiz/quiz_model.dart';
 
 abstract class IQuizRemoteDataSource {
   String prompt(WordComplexity complexity) => '''

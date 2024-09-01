@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:practly/core/services/text_to_speech_service.dart';
 import 'package:practly/core/widgets/highlighted_section.dart';
 import 'package:practly/core/widgets/speakable.dart';
-import 'package:practly/features/speak_out_aloud/data/speak_out_aloud_model.dart';
+import 'package:practly/core/models/speak/speak_out_aloud_model.dart';
 import 'package:shadcn_ui/shadcn_ui.dart';
 
 class SpeakOutAloudContent extends StatelessWidget {

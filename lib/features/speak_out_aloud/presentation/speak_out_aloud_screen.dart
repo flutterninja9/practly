@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:practly/core/async/async_page.dart';
-import 'package:practly/core/excercise_widgets/speak/speak_excercise_screen.dart';
+import 'package:practly/core/widgets/speak/speak_excercise_screen.dart';
 import 'package:practly/core/services/text_to_speech_service.dart';
 import 'package:practly/core/widgets/complexity_selector.dart';
 import 'package:practly/di/di.dart';

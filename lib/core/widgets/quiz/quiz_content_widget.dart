@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:practly/features/quiz/data/quiz_model.dart';
+import 'package:practly/core/models/quiz/quiz_model.dart';
 import 'package:shadcn_ui/shadcn_ui.dart';
 
 class QuizContentWidget extends StatelessWidget {

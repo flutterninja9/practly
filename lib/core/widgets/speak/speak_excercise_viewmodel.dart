@@ -2,7 +2,7 @@ import 'package:flutter/foundation.dart';
 import 'package:practly/core/services/score_logic.dart';
 import 'package:practly/core/services/speech_to_text_service.dart';
 import 'package:practly/core/services/text_to_speech_service.dart';
-import 'package:practly/features/speak_out_aloud/data/speak_out_aloud_model.dart';
+import 'package:practly/core/models/speak/speak_out_aloud_model.dart';
 
 class SpeakExcerciseViewmodel with ChangeNotifier {
   final SpeakOutAloudModel model;
