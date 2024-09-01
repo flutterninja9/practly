@@ -10,21 +10,19 @@ class LearnScreen extends StatefulWidget {
   State<LearnScreen> createState() => _LearnScreenState();
 }
 
-class _LearnScreenState extends State<LearnScreen>
-    with SingleTickerProviderStateMixin {
-  @override
-  void initState() {
-    super.initState();
-  }
-
+class _LearnScreenState extends State<LearnScreen> {
+  final _contents = <Widget>[
+    const WordOfTheDayScreen(),
+    // const ContextualChallengesScreen(),
+  ];
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: ListView(
+      body: ListView.separated(
         padding: const EdgeInsets.all(16.0),
-        children: const [
-          WordOfTheDayScreen(),
-        ],
+        separatorBuilder: (context, index) => const SizedBox(height: 40),
+        itemCount: _contents.length,
+        itemBuilder: (context, index) => _contents[index],
       ),
     );
   }
