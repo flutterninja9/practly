@@ -1,7 +1,8 @@
 import 'package:practly/core/enums/enums.dart';
+import 'package:practly/features/learn/data/daily_dialogs_model.dart';
 import 'package:practly/features/learn/data/word_of_the_day_model.dart';
 
-abstract class IWordRemoteDataSource {
+abstract class ILearnRemoteDataSource {
   String prompt(WordComplexity complexity) => '''
   You are a helpful language learning assistant. Your task is to generate a random word to improve the user's vocabulary based on the given complexity level: {complexity} (easy/medium/hard).
 
@@ -39,6 +40,10 @@ abstract class IWordRemoteDataSource {
 ''';
 
   Future<WordOfTheDayModel> generateWordOfTheDay({
+    WordComplexity complexity = WordComplexity.easy,
+  });
+
+  Future<List<DailyDialogModel>> getDailyDialogs({
     WordComplexity complexity = WordComplexity.easy,
   });
 }

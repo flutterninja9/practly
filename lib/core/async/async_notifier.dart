@@ -47,14 +47,20 @@ class AsyncNotifier<T> extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> execute(Future<T> Function() operation) async {
+  Future<void> execute(
+    Future<T> Function() operation, {
+    bool isAIGeneration = true,
+  }) async {
     try {
-      if (await _databaseService.getGenerationLimit() <= 0) {
+      if (isAIGeneration &&
+          (await _databaseService.getGenerationLimit() <= 0)) {
         setOutOfCredits();
       } else {
         setLoading();
         final result = await operation();
-        await _databaseService.decrementGenerationLimit();
+        if (isAIGeneration) {
+          await _databaseService.decrementGenerationLimit();
+        }
         setData(result);
       }
     } catch (error) {

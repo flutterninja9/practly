@@ -8,7 +8,7 @@ final locator = GetIt.I;
 
 Future<void> initializeDeps() async {
   await setupCore();
-  setupWordOfTheDay();
+  setupLearn();
   setupSpeakOutAloud();
   setupQuiz();
 }

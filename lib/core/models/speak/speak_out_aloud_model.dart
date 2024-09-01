@@ -1,8 +1,9 @@
 import 'dart:convert';
 
 import 'package:practly/core/enums/enums.dart';
+import 'package:practly/core/models/excercise.dart';
 
-class SpeakOutAloudModel {
+class SpeakOutAloudModel implements Exercise {
   final String sentence;
   final String explanation;
   final String tip;
@@ -16,17 +17,27 @@ class SpeakOutAloudModel {
   });
 
   factory SpeakOutAloudModel.fromJson(
-      String source, WordComplexity? complexity) {
+    String source,
+    WordComplexity? complexity,
+  ) {
     final Map<String, dynamic> data = json.decode(source);
 
+    return SpeakOutAloudModel.fromMap(data, complexity);
+  }
+
+  factory SpeakOutAloudModel.fromMap(
+    Map<String, dynamic> map,
+    WordComplexity? complexity,
+  ) {
     return SpeakOutAloudModel(
-      sentence: data['sentence'] ?? '',
-      explanation: data['explanation'] ?? '',
-      complexity: data['complexity'] ?? complexity,
-      tip: data['tip'] ?? '',
+      sentence: map['sentence'] ?? '',
+      explanation: map['explanation'] ?? '',
+      complexity: map['complexity'] ?? complexity,
+      tip: map['tip'] ?? '',
     );
   }
 
+  @override
   Map<String, dynamic> toMap() {
     return <String, dynamic>{
       'sentence': sentence,
@@ -51,4 +62,7 @@ class SpeakOutAloudModel {
 
   @override
   int get hashCode => sentence.hashCode ^ explanation.hashCode ^ tip.hashCode;
+
+  @override
+  String get type => "sentence";
 }

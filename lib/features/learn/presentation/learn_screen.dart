@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:practly/features/learn/presentation/word_of_the_day_screen.dart';
+import 'package:practly/features/learn/daily_dialogs/presentation/dialy_dialogs_screen.dart';
+import 'package:practly/features/learn/word/presentation/word_of_the_day_screen.dart';
 
 class LearnScreen extends StatefulWidget {
   const LearnScreen({super.key});
@@ -13,8 +14,9 @@ class LearnScreen extends StatefulWidget {
 class _LearnScreenState extends State<LearnScreen> {
   final _contents = <Widget>[
     const WordOfTheDayScreen(),
-    // const ContextualChallengesScreen(),
+    const DailyDialogsScreen(),
   ];
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(

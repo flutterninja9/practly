@@ -4,8 +4,8 @@ import 'package:practly/core/async/async_page.dart';
 import 'package:practly/core/services/text_to_speech_service.dart';
 import 'package:practly/core/widgets/complexity_selector.dart';
 import 'package:practly/di/di.dart';
-import 'package:practly/features/learn/buisness_logic/word_of_the_day_notifier.dart';
-import 'package:practly/features/learn/presentation/word_of_the_day_content.dart';
+import 'package:practly/features/learn/word/buisness_logic/word_of_the_day_notifier.dart';
+import 'package:practly/features/learn/word/presentation/word_of_the_day_content.dart';
 
 class WordOfTheDayScreen extends StatefulWidget {
   const WordOfTheDayScreen({super.key});
@@ -15,7 +15,7 @@ class WordOfTheDayScreen extends StatefulWidget {
 }
 
 class _WordOfTheDayScreenState extends State<WordOfTheDayScreen>
-    with SingleTickerProviderStateMixin {
+    with AutomaticKeepAliveClientMixin {
   late final WordOfTheDayNotifier notifier;
   late final TextToSpeechService speechService;
 
@@ -29,10 +29,12 @@ class _WordOfTheDayScreenState extends State<WordOfTheDayScreen>
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const Header(title: 'Word of the Day'),
+        const Header(title: 'Word of the day'),
         const SizedBox(height: 20),
         AnimatedBuilder(
           animation: notifier,
@@ -66,4 +68,7 @@ class _WordOfTheDayScreenState extends State<WordOfTheDayScreen>
       ],
     );
   }
+
+  @override
+  bool get wantKeepAlive => true;
 }

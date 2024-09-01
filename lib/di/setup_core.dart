@@ -101,7 +101,8 @@ void _setupRouter() {
 }
 
 void _setupDatabaseService() {
-  locator.registerSingleton<FirebaseFirestore>(FirebaseFirestore.instance);
+  final f = FirebaseFirestore.instance;
+  locator.registerSingleton<FirebaseFirestore>(f);
   locator.registerSingleton<DatabaseService>(DatabaseService(
     locator.get(),
     locator.get(),
