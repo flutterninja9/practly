@@ -34,14 +34,12 @@ class ComplexitySelectorNotifier with ChangeNotifier {
     selectedComplexity = newComplexity;
   }
 
-  Future<void> onSaveAndContinue(Function() onSuccess) async {
+  Future<void> onSaveAndContinue() async {
     isSaving = true;
 
     await saveComplexity(_selectedComplexity);
 
     _isSaving = false;
-
-    // await onSuccess();
   }
 
   Future<void> saveComplexity(Complexity complexity) async {

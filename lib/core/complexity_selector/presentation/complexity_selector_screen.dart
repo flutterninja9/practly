@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
 import 'package:practly/core/complexity_selector/business_logic/complexity_selector_notifier.dart';
 import 'package:practly/core/complexity_selector/presentation/complexity_selector.dart';
 import 'package:practly/core/extensions/context_extensions.dart';
 import 'package:practly/di/di.dart';
-import 'package:practly/features/learn/presentation/learn_screen.dart';
 import 'package:shadcn_ui/shadcn_ui.dart';
 
 class ComplexitySelectorScreen extends StatefulWidget {
@@ -19,10 +17,6 @@ class ComplexitySelectorScreen extends StatefulWidget {
 
 class _ComplexitySelectorScreenState extends State<ComplexitySelectorScreen> {
   late final ComplexitySelectorNotifier notifier;
-
-  void onSaveSuccess() {
-    context.go(LearnScreen.route);
-  }
 
   @override
   void initState() {
@@ -73,7 +67,7 @@ class _ComplexitySelectorScreenState extends State<ComplexitySelectorScreen> {
                         child: ShadButton(
                           onPressed: notifier.isSaving
                               ? null
-                              : () => notifier.onSaveAndContinue(onSaveSuccess),
+                              : () => notifier.onSaveAndContinue(),
                           child: notifier.isSaving
                               ? SizedBox(
                                   width: 25,
