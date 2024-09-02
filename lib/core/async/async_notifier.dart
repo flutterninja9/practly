@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:practly/core/enums/enums.dart';
 import 'package:practly/core/services/ad_service.dart';
 import 'package:practly/core/services/database_service.dart';
 import 'async_value.dart';
@@ -12,11 +11,7 @@ class AsyncNotifier<T> extends ChangeNotifier {
 
   AsyncValue<T> get state => _state;
 
-  Complexity _complexity = Complexity.easy;
-
   AsyncNotifier(this._databaseService, this._adService);
-
-  Complexity get complexity => _complexity;
 
   void setLoading() {
     _state = const AsyncValue.loading();
@@ -25,11 +20,6 @@ class AsyncNotifier<T> extends ChangeNotifier {
 
   void setOutOfCredits() {
     _state = const AsyncValue.outOfCredits();
-    notifyListeners();
-  }
-
-  void setComplexity(Complexity newComplexity) {
-    _complexity = newComplexity;
     notifyListeners();
   }
 

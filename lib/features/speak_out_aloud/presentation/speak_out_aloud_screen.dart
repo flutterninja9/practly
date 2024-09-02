@@ -43,19 +43,6 @@ class _SpeakOutAloudScreenState extends State<SpeakOutAloudScreen> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             const Header(title: 'Speak Out Aloud'),
-            const SizedBox(height: 20),
-            // AnimatedBuilder(
-            //   animation: notifier,
-            //   builder: (context, child) {
-            //     return ComplexitySelector(
-            //       initialValue: notifier.complexity,
-            //       onChanged: (val) {
-            //         notifier.setComplexity(val);
-            //         notifier.generateSentence();
-            //       },
-            //     );
-            //   },
-            // ),
             Expanded(
               child: AnimatedBuilder(
                   animation: notifier,

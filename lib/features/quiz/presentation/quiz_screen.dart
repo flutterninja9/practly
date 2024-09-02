@@ -34,19 +34,6 @@ class _QuizScreenState extends State<QuizScreen> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             const Header(title: 'Quiz'),
-            const SizedBox(height: 20),
-            // AnimatedBuilder(
-            //   animation: notifier,
-            //   builder: (context, child) {
-            //     return ComplexitySelector(
-            //       initialValue: notifier.complexity,
-            //       onChanged: (val) {
-            //         notifier.setComplexity(val);
-            //         notifier.generateQuiz();
-            //       },
-            //     );
-            //   },
-            // ),
             Expanded(
               child: AnimatedBuilder(
                   animation: notifier,

@@ -34,19 +34,6 @@ class _WordOfTheDayScreenState extends State<WordOfTheDayScreen>
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         const Header(title: 'Word of the day'),
-        // const SizedBox(height: 20),
-        // AnimatedBuilder(
-        //   animation: notifier,
-        //   builder: (context, child) {
-        //     return ComplexitySelector(
-        //       initialValue: notifier.complexity,
-        //       onChanged: (val) {
-        //         notifier.setComplexity(val);
-        //         notifier.generateWord();
-        //       },
-        //     );
-        //   },
-        // ),
         const SizedBox(height: 20),
         AnimatedBuilder(
           animation: notifier,

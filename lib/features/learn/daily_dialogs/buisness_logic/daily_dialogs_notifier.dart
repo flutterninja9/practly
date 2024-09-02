@@ -23,6 +23,8 @@ class DailyDialogsNotifier extends AsyncNotifier<List<LessonModel>> {
   ) : super(_databaseService, _adService);
 
   Future<void> getDailyDialogs() async {
+    final complexity = locator.get<FirebaseAuthNotifier>().signedInUser?.complexity;
+    
     execute(
       () => _repository.getDailyDialogs(complexity: complexity),
       isAIGeneration: false,
