@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:practly/core/complexity_selector/presentation/complexity_selector.dart';
 import 'package:practly/core/constants.dart';
+import 'package:practly/core/enums/enums.dart';
 import 'package:practly/core/navigation/auth_notifier.dart';
 import 'package:practly/core/services/database_service.dart';
 import 'package:practly/di/di.dart';
@@ -20,6 +22,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
   late final DatabaseService databaseService;
   final _displayNameController = TextEditingController();
   final _emailController = TextEditingController();
+  Complexity _selectedComplexity = Complexity.easy;
   bool _isEditing = false;
 
   @override
@@ -35,6 +38,45 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
     if (user != null) {
       _displayNameController.text = user.displayName ?? '';
       _emailController.text = user.email ?? '';
+      _loadUserComplexity();
+    }
+  }
+
+  void _loadUserComplexity() async {
+    final complexity = authNotifier.signedInUser?.complexity;
+    setState(() {
+      _selectedComplexity = complexity ?? Complexity.easy;
+    });
+  }
+
+  void _saveChanges() async {
+    try {
+      final user = FirebaseAuth.instance.currentUser;
+      final newName = _displayNameController.text;
+      if (newName.isNotEmpty) {
+        await user?.updateDisplayName(newName);
+        await databaseService.updateUserProfile(user!.uid, {
+          "name": newName,
+          "complexity": _selectedComplexity.name,
+        });
+        final updatedUser = await databaseService.getUserProfile(user.uid);
+        authNotifier.updateSignedInUserNotify(updatedUser);
+
+        const t = ShadToast.raw(
+          variant: ShadToastVariant.primary,
+          title: Text('Profile updated successfully'),
+        );
+        if (!mounted) return;
+        ShadToaster.maybeOf(context)?.show(t);
+      } else {
+        const t = ShadToast.destructive(title: Text('Name cannot be empty'));
+        if (!mounted) return;
+        ShadToaster.maybeOf(context)?.show(t);
+      }
+    } catch (e) {
+      const t = ShadToast.destructive(title: Text('Failed to update profile'));
+      if (!mounted) return;
+      ShadToaster.maybeOf(context)?.show(t);
     }
   }
 
@@ -88,11 +130,27 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
               ShadInputFormField(
                 controller: _emailController,
                 placeholder: const Text('Email'),
-                readOnly: true, // Email should not be editable
+                readOnly: true,
                 prefix: const Padding(
                   padding: EdgeInsets.all(4.0),
                   child: ShadImage.square(size: 16, LucideIcons.mail),
                 ),
+              ),
+              const SizedBox(height: 16),
+              Row(
+                children: [
+                  Expanded(
+                    child: ComplexitySelector(
+                      enabled: _isEditing,
+                      initialValue: _selectedComplexity,
+                      onChanged: (newComplexity) {
+                        setState(() {
+                          _selectedComplexity = newComplexity;
+                        });
+                      },
+                    ),
+                  ),
+                ],
               ),
               const SizedBox(height: 24),
               ShadButton.destructive(
@@ -104,32 +162,6 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
         ),
       ),
     );
-  }
-
-  void _saveChanges() async {
-    try {
-      final user = FirebaseAuth.instance.currentUser;
-      final newName = _displayNameController.text;
-      if (newName.isNotEmpty) {
-        await user?.updateDisplayName(newName);
-        await databaseService.updateUserProfile(user!.uid, {"name": newName});
-
-        const t = ShadToast.raw(
-          variant: ShadToastVariant.primary,
-          title: Text('Profile updated successfully'),
-        );
-        if (!mounted) return;
-        ShadToaster.maybeOf(context)?.show(t);
-      } else {
-        const t = ShadToast.destructive(title: Text('Name cannot be empty'));
-        if (!mounted) return;
-        ShadToaster.maybeOf(context)?.show(t);
-      }
-    } catch (e) {
-      const t = ShadToast.destructive(title: Text('Failed to update profile'));
-      if (!mounted) return;
-      ShadToaster.maybeOf(context)?.show(t);
-    }
   }
 
   void _signOut() async {

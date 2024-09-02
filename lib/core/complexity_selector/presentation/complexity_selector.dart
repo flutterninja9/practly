@@ -7,16 +7,19 @@ class ComplexitySelector extends StatelessWidget {
   const ComplexitySelector({
     super.key,
     required this.initialValue,
+    this.enabled = true,
     required this.onChanged,
   });
 
   final Complexity initialValue;
+  final bool enabled;
   final Function(Complexity) onChanged;
 
   @override
   Widget build(BuildContext context) {
     return ShadSelect(
       minWidth: 180,
+      enabled: enabled,
       initialValue: initialValue.name,
       onChanged: (String? newValue) {
         if (newValue != null) {
