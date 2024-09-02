@@ -4,12 +4,13 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart';
 
 import 'package:practly/core/constants.dart';
+import 'package:practly/core/enums/enums.dart';
 
 class UserModel {
   final String id;
   final String? name;
   final String? email;
-  final String? complexity;
+  final Complexity? complexity;
   final String? displayPictureUrl;
   final Progress? progress;
   final DateTime createdAt;
@@ -52,7 +53,9 @@ class UserModel {
     return UserModel(
       id: id,
       name: map['name'],
-      complexity: map['complexity'],
+      complexity: map['complexity'] != null
+          ? Complexity.fromString(map['complexity'])
+          : map['complexity'],
       progress:
           map['progress'] != null ? Progress.fromMap(map['progress']) : null,
       displayPictureUrl: map['displayPictureUrl'] ?? kFallbackProfileImageUrl,
@@ -78,7 +81,7 @@ class UserModel {
   UserModel copyWith({
     String? name,
     String? email,
-    String? complexity,
+    Complexity? complexity,
     String? displayPictureUrl,
     DateTime? lastLogin,
     Progress? progress,
