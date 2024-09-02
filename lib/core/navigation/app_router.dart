@@ -25,7 +25,12 @@ class AppRouter {
       final authNotifier = locator.get<FirebaseAuthNotifier>();
       final noComplexityChosen = authNotifier.signedInUser?.complexity == null;
       final inMaintainence = config.inMaintainence;
-      final isSigningIn = state.matchedLocation == AuthScreen.route;
+      final authAndOnboardingScreens = [
+        AuthScreen.route,
+        ComplexitySelectorScreen.route
+      ];
+      final isSigningIn =
+          authAndOnboardingScreens.contains(state.matchedLocation);
 
       if (inMaintainence) {
         return MaintenanceScreen.route;
