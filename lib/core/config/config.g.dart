@@ -14,7 +14,7 @@ Config _$ConfigFromJson(Map<String, dynamic> json) => Config(
       allowAnonymousSignups: json['allowAnonymousSignups'] as bool,
       minSupportedVersion: json['minSupportedVersion'] as String,
       inMaintainence: json['inMaintainence'] as bool,
-      featureToggles: Map<String, bool>.from(json['featureToggles'] as Map),
+      featureToggles: json['featureToggles'] as Map<String, dynamic>,
     );
 
 Map<String, dynamic> _$ConfigToJson(Config instance) => <String, dynamic>{
