@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:practly/features/word_of_the_day/presentation/word_of_the_day_screen.dart';
+import 'package:practly/features/learn/presentation/learn_screen.dart';
 import 'package:shadcn_ui/shadcn_ui.dart';
 
 class MaintenanceScreen extends StatelessWidget {
@@ -46,7 +46,7 @@ class MaintenanceScreen extends StatelessWidget {
                     const SizedBox(height: 20),
                     ShadButton(
                       onPressed: () {
-                        context.go(WordOfTheDayScreen.route);
+                        context.go(LearnScreen.route);
                       },
                       child: const Text('Refresh'),
                     ),

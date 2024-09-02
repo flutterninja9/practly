@@ -1,5 +1,6 @@
 import 'package:flutter/widgets.dart';
 import 'package:go_router/go_router.dart';
+import 'package:practly/core/complexity_selector/presentation/complexity_selector_screen.dart';
 import 'package:practly/core/config/config.dart';
 import 'package:practly/core/services/app_info_service.dart';
 import 'package:practly/core/widgets/force_update_screen.dart';
@@ -8,10 +9,11 @@ import 'package:practly/di/di.dart';
 import 'package:practly/core/navigation/auth_notifier.dart';
 import 'package:practly/features/auth/presentation/auth_screen.dart';
 import 'package:practly/features/home/presentation/home_screen.dart';
+import 'package:practly/features/learn/exercise/presentation/exercise_screen.dart';
+import 'package:practly/features/learn/presentation/learn_screen.dart';
 import 'package:practly/features/profile/profile_screen.dart';
 import 'package:practly/features/quiz/presentation/quiz_screen.dart';
 import 'package:practly/features/speak_out_aloud/presentation/speak_out_aloud_screen.dart';
-import 'package:practly/features/word_of_the_day/presentation/word_of_the_day_screen.dart';
 
 class AppRouter {
   GoRouter getRouter = GoRouter(
@@ -21,8 +23,14 @@ class AppRouter {
       final config = locator.get<Config>();
       final appInfo = locator.get<AppInfoService>();
       final authNotifier = locator.get<FirebaseAuthNotifier>();
+      final noComplexityChosen = authNotifier.signedInUser?.complexity == null;
       final inMaintainence = config.inMaintainence;
-      final isSigningIn = state.matchedLocation == AuthScreen.route;
+      final authAndOnboardingScreens = [
+        AuthScreen.route,
+        ComplexitySelectorScreen.route
+      ];
+      final isSigningIn =
+          authAndOnboardingScreens.contains(state.matchedLocation);
 
       if (inMaintainence) {
         return MaintenanceScreen.route;
@@ -37,7 +45,11 @@ class AppRouter {
       }
 
       if (authNotifier.isSignedIn && isSigningIn) {
-        return WordOfTheDayScreen.route;
+        if (noComplexityChosen) {
+          return ComplexitySelectorScreen.route;
+        }
+
+        return LearnScreen.route;
       }
 
       return null;
@@ -53,6 +65,18 @@ class AppRouter {
           builder: (context, state) {
             return const UserProfileScreen();
           }),
+      GoRoute(
+          path: ExerciseScreen.route,
+          builder: (context, state) {
+            return ExerciseScreen(
+              id: state.pathParameters["id"]!,
+            );
+          }),
+      GoRoute(
+          path: ComplexitySelectorScreen.route,
+          builder: (context, state) {
+            return const ComplexitySelectorScreen();
+          }),
       ShellRoute(
         builder: (context, state, child) {
           return HomeScreen(child: child);
@@ -60,9 +84,9 @@ class AppRouter {
         routes: [
           // learn
           GoRoute(
-            path: WordOfTheDayScreen.route,
+            path: LearnScreen.route,
             pageBuilder: (context, state) =>
-                const NoTransitionPage(child: WordOfTheDayScreen()),
+                const NoTransitionPage(child: LearnScreen()),
           ),
           // speak
           GoRoute(

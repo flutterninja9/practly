@@ -1,8 +1,8 @@
 import 'package:practly/core/enums/enums.dart';
-import 'package:practly/features/speak_out_aloud/data/speak_out_aloud_model.dart';
+import 'package:practly/core/models/speak/speak_out_aloud_model.dart';
 
 abstract class ISentenceRemoteDataSource {
-  String prompt(WordComplexity complexity) => '''
+  String prompt(Complexity complexity) => '''
   You are a helpful language learning assistant. Your task is to generate a sentence for speaking practice based on the given complexity level: {complexity} (easy/medium/hard). The sentence should help users improve their pronunciation, fluency, and vocabulary.
 
   Generate a sentence appropriate for the ${complexity.name} level.
@@ -44,6 +44,6 @@ abstract class ISentenceRemoteDataSource {
 ''';
 
   Future<SpeakOutAloudModel> generateSentence({
-    WordComplexity complexity = WordComplexity.easy,
+    Complexity complexity = Complexity.easy,
   });
 }

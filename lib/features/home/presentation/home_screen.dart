@@ -4,9 +4,9 @@ import 'package:practly/core/extensions/context_extensions.dart';
 import 'package:practly/core/user/user_model.dart';
 import 'package:practly/features/home/widgets/credits_remaining_widget.dart';
 import 'package:practly/features/home/widgets/profile_pic.dart';
+import 'package:practly/features/learn/presentation/learn_screen.dart';
 import 'package:practly/features/quiz/presentation/quiz_screen.dart';
 import 'package:practly/features/speak_out_aloud/presentation/speak_out_aloud_screen.dart';
-import 'package:practly/features/word_of_the_day/presentation/word_of_the_day_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({
@@ -25,7 +25,7 @@ class _HomeScreenState extends State<HomeScreen> {
   int _getSelectedIndex() {
     final currentRoute = context.currentRoute;
 
-    if (currentRoute.contains(WordOfTheDayScreen.route)) {
+    if (currentRoute.contains(LearnScreen.route)) {
       return 0;
     }
     if (currentRoute.contains(SpeakOutAloudScreen.route)) {
@@ -56,7 +56,7 @@ class _HomeScreenState extends State<HomeScreen> {
   void _onItemTapped(int index) {
     switch (index) {
       case 0:
-        context.go(WordOfTheDayScreen.route);
+        context.go(LearnScreen.route);
       case 1:
         context.go(SpeakOutAloudScreen.route);
       case 2:

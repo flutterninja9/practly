@@ -1,8 +1,9 @@
 import 'dart:convert';
 
 import 'package:flutter/foundation.dart';
+import 'package:practly/core/models/excercise.dart';
 
-class QuizModel {
+class QuizModel implements Exercise {
   final String sentence;
   final Map<String, String> options;
   final String correctAnswer;
@@ -16,13 +17,18 @@ class QuizModel {
   factory QuizModel.fromJson(String source) {
     final Map<String, dynamic> data = jsonDecode(source);
 
+    return QuizModel.fromMap(data);
+  }
+
+  factory QuizModel.fromMap(Map<String, dynamic> map) {
     return QuizModel(
-      sentence: data['sentence'] ?? '',
-      options: Map<String, String>.from(data['options'] ?? {}),
-      correctAnswer: data['correct_answer'] ?? '',
+      sentence: map['sentence'] ?? '',
+      options: Map<String, String>.from(map['options'] ?? {}),
+      correctAnswer: map['correct_answer'] ?? '',
     );
   }
 
+  @override
   Map<String, dynamic> toMap() {
     return <String, dynamic>{
       'sentence': sentence,
@@ -49,4 +55,7 @@ class QuizModel {
   int get hashCode {
     return sentence.hashCode ^ options.hashCode ^ correctAnswer.hashCode;
   }
+
+  @override
+  String get type => "quiz";
 }

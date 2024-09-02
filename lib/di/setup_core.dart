@@ -6,6 +6,7 @@ import 'package:flutter_tts/flutter_tts.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_gemini/google_gemini.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
+import 'package:practly/core/complexity_selector/business_logic/complexity_selector_notifier.dart';
 import 'package:practly/core/config/config.dart';
 import 'package:practly/core/navigation/app_router.dart';
 import 'package:practly/core/services/ad_service.dart';
@@ -34,6 +35,7 @@ Future<void> setupCore() async {
   _setupTextToSpeechService();
   _setupRouter();
   _setupAdService();
+  _setupComplexitySelector();
 }
 
 Future<void> _initializeFirebase() async {
@@ -80,8 +82,8 @@ void _setupGemini() {
 }
 
 void _setupSpeechToTextService() {
-  locator.registerSingleton<TextToSpeechService>(
-      TextToSpeechService(FlutterTts()));
+  locator.registerFactory<TextToSpeechService>(
+      () => TextToSpeechService(FlutterTts()));
 }
 
 void _setupTextToSpeechService() {
@@ -101,7 +103,8 @@ void _setupRouter() {
 }
 
 void _setupDatabaseService() {
-  locator.registerSingleton<FirebaseFirestore>(FirebaseFirestore.instance);
+  final f = FirebaseFirestore.instance;
+  locator.registerSingleton<FirebaseFirestore>(f);
   locator.registerSingleton<DatabaseService>(DatabaseService(
     locator.get(),
     locator.get(),
@@ -121,4 +124,13 @@ void _setupAdService() {
 
 void _setupAppVersionService() {
   locator.registerSingleton<AppInfoService>(AppInfoService(locator.get()));
+}
+
+void _setupComplexitySelector() {
+  locator.registerFactory<ComplexitySelectorNotifier>(
+    () => ComplexitySelectorNotifier(
+      locator.get(),
+      locator.get(),
+    ),
+  );
 }

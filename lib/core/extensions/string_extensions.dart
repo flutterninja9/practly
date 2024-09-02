@@ -19,4 +19,9 @@ extension Stringx on String {
       .replaceAll(RegExp(r'[œ]'), 'oe') // Handle 'œ' as 'oe'
       .replaceAll(
           RegExp(r'[\u200B-\u200D\uFEFF]'), ''); // Remove zero-width characters
+
+  String capitalize() {
+    if (isEmpty) return this; // Return the original string if empty
+    return '${this[0].toUpperCase()}${substring(1)}';
+  }
 }

@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:firebase_remote_config/firebase_remote_config.dart';
 import 'package:json_annotation/json_annotation.dart';
 
@@ -12,6 +14,7 @@ class Config {
   final int creditsForAdWatch;
   final bool allowAnonymousSignups;
   final bool inMaintainence;
+  final Map<String, dynamic> featureToggles;
 
   Config({
     required this.geminiKey,
@@ -21,6 +24,7 @@ class Config {
     required this.allowAnonymousSignups,
     required this.minSupportedVersion,
     required this.inMaintainence,
+    required this.featureToggles,
   });
 
   factory Config.fromJson(Map<String, dynamic> json) => _$ConfigFromJson(json);
@@ -34,6 +38,8 @@ class Config {
       minSupportedVersion: map["minSupportedVersion"]!.asString(),
       allowAnonymousSignups: map["allowAnonymousSignups"]!.asBool(),
       inMaintainence: map["inMaintainence"]!.asBool(),
+      featureToggles: jsonDecode(map["featureToggles"]?.asString() ?? "{}")
+          as Map<String, dynamic>,
     );
   }
 

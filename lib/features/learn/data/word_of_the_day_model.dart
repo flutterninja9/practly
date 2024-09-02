@@ -7,7 +7,7 @@ class WordOfTheDayModel {
   final String definition;
   final String example;
   final String usage;
-  final WordComplexity complexity;
+  final Complexity complexity;
 
   const WordOfTheDayModel({
     required this.word,
@@ -17,7 +17,7 @@ class WordOfTheDayModel {
     required this.complexity,
   });
 
-  factory WordOfTheDayModel.fromJson(String source, WordComplexity? complexity) {
+  factory WordOfTheDayModel.fromJson(String source, Complexity? complexity) {
     final Map<String, dynamic> data = json.decode(source);
 
     return WordOfTheDayModel(
