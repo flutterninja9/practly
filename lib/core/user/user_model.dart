@@ -9,6 +9,7 @@ class UserModel {
   final String id;
   final String? name;
   final String? email;
+  final String? complexity;
   final String? displayPictureUrl;
   final Progress? progress;
   final DateTime createdAt;
@@ -18,6 +19,7 @@ class UserModel {
   UserModel({
     required this.id,
     required this.name,
+    required this.complexity,
     required this.email,
     required this.createdAt,
     required this.progress,
@@ -38,6 +40,7 @@ class UserModel {
       name: name,
       email: email,
       progress: null,
+      complexity: null,
       displayPictureUrl: dpUrl,
       createdAt: DateTime.now(),
       lastLogin: DateTime.now(),
@@ -49,6 +52,7 @@ class UserModel {
     return UserModel(
       id: id,
       name: map['name'],
+      complexity: map['complexity'],
       progress:
           map['progress'] != null ? Progress.fromMap(map['progress']) : null,
       displayPictureUrl: map['displayPictureUrl'] ?? kFallbackProfileImageUrl,
@@ -63,6 +67,7 @@ class UserModel {
     return {
       'name': name,
       'email': email,
+      'complexity': complexity,
       'createdAt': Timestamp.fromDate(createdAt),
       'lastLogin': Timestamp.fromDate(lastLogin),
       'subscription': subscription.toMap(),
@@ -73,6 +78,7 @@ class UserModel {
   UserModel copyWith({
     String? name,
     String? email,
+    String? complexity,
     String? displayPictureUrl,
     DateTime? lastLogin,
     Progress? progress,
@@ -82,6 +88,7 @@ class UserModel {
       id: id,
       displayPictureUrl: displayPictureUrl ?? this.displayPictureUrl,
       name: name ?? this.name,
+      complexity: complexity ?? this.complexity,
       progress: progress ?? this.progress,
       email: email ?? this.email,
       createdAt: createdAt,

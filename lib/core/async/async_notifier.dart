@@ -12,11 +12,11 @@ class AsyncNotifier<T> extends ChangeNotifier {
 
   AsyncValue<T> get state => _state;
 
-  WordComplexity _complexity = WordComplexity.easy;
+  Complexity _complexity = Complexity.easy;
 
   AsyncNotifier(this._databaseService, this._adService);
 
-  WordComplexity get complexity => _complexity;
+  Complexity get complexity => _complexity;
 
   void setLoading() {
     _state = const AsyncValue.loading();
@@ -28,7 +28,7 @@ class AsyncNotifier<T> extends ChangeNotifier {
     notifyListeners();
   }
 
-  void setComplexity(WordComplexity newComplexity) {
+  void setComplexity(Complexity newComplexity) {
     _complexity = newComplexity;
     notifyListeners();
   }

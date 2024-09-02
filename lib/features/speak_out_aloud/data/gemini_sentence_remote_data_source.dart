@@ -10,7 +10,7 @@ class GeminiSentenceRemoteDataSource extends ISentenceRemoteDataSource {
 
   @override
   Future<SpeakOutAloudModel> generateSentence({
-    WordComplexity complexity = WordComplexity.easy,
+    Complexity complexity = Complexity.easy,
   }) async {
     final res = await _gemini.generateFromText(prompt(complexity));
     return SpeakOutAloudModel.fromJson(res.text, complexity);

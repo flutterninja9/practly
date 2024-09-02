@@ -44,7 +44,7 @@ class LessonModel {
   factory LessonModel.fromMap(
     String id,
     Map<String, dynamic> map,
-    WordComplexity? complexity,
+    Complexity? complexity,
   ) {
     return LessonModel(
       id: id,
@@ -65,7 +65,7 @@ class LessonModel {
   String toJson() => json.encode(toMap());
 
   factory LessonModel.fromJson(
-          String source, String id, WordComplexity? complexity) =>
+          String source, String id, Complexity? complexity) =>
       LessonModel.fromMap(
         id,
         json.decode(source) as Map<String, dynamic>,

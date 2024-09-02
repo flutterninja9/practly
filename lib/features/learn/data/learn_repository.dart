@@ -10,13 +10,13 @@ class LearnRepository {
   LearnRepository(this._remoteDataSource);
 
   Future<WordOfTheDayModel> getWord({
-    WordComplexity complexity = WordComplexity.easy,
+    Complexity complexity = Complexity.easy,
   }) {
     return _remoteDataSource.generateWordOfTheDay(complexity: complexity);
   }
 
   Future<List<LessonModel>> getDailyDialogs({
-    WordComplexity complexity = WordComplexity.easy,
+    Complexity complexity = Complexity.easy,
   }) {
     return _remoteDataSource.getLessons(complexity: complexity);
   }

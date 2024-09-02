@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:practly/core/widgets/header.dart';
 import 'package:practly/core/async/async_page.dart';
 import 'package:practly/core/services/text_to_speech_service.dart';
-import 'package:practly/core/widgets/complexity_selector.dart';
 import 'package:practly/di/di.dart';
 import 'package:practly/features/learn/word/buisness_logic/word_of_the_day_notifier.dart';
 import 'package:practly/features/learn/word/presentation/word_of_the_day_content.dart';
@@ -35,19 +34,19 @@ class _WordOfTheDayScreenState extends State<WordOfTheDayScreen>
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         const Header(title: 'Word of the day'),
-        const SizedBox(height: 20),
-        AnimatedBuilder(
-          animation: notifier,
-          builder: (context, child) {
-            return ComplexitySelector(
-              initialValue: notifier.complexity,
-              onChanged: (val) {
-                notifier.setComplexity(val);
-                notifier.generateWord();
-              },
-            );
-          },
-        ),
+        // const SizedBox(height: 20),
+        // AnimatedBuilder(
+        //   animation: notifier,
+        //   builder: (context, child) {
+        //     return ComplexitySelector(
+        //       initialValue: notifier.complexity,
+        //       onChanged: (val) {
+        //         notifier.setComplexity(val);
+        //         notifier.generateWord();
+        //       },
+        //     );
+        //   },
+        // ),
         const SizedBox(height: 20),
         AnimatedBuilder(
           animation: notifier,

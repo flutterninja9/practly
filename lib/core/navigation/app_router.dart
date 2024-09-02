@@ -1,5 +1,6 @@
 import 'package:flutter/widgets.dart';
 import 'package:go_router/go_router.dart';
+import 'package:practly/core/complexity_selector/presentation/complexity_selector_screen.dart';
 import 'package:practly/core/config/config.dart';
 import 'package:practly/core/services/app_info_service.dart';
 import 'package:practly/core/widgets/force_update_screen.dart';
@@ -22,6 +23,7 @@ class AppRouter {
       final config = locator.get<Config>();
       final appInfo = locator.get<AppInfoService>();
       final authNotifier = locator.get<FirebaseAuthNotifier>();
+      final noComplexityChosen = authNotifier.signedInUser?.complexity == null;
       final inMaintainence = config.inMaintainence;
       final isSigningIn = state.matchedLocation == AuthScreen.route;
 
@@ -38,6 +40,10 @@ class AppRouter {
       }
 
       if (authNotifier.isSignedIn && isSigningIn) {
+        if (noComplexityChosen) {
+          return ComplexitySelectorScreen.route;
+        }
+
         return LearnScreen.route;
       }
 
@@ -60,6 +66,11 @@ class AppRouter {
             return ExerciseScreen(
               id: state.pathParameters["id"]!,
             );
+          }),
+      GoRoute(
+          path: ComplexitySelectorScreen.route,
+          builder: (context, state) {
+            return const ComplexitySelectorScreen();
           }),
       ShellRoute(
         builder: (context, state, child) {

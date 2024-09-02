@@ -3,7 +3,6 @@ import 'package:practly/core/widgets/header.dart';
 import 'package:practly/core/widgets/quiz/quiz_excercise_screen.dart';
 
 import 'package:practly/core/async/async_page.dart';
-import 'package:practly/core/widgets/complexity_selector.dart';
 import 'package:practly/di/di.dart';
 import 'package:practly/features/quiz/business_logic/quiz_notifier.dart';
 
@@ -36,18 +35,18 @@ class _QuizScreenState extends State<QuizScreen> {
           children: [
             const Header(title: 'Quiz'),
             const SizedBox(height: 20),
-            AnimatedBuilder(
-              animation: notifier,
-              builder: (context, child) {
-                return ComplexitySelector(
-                  initialValue: notifier.complexity,
-                  onChanged: (val) {
-                    notifier.setComplexity(val);
-                    notifier.generateQuiz();
-                  },
-                );
-              },
-            ),
+            // AnimatedBuilder(
+            //   animation: notifier,
+            //   builder: (context, child) {
+            //     return ComplexitySelector(
+            //       initialValue: notifier.complexity,
+            //       onChanged: (val) {
+            //         notifier.setComplexity(val);
+            //         notifier.generateQuiz();
+            //       },
+            //     );
+            //   },
+            // ),
             Expanded(
               child: AnimatedBuilder(
                   animation: notifier,

@@ -4,7 +4,7 @@ import 'package:practly/features/learn/data/lesson_model.dart';
 import 'package:practly/features/learn/data/word_of_the_day_model.dart';
 
 abstract class ILearnRemoteDataSource {
-  String prompt(WordComplexity complexity) => '''
+  String prompt(Complexity complexity) => '''
   You are a helpful language learning assistant. Your task is to generate a random word to improve the user's vocabulary based on the given complexity level: {complexity} (easy/medium/hard).
 
   Generate a random word appropriate for the ${complexity.name} level.
@@ -41,11 +41,11 @@ abstract class ILearnRemoteDataSource {
 ''';
 
   Future<WordOfTheDayModel> generateWordOfTheDay({
-    WordComplexity complexity = WordComplexity.easy,
+    Complexity complexity = Complexity.easy,
   });
 
   Future<List<LessonModel>> getLessons({
-    WordComplexity complexity = WordComplexity.easy,
+    Complexity complexity = Complexity.easy,
   });
 
   Future<List<Exercise>> getExercises(String id);

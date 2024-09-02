@@ -28,4 +28,10 @@ class FirebaseAuthNotifier extends ChangeNotifier {
   set signedInUser(UserModel? value) {
     _signedInUser = value;
   }
+
+  void updateSignedInUserNotify(UserModel? value) {
+    signedInUser = value;
+
+    notifyListeners();
+  }
 }

@@ -14,7 +14,7 @@ class LearnRemoteDataSourceImpl extends ILearnRemoteDataSource {
 
   @override
   Future<WordOfTheDayModel> generateWordOfTheDay({
-    WordComplexity complexity = WordComplexity.easy,
+    Complexity complexity = Complexity.easy,
   }) async {
     final res = await _gemini.generateFromText(prompt(complexity));
     return WordOfTheDayModel.fromJson(res.text, complexity);
@@ -22,7 +22,7 @@ class LearnRemoteDataSourceImpl extends ILearnRemoteDataSource {
 
   @override
   Future<List<LessonModel>> getLessons({
-    WordComplexity complexity = WordComplexity.easy,
+    Complexity complexity = Complexity.easy,
   }) async {
     final doc = await _firestore.collection('lessons').get();
 
@@ -40,7 +40,7 @@ class LearnRemoteDataSourceImpl extends ILearnRemoteDataSource {
         .get();
 
     return (doc.docs)
-        .map((e) => Exercise.fromMap(e.data(), WordComplexity.easy))
+        .map((e) => Exercise.fromMap(e.data(), Complexity.easy))
         .toList();
   }
 }

@@ -1,1 +1,1 @@
-enum WordComplexity { easy, medium, hard }
+enum Complexity { easy, medium, hard }

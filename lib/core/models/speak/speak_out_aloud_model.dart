@@ -7,7 +7,7 @@ class SpeakOutAloudModel implements Exercise {
   final String sentence;
   final String explanation;
   final String tip;
-  final WordComplexity complexity;
+  final Complexity complexity;
 
   SpeakOutAloudModel({
     required this.sentence,
@@ -18,7 +18,7 @@ class SpeakOutAloudModel implements Exercise {
 
   factory SpeakOutAloudModel.fromJson(
     String source,
-    WordComplexity? complexity,
+    Complexity? complexity,
   ) {
     final Map<String, dynamic> data = json.decode(source);
 
@@ -27,7 +27,7 @@ class SpeakOutAloudModel implements Exercise {
 
   factory SpeakOutAloudModel.fromMap(
     Map<String, dynamic> map,
-    WordComplexity? complexity,
+    Complexity? complexity,
   ) {
     return SpeakOutAloudModel(
       sentence: map['sentence'] ?? '',

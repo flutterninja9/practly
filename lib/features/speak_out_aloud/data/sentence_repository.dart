@@ -8,7 +8,7 @@ class SentenceRepository {
   SentenceRepository(this._remoteDataSource);
 
   Future<SpeakOutAloudModel> getSentence({
-    WordComplexity complexity = WordComplexity.easy,
+    Complexity complexity = Complexity.easy,
   }) async {
     return _remoteDataSource.generateSentence(complexity: complexity);
   }

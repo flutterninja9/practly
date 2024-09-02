@@ -10,7 +10,7 @@ class GeminiQuizDataSource extends IQuizRemoteDataSource {
 
   @override
   Future<QuizModel> generateQuiz({
-    WordComplexity complexity = WordComplexity.easy,
+    Complexity complexity = Complexity.easy,
   }) async {
     final res = await _gemini.generateFromText(prompt(complexity));
     return QuizModel.fromJson(res.text);

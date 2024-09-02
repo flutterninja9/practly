@@ -11,7 +11,7 @@ abstract class Exercise {
 
   static Exercise fromMap(
     Map<String, dynamic> map,
-    WordComplexity? complexity,
+    Complexity? complexity,
   ) {
     switch (map['type']) {
       case 'quiz':

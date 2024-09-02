@@ -8,7 +8,7 @@ class QuizRepository {
   QuizRepository(this._remoteDataSource);
 
   Future<QuizModel> getQuiz({
-    WordComplexity complexity = WordComplexity.easy,
+    Complexity complexity = Complexity.easy,
   }) async {
     return _remoteDataSource.generateQuiz(complexity: complexity);
   }

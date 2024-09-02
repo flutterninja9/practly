@@ -4,7 +4,6 @@ import 'package:practly/core/async/async_page.dart';
 import 'package:practly/core/widgets/header.dart';
 import 'package:practly/core/widgets/speak/speak_excercise_screen.dart';
 import 'package:practly/core/services/text_to_speech_service.dart';
-import 'package:practly/core/widgets/complexity_selector.dart';
 import 'package:practly/di/di.dart';
 import 'package:practly/features/speak_out_aloud/buisness_logic/speak_out_aloud_notifier.dart';
 
@@ -45,18 +44,18 @@ class _SpeakOutAloudScreenState extends State<SpeakOutAloudScreen> {
           children: [
             const Header(title: 'Speak Out Aloud'),
             const SizedBox(height: 20),
-            AnimatedBuilder(
-              animation: notifier,
-              builder: (context, child) {
-                return ComplexitySelector(
-                  initialValue: notifier.complexity,
-                  onChanged: (val) {
-                    notifier.setComplexity(val);
-                    notifier.generateSentence();
-                  },
-                );
-              },
-            ),
+            // AnimatedBuilder(
+            //   animation: notifier,
+            //   builder: (context, child) {
+            //     return ComplexitySelector(
+            //       initialValue: notifier.complexity,
+            //       onChanged: (val) {
+            //         notifier.setComplexity(val);
+            //         notifier.generateSentence();
+            //       },
+            //     );
+            //   },
+            // ),
             Expanded(
               child: AnimatedBuilder(
                   animation: notifier,
