@@ -1,10 +1,10 @@
 import 'package:flutter/foundation.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:practly/core/config/config.dart';
-import 'database_service.dart';
+import 'remote_database_service.dart';
 
 class AdService {
-  final DatabaseService _databaseService;
+  final RemoteDatabaseService _databaseService;
   final MobileAds _adService;
   final Config _config;
 

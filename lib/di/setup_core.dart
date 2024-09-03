@@ -12,7 +12,7 @@ import 'package:practly/core/database/app_database.dart';
 import 'package:practly/core/navigation/app_router.dart';
 import 'package:practly/core/services/ad_service.dart';
 import 'package:practly/core/services/app_info_service.dart';
-import 'package:practly/core/services/database_service.dart';
+import 'package:practly/core/services/remote_database_service.dart';
 import 'package:practly/core/services/score_logic.dart';
 import 'package:practly/core/services/speech_to_text_service.dart';
 import 'package:practly/core/services/text_to_speech_service.dart';
@@ -112,7 +112,7 @@ void _setupRouter() {
 void _setupDatabaseService() {
   final f = FirebaseFirestore.instance;
   locator.registerSingleton<FirebaseFirestore>(f);
-  locator.registerSingleton<DatabaseService>(DatabaseService(
+  locator.registerSingleton<RemoteDatabaseService>(RemoteDatabaseService(
     locator.get(),
     locator.get(),
     locator.get(),

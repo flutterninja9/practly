@@ -4,7 +4,7 @@ import 'package:practly/core/async/async_notifier.dart';
 import 'package:practly/core/models/excercise.dart';
 import 'package:practly/core/navigation/auth_notifier.dart';
 import 'package:practly/core/services/ad_service.dart';
-import 'package:practly/core/services/database_service.dart';
+import 'package:practly/core/services/remote_database_service.dart';
 import 'package:practly/di/di.dart';
 import 'package:practly/features/learn/data/learn_repository.dart';
 import 'package:practly/features/learn/data/lesson_model.dart';
@@ -12,7 +12,7 @@ import 'package:shadcn_ui/shadcn_ui.dart';
 
 class ExerciseNotifier extends AsyncNotifier<List<Exercise>> {
   final LearnRepository _repository;
-  final DatabaseService _databaseService;
+  final RemoteDatabaseService _databaseService;
   final AdService _adService;
 
   ExerciseNotifier(

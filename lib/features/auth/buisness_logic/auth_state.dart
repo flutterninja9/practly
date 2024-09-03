@@ -2,13 +2,13 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/widgets.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:practly/core/config/config.dart';
-import 'package:practly/core/services/database_service.dart';
+import 'package:practly/core/services/remote_database_service.dart';
 import 'package:practly/core/user/user_model.dart';
 import 'package:practly/di/di.dart';
 
 class AuthState extends ChangeNotifier {
   final FirebaseAuth _auth = FirebaseAuth.instance;
-  final DatabaseService _databaseService = locator.get();
+  final RemoteDatabaseService _databaseService = locator.get();
   final Config _config = locator.get();
   final GoogleSignIn _googleSignIn = GoogleSignIn();
 
