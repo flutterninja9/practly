@@ -14,12 +14,15 @@ class LearnLocalDataSource implements ILearnLocalDataSource {
     final now = DateTime.now();
     final startOfDay = DateTime(now.year, now.month, now.day);
 
-    final cachedWord = await (_database.select(_database.wordsTable)
+    final cachedWords = await (_database.select(_database.wordsTable)
           ..where((tbl) => tbl.createdAt.isBiggerOrEqualValue(startOfDay))
-          ..where((tbl) => tbl.complexity.equals(complexity.name)))
-        .getSingleOrNull();
+          ..where((tbl) => tbl.complexity.equals(complexity.name))
+          ..orderBy([(w) => OrderingTerm.desc(w.createdAt)]))
+        .get();
 
-    if (cachedWord != null) {
+    if (cachedWords.isNotEmpty) {
+      final cachedWord = cachedWords.first;
+
       return WordOfTheDayModel(
         word: cachedWord.word,
         definition: cachedWord.definition,

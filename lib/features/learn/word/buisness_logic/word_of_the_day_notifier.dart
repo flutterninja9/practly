@@ -21,14 +21,14 @@ class WordOfTheDayNotifier extends AsyncNotifier<WordOfTheDayModel> {
     this._adService,
   ) : super(_databaseService, _adService);
 
-  Future<void> generateWord() async {
+  Future<void> generateWord({bool forceRemote = false}) async {
     final complexity =
         locator.get<FirebaseAuthNotifier>().signedInUser?.complexity;
 
     final cachedWord =
         await _localDataSource.getWord(complexity ?? Complexity.easy);
 
-    if (cachedWord != null) {
+    if (cachedWord != null && !forceRemote) {
       execute(() async => cachedWord, isAIGeneration: false);
     } else {
       execute(
@@ -39,7 +39,7 @@ class WordOfTheDayNotifier extends AsyncNotifier<WordOfTheDayModel> {
             _localDataSource.setWord(word),
             _databaseService.saveWordOfTheDay(word),
           ]);
-          
+
           return word;
         }),
       );

@@ -44,7 +44,7 @@ class _WordOfTheDayScreenState extends State<WordOfTheDayScreen>
                 return WordOfTheDayContent(
                   model: model,
                   speechService: speechService,
-                  onRefresh: notifier.generateWord,
+                  onRefresh: () => notifier.generateWord(forceRemote: true),
                 );
               },
               onRetry: notifier.generateWord,
