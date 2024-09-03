@@ -24,6 +24,7 @@ void setupLearn() {
       locator.get(),
       locator.get(),
       locator.get(),
+      locator.get(),
     ),
   );
 

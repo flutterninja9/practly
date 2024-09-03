@@ -103,7 +103,7 @@ Difficulty: ${complexity.name}
 ''';
 
   Future<WordOfTheDayModel> generateWordOfTheDay({
-    Complexity complexity = Complexity.easy,
+    Complexity? complexity = Complexity.easy,
   });
 
   Future<List<LessonModel>> getLessons({
