@@ -26,11 +26,24 @@ class ExerciseNotifier extends AsyncNotifier<List<Exercise>> {
   Future<void> getExercises(String lessonId, LessonModel? lesson) async {
     if (lesson != null) {
       execute(
-        () => _repository.getExercises(
-          lesson: lesson,
-          complexity:
-              locator.get<FirebaseAuthNotifier>().signedInUser?.complexity,
-        ),
+        () async {
+          final cached = await _databaseService.getCachedExercise(lessonId);
+          if (cached != null) {
+            return cached;
+          }
+
+          return _repository
+              .getExercises(
+                  lesson: lesson,
+                  complexity: locator
+                      .get<FirebaseAuthNotifier>()
+                      .signedInUser
+                      ?.complexity)
+              .then((e) {
+            _databaseService.setCachedExercise(e);
+            return e;
+          });
+        },
         isAIGeneration: false,
       );
     } else {
