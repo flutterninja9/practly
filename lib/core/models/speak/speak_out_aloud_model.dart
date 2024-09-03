@@ -32,7 +32,9 @@ class SpeakOutAloudModel implements Exercise {
     return SpeakOutAloudModel(
       sentence: map['sentence'] ?? '',
       explanation: map['explanation'] ?? '',
-      complexity: map['complexity'] ?? complexity,
+      complexity: map['complexity'] != null
+          ? Complexity.fromString(map['complexity'])
+          : Complexity.easy,
       tip: map['tip'] ?? '',
     );
   }
@@ -44,6 +46,7 @@ class SpeakOutAloudModel implements Exercise {
       'explanation': explanation,
       'tip': tip,
       'complexity': complexity.name,
+      'type': type,
     };
   }
 

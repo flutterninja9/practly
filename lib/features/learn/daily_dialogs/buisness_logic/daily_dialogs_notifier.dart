@@ -23,8 +23,9 @@ class DailyDialogsNotifier extends AsyncNotifier<List<LessonModel>> {
   ) : super(_databaseService, _adService);
 
   Future<void> getDailyDialogs() async {
-    final complexity = locator.get<FirebaseAuthNotifier>().signedInUser?.complexity;
-    
+    final complexity =
+        locator.get<FirebaseAuthNotifier>().signedInUser?.complexity;
+
     execute(
       () => _repository.getDailyDialogs(complexity: complexity),
       isAIGeneration: false,
@@ -38,18 +39,12 @@ class DailyDialogsNotifier extends AsyncNotifier<List<LessonModel>> {
     return alreadyEnrolled;
   }
 
-  bool alreadyCompleted(String id) {
-    final currentuser = locator.get<FirebaseAuthNotifier>().signedInUser;
-    final alreadyCompleted =
-        (currentuser?.progress?.completedLessons?.contains(id) ?? false);
-
-    return alreadyCompleted;
-  }
-
   Future<void> onStartLesson(
-    String id,
+    LessonModel lesson,
     BuildContext context,
   ) async {
+    final id = lesson.id;
+
     if (!alreadyEnrolled(id)) {
       await _databaseService.setEnrollment(id);
       _authNotifier.signedInUser =
@@ -57,7 +52,10 @@ class DailyDialogsNotifier extends AsyncNotifier<List<LessonModel>> {
     }
 
     if (!context.mounted) return;
-    await context.push(ExerciseScreen.getRouteById(id));
+    await context.push(
+      ExerciseScreen.getRouteById(id),
+      extra: lesson,
+    );
     getDailyDialogs();
   }
 }

@@ -1,6 +1,9 @@
 # Env
 env.json
 
+# scratch file
+todos.md
+
 # Miscellaneous
 *.class
 *.log

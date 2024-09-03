@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:practly/core/config/config.dart';
+import 'package:practly/core/models/excercise.dart';
 import 'package:practly/core/navigation/auth_notifier.dart';
 import 'package:practly/core/user/user_model.dart';
 import 'package:practly/core/models/quiz/quiz_model.dart';
@@ -115,7 +116,22 @@ class DatabaseService {
 
   Future<void> clearEnrollment() async {
     await _firestore.collection('users').doc(_user!.uid).update({
-      'progress.currentLesson': FieldValue.delete(),
+      'progress': FieldValue.delete(),
+    });
+  }
+
+  Future<List<Exercise>?> getCachedExercise(String lessonId) async {
+    final res =
+        (await _firestore.collection('users').doc(_user!.uid).get()).data();
+
+    final inProgressExercises = res?["progress"]["excercises"] as List?;
+
+    return inProgressExercises?.map((e) => Exercise.fromMap(e, null)).toList();
+  }
+
+  Future<void> setCachedExercise(List<Exercise> exercises) async {
+    await _firestore.collection('users').doc(_user!.uid).update({
+      'progress.excercises': exercises.map((e) => e.toMap()).toList(),
     });
   }
 
@@ -124,11 +140,5 @@ class DatabaseService {
     final authNotifier = locator.get<FirebaseAuthNotifier>();
     final user = await getUserProfile(authNotifier.signedInUser!.id);
     authNotifier.signedInUser = user;
-    final completedLessons = user?.progress?.completedLessons ?? [];
-    completedLessons.add(lessonId);
-
-    await _firestore.collection('users').doc(_user!.uid).update({
-      'progress.completedLessons': completedLessons,
-    });
   }
 }

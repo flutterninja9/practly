@@ -33,7 +33,8 @@ class QuizModel implements Exercise {
     return <String, dynamic>{
       'sentence': sentence,
       'options': options,
-      'correctAnswer': correctAnswer,
+      'correct_answer': correctAnswer,
+      'type': type,
     };
   }
 

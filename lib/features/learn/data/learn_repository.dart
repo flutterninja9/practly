@@ -25,7 +25,13 @@ class LearnRepository {
     );
   }
 
-  Future<List<Exercise>> getExercises(String id) {
-    return _remoteDataSource.getExercises(id);
+  Future<List<Exercise>> getExercises({
+    Complexity? complexity,
+    required LessonModel lesson,
+  }) {
+    return _remoteDataSource.getExercises(
+      lesson: lesson,
+      complexity: complexity ?? Complexity.easy,
+    );
   }
 }

@@ -1,4 +1,7 @@
+import 'dart:convert';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/rendering.dart';
 import 'package:google_gemini/google_gemini.dart';
 import 'package:practly/core/enums/enums.dart';
 import 'package:practly/core/models/excercise.dart';
@@ -16,7 +19,7 @@ class LearnRemoteDataSourceImpl extends ILearnRemoteDataSource {
   Future<WordOfTheDayModel> generateWordOfTheDay({
     Complexity complexity = Complexity.easy,
   }) async {
-    final res = await _gemini.generateFromText(prompt(complexity));
+    final res = await _gemini.generateFromText(wordGenPrompt(complexity));
     return WordOfTheDayModel.fromJson(res.text, complexity);
   }
 
@@ -32,15 +35,16 @@ class LearnRemoteDataSourceImpl extends ILearnRemoteDataSource {
   }
 
   @override
-  Future<List<Exercise>> getExercises(String id) async {
-    final doc = await _firestore
-        .collection('lessons')
-        .doc(id)
-        .collection("exercises")
-        .get();
+  Future<List<Exercise>> getExercises({
+    Complexity complexity = Complexity.easy,
+    required LessonModel lesson,
+  }) async {
+    final res = await _gemini.generateFromText(
+      excerciseGenPrompt(lesson, complexity),
+    );
+    final json = jsonDecode(res.text) as List;
+    debugPrint(json.toString());
 
-    return (doc.docs)
-        .map((e) => Exercise.fromMap(e.data(), Complexity.easy))
-        .toList();
+    return (json).map((e) => Exercise.fromMap(e, Complexity.easy)).toList();
   }
 }

@@ -19,7 +19,7 @@ abstract class Exercise {
       case 'sentence':
         return SpeakOutAloudModel.fromMap(map, complexity);
       default:
-        throw Exception('Unknown type');
+        throw Exception('Unknown type ${map["type"]}');
     }
   }
 }
