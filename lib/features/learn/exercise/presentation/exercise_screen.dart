@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:practly/core/async/async_page.dart';
 import 'package:practly/di/di.dart';
+import 'package:practly/features/learn/data/lesson_model.dart';
 import 'package:practly/features/learn/exercise/buisness_logic/excercise_notifier.dart';
 import 'package:practly/features/learn/exercise/presentation/exercise_widget.dart';
 import 'package:shadcn_ui/shadcn_ui.dart';
@@ -11,9 +12,11 @@ class ExerciseScreen extends StatefulWidget {
   const ExerciseScreen({
     super.key,
     required this.id,
+    this.lessonModel,
   });
 
   final String id;
+  final LessonModel? lessonModel;
   static get route => "/lesson/:id";
   static String getRouteById(String id) => "/lesson/$id";
 
@@ -29,7 +32,7 @@ class _ExerciseScreenState extends State<ExerciseScreen> {
   void initState() {
     notifier = locator.get();
     super.initState();
-    notifier.getExercises(widget.id);
+    notifier.getExercises(widget.id, widget.lessonModel);
   }
 
   @override
@@ -55,7 +58,10 @@ class _ExerciseScreenState extends State<ExerciseScreen> {
             builder: (context, child) {
               return AsyncPage(
                 asyncValue: notifier.state,
-                onRetry: () => notifier.getExercises(widget.id),
+                onRetry: () => notifier.getExercises(
+                  widget.id,
+                  widget.lessonModel,
+                ),
                 dataBuilder: (model) => ExerciseListWidget(
                   exercises: model,
                   currentIndex: notifier.currentExerciseIndex,

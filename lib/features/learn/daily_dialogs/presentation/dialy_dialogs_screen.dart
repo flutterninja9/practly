@@ -66,7 +66,7 @@ class _DailyDialogsScreenState extends State<DailyDialogsScreen>
                       alreadyCompleted: alreadyCompleted,
                       lessonLocked: someLessonOngoing && !alreadyEnrolled,
                       onTap: () async =>
-                          await notifier.onStartLesson(lesson.id, context),
+                          await notifier.onStartLesson(lesson, context),
                     );
                   },
                 );
