@@ -52,7 +52,10 @@ class _SpeakOutAloudScreenState extends State<SpeakOutAloudScreen> {
                       onRetry: notifier.generateSentence,
                       dataBuilder: (model) => SpeakExcerciseScreen(
                         model: model,
-                        onRequestNext: notifier.generateSentence,
+                        onRequestNext: () async {
+                          await notifier.clearOlderResults();
+                          notifier.generateSentence();
+                        },
                       ),
                     );
                   }),
