@@ -8,6 +8,7 @@ import 'package:google_gemini/google_gemini.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:practly/core/complexity_selector/business_logic/complexity_selector_notifier.dart';
 import 'package:practly/core/config/config.dart';
+import 'package:practly/core/database/app_database.dart';
 import 'package:practly/core/navigation/app_router.dart';
 import 'package:practly/core/services/ad_service.dart';
 import 'package:practly/core/services/app_info_service.dart';
@@ -26,6 +27,7 @@ import 'package:speech_to_text/speech_to_text.dart';
 Future<void> setupCore() async {
   await _initializeFirebase();
   await _loadConfigs();
+  _setupDb();
   _setupAppVersionService();
   _setupDatabaseService();
   _initializeFirebaseAuth();
@@ -36,6 +38,11 @@ Future<void> setupCore() async {
   _setupRouter();
   _setupAdService();
   _setupComplexitySelector();
+}
+
+void _setupDb() {
+  final db = AppDatabase();
+  locator.registerSingleton<AppDatabase>(db);
 }
 
 Future<void> _initializeFirebase() async {
