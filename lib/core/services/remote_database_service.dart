@@ -7,16 +7,16 @@ import 'package:practly/core/user/user_model.dart';
 import 'package:practly/core/models/quiz/quiz_model.dart';
 import 'package:practly/core/models/speak/speak_out_aloud_model.dart';
 import 'package:practly/di/di.dart';
-import 'package:practly/features/learn/data/word_of_the_day_model.dart';
+import 'package:practly/core/models/word/word_of_the_day_model.dart';
 
-class DatabaseService {
+class RemoteDatabaseService {
   final FirebaseFirestore _firestore;
   final FirebaseAuth _firebaseAuth;
   final Config _config;
 
   User? get _user => _firebaseAuth.currentUser;
 
-  DatabaseService(
+  RemoteDatabaseService(
     this._firestore,
     this._firebaseAuth,
     this._config,

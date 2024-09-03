@@ -7,7 +7,7 @@ import 'package:practly/core/enums/enums.dart';
 import 'package:practly/core/models/excercise.dart';
 import 'package:practly/features/learn/data/lesson_model.dart';
 import 'package:practly/features/learn/data/i_learn_remote_data_source.dart';
-import 'package:practly/features/learn/data/word_of_the_day_model.dart';
+import 'package:practly/core/models/word/word_of_the_day_model.dart';
 
 class LearnRemoteDataSourceImpl extends ILearnRemoteDataSource {
   final GoogleGemini _gemini;
@@ -17,15 +17,16 @@ class LearnRemoteDataSourceImpl extends ILearnRemoteDataSource {
 
   @override
   Future<WordOfTheDayModel> generateWordOfTheDay({
-    Complexity complexity = Complexity.easy,
+    Complexity? complexity,
   }) async {
-    final res = await _gemini.generateFromText(wordGenPrompt(complexity));
+    final res = await _gemini
+        .generateFromText(wordGenPrompt(complexity ?? Complexity.easy));
     return WordOfTheDayModel.fromJson(res.text, complexity);
   }
 
   @override
   Future<List<LessonModel>> getLessons({
-    Complexity complexity = Complexity.easy,
+    Complexity? complexity = Complexity.easy,
   }) async {
     final doc = await _firestore.collection('lessons').get();
 

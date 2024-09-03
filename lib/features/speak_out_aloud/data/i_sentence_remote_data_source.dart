@@ -43,7 +43,5 @@ abstract class ISentenceRemoteDataSource {
   Please ensure that the JSON you provide is well-formed and safe to parse in a programming environment.
 ''';
 
-  Future<SpeakOutAloudModel> generateSentence({
-    Complexity complexity = Complexity.easy,
-  });
+  Future<SpeakOutAloudModel> generateSentence({Complexity? complexity});
 }

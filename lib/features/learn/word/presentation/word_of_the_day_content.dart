@@ -5,7 +5,7 @@ import 'package:shadcn_ui/shadcn_ui.dart';
 
 import 'package:practly/core/services/text_to_speech_service.dart';
 import 'package:practly/core/widgets/speakable.dart';
-import 'package:practly/features/learn/data/word_of_the_day_model.dart';
+import 'package:practly/core/models/word/word_of_the_day_model.dart';
 
 class WordOfTheDayContent extends StatelessWidget {
   const WordOfTheDayContent({
@@ -35,8 +35,17 @@ class WordOfTheDayContent extends StatelessWidget {
                   sentence: model.word,
                 ),
               ),
-              ShadBadge.outline(
-                child: Text(model.complexity.name.capitalize()),
+              Row(
+                children: [
+                  ShadBadge.outline(
+                    child: Text(model.complexity.name.capitalize()),
+                  ),
+                  const SizedBox(width: 12),
+                  GestureDetector(
+                    onTap: onRefresh,
+                    child: const Icon(LucideIcons.refreshCcw, size: 20),
+                  ),
+                ],
               ),
             ],
           ),
@@ -50,15 +59,6 @@ class WordOfTheDayContent extends StatelessWidget {
           const SizedBox(height: 20),
           HighlightedSection(title: "Usage:", content: model.usage),
           const SizedBox(height: 20),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              ShadButton.secondary(
-                onPressed: onRefresh,
-                child: const Text('Next word'),
-              )
-            ],
-          ),
         ],
       ),
     );
