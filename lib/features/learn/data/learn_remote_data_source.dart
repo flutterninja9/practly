@@ -39,19 +39,12 @@ class LearnRemoteDataSourceImpl extends ILearnRemoteDataSource {
     Complexity complexity = Complexity.easy,
     required LessonModel lesson,
   }) async {
-    try {
-      final res = await _gemini.generateFromText(
-        excerciseGenPrompt(lesson, complexity),
-      );
-      final json = jsonDecode(res.text) as List;
-      debugPrint(json.toString());
+    final res = await _gemini.generateFromText(
+      excerciseGenPrompt(lesson, complexity),
+    );
+    final json = jsonDecode(res.text) as List;
+    debugPrint(json.toString());
 
-      return (json).map((e) => Exercise.fromMap(e, Complexity.easy)).toList();
-    } catch (e, s) {
-      debugPrint(e.toString());
-      debugPrint(s.toString());
-
-      throw "OK";
-    }
+    return (json).map((e) => Exercise.fromMap(e, Complexity.easy)).toList();
   }
 }

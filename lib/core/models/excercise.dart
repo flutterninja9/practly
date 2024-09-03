@@ -13,7 +13,6 @@ abstract class Exercise {
     Map<String, dynamic> map,
     Complexity? complexity,
   ) {
-    print(map);
     switch (map['type']) {
       case 'quiz':
         return QuizModel.fromMap(map);

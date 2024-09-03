@@ -5,7 +5,6 @@ import 'package:shadcn_ui/shadcn_ui.dart';
 class LessonTile extends StatelessWidget {
   final LessonModel model;
   final bool alreadyEnrolled;
-  final bool alreadyCompleted;
   final bool lessonLocked;
   final VoidCallback? onTap;
 
@@ -13,7 +12,6 @@ class LessonTile extends StatelessWidget {
     super.key,
     required this.model,
     required this.lessonLocked,
-    required this.alreadyCompleted,
     required this.alreadyEnrolled,
     this.onTap,
   });
@@ -35,13 +33,7 @@ class LessonTile extends StatelessWidget {
             style: ShadTheme.of(context).textTheme.p,
           ),
           const SizedBox(height: 12),
-          if (alreadyCompleted)
-            ShadButton.ghost(
-              onPressed: onTap,
-              icon: const Icon(LucideIcons.rotateCw),
-              child: const Text('Retest'),
-            )
-          else if (lessonLocked)
+          if (lessonLocked)
             const ShadButton.outline(
               icon: Icon(LucideIcons.lock),
               child: Text('Locked'),

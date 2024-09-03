@@ -57,13 +57,10 @@ class _DailyDialogsScreenState extends State<DailyDialogsScreen>
                   itemBuilder: (context, index) {
                     final lesson = model[index];
                     final alreadyEnrolled = notifier.alreadyEnrolled(lesson.id);
-                    final alreadyCompleted =
-                        notifier.alreadyCompleted(lesson.id);
 
                     return LessonTile(
                       model: lesson,
                       alreadyEnrolled: alreadyEnrolled,
-                      alreadyCompleted: alreadyCompleted,
                       lessonLocked: someLessonOngoing && !alreadyEnrolled,
                       onTap: () async =>
                           await notifier.onStartLesson(lesson, context),

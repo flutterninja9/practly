@@ -39,14 +39,6 @@ class DailyDialogsNotifier extends AsyncNotifier<List<LessonModel>> {
     return alreadyEnrolled;
   }
 
-  bool alreadyCompleted(String id) {
-    final currentuser = locator.get<FirebaseAuthNotifier>().signedInUser;
-    final alreadyCompleted =
-        (currentuser?.progress?.completedLessons?.contains(id) ?? false);
-
-    return alreadyCompleted;
-  }
-
   Future<void> onStartLesson(
     LessonModel lesson,
     BuildContext context,

@@ -124,11 +124,5 @@ class DatabaseService {
     final authNotifier = locator.get<FirebaseAuthNotifier>();
     final user = await getUserProfile(authNotifier.signedInUser!.id);
     authNotifier.signedInUser = user;
-    final completedLessons = user?.progress?.completedLessons ?? [];
-    completedLessons.add(lessonId);
-
-    await _firestore.collection('users').doc(_user!.uid).update({
-      'progress.completedLessons': completedLessons,
-    });
   }
 }
