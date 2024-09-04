@@ -1,3 +1,4 @@
+import 'package:drift/drift.dart';
 import 'package:practly/core/database/app_database.dart';
 import 'package:practly/core/enums/enums.dart';
 import 'package:practly/core/models/speak/speak_out_aloud_model.dart';
@@ -32,6 +33,7 @@ class SentenceLocalDataSource implements ISentenceLocalDataSource {
     } else {
       await _database.into(_database.sentencesTable).insert(
             SentencesTableCompanion.insert(
+              id: const Value(1),
               sentence: model.sentence,
               explanation: model.explanation,
               tip: model.tip,
