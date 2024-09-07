@@ -4,9 +4,10 @@ const generateWords = require('./generators/generateWords');
 const generateSentences = require('./generators/generateSentences');
 const generateQuizzes = require('./generators/generateQuizzes');
 const writeToFirestore = require("./db/writeToFirestore");
-const readFromFirestore = require("./db/readFromFirestore");
-const { GoogleGenerativeAI } = require("@google/generative-ai");
 const getAlreadyGeneratedWords = require("./db/getAlreadyGeneratedWords");
+const getAlreadyGeneratedSentences = require("./db/getAlreadyGeneratedSentences");
+const getAlreadyGeneratedQuizzes = require("./db/getAlreadyGeneratedQuizzes");
+const { GoogleGenerativeAI } = require("@google/generative-ai");
 
 admin.initializeApp();
 const db = admin.firestore();
@@ -20,16 +21,16 @@ exports.getDataFromFirestore = functions.https.onRequest(async (req, res) => {
     const alreadyGeneratedWords = await getAlreadyGeneratedWords(db);
     const words = await generateWords(model, "easy", 5, alreadyGeneratedWords);
     await writeToFirestore(db, words, "wordPool");
-
-    /// Sentences
-    const sentences = await generateSentences(model, "easy", 5);
-    // await writeToFirestore(db, sentences, "sentencePool");
-
     
+    /// Sentences
+    const alreadyGeneratedSentences = await getAlreadyGeneratedSentences(db);
+    const sentences = await generateSentences(model, "easy", 5, alreadyGeneratedSentences);
+    await writeToFirestore(db, sentences, "sentencePool");
 
     /// Quizzes
-    const quizzes = await generateQuizzes(model, "easy", 5);
-    // await writeToFirestore(db, quizzes, "quizPool");
+    const alreadyGeneratedQuizzes = await getAlreadyGeneratedQuizzes(db);
+    const quizzes = await generateQuizzes(model, "easy", 5, alreadyGeneratedQuizzes);
+    await writeToFirestore(db, quizzes, "quizPool");
 
 
     res.status(200).json({
