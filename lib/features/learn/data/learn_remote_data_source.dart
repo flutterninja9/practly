@@ -26,7 +26,11 @@ class LearnRemoteDataSourceImpl extends ILearnRemoteDataSource {
     Complexity? complexity,
   }) async {
     final usedContent = await _getUsedContent();
-    final unUsedContent = await _getUnusedContent(usedContent);
+    final unUsedContent = await _getUnusedContent(
+      usedContent,
+      complexity ?? Complexity.easy,
+    );
+
     if (unUsedContent.isNotEmpty) {
       unUsedContent.shuffle();
       final randomElement = unUsedContent.first;
@@ -81,10 +85,14 @@ class LearnRemoteDataSourceImpl extends ILearnRemoteDataSource {
 
   Future<List<WordOfTheDayModel>> _getUnusedContent(
     List<UsedContentModel> usedContent,
+    Complexity complexity,
   ) async {
     final usedIds = usedContent.map((e) => e.usedContentId).toList();
 
-    final res = await _firestore.collection("wordPool").get();
+    final res = await _firestore
+        .collection("wordPool")
+        .where(FieldPath.fromString("complexity"), isEqualTo: complexity.name)
+        .get();
 
     return res.docs
         .map((e) => WordOfTheDayModel.fromMap(e.id, e.data()))

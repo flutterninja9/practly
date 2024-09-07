@@ -4,6 +4,7 @@ class UsedContentModel {
   final String usedContentId;
   final String type;
   final String generation;
+
   UsedContentModel({
     required this.usedContentId,
     required this.type,
