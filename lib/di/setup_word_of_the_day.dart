@@ -10,7 +10,11 @@ import 'package:practly/features/learn/data/learn_repository.dart';
 
 void setupLearn() {
   locator.registerSingleton<ILearnRemoteDataSource>(
-    LearnRemoteDataSourceImpl(locator.get(), locator.get()),
+    LearnRemoteDataSourceImpl(
+      locator.get(),
+      locator.get(),
+      locator.get(),
+    ),
   );
 
   locator.registerSingleton<ILearnLocalDataSource>(

@@ -4,10 +4,10 @@ import 'package:practly/features/learn/data/lesson_model.dart';
 import 'package:practly/core/models/word/word_of_the_day_model.dart';
 
 abstract class ILearnRemoteDataSource {
-  String wordGenPrompt(Complexity complexity) => '''
+  String wordGenPrompt(Complexity complexity, {List<String>? blacklist}) => '''
   You are a helpful language learning assistant. Your task is to generate a random word to improve the user's vocabulary based on the given complexity level: {complexity} (easy/medium/hard).
 
-  Generate a random word appropriate for the ${complexity.name} level.
+  Generate a random word appropriate for the ${complexity.name} level, but avoid the following words: ${(blacklist ?? []).join(", ")}
   Provide a clear, concise definition of the word.
   Use the word in a simple example sentence.
   Offer a brief explanation of how the word is commonly used or any notable connotations.
@@ -24,6 +24,7 @@ abstract class ILearnRemoteDataSource {
     "word": "[Generated word]",
     "definition": "[Clear, concise definition]",
     "example": "[Sentence using the word]",
+    "complexity": [Value of complexity<easy/medium/hard> for which this was generated],
     "usage": "[Brief explanation of common usage or connotations]"
     }
 
@@ -34,6 +35,7 @@ abstract class ILearnRemoteDataSource {
   "word": "Quaint",
   "definition": "Pleasingly old-fashioned",
   "example": "The quaint little cottage was a welcome sight after a long day of travel.",
+  "complexity": "medium",
   "usage": "Quaint is often used to describe things that are charming or nostalgic, especially buildings, towns, or objects that evoke a sense of the past."
 }
 
