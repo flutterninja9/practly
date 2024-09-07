@@ -32,7 +32,7 @@ class WordOfTheDayContent extends StatelessWidget {
               Flexible(
                 child: SpeakableText(
                   tts: speechService,
-                  sentence: model.word,
+                  sentence: model.word.capitalize(),
                 ),
               ),
               Row(
