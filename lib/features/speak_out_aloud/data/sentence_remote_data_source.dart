@@ -1,28 +1,24 @@
-import 'dart:convert';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_gemini/google_gemini.dart';
 import 'package:practly/core/enums/enums.dart';
-import 'package:practly/core/models/excercise.dart';
 import 'package:practly/core/models/used_content_model.dart';
-import 'package:practly/features/learn/data/lesson_model.dart';
-import 'package:practly/features/learn/data/i_learn_remote_data_source.dart';
-import 'package:practly/core/models/word/word_of_the_day_model.dart';
+import 'package:practly/features/speak_out_aloud/data/i_sentence_remote_data_source.dart';
+import 'package:practly/core/models/speak/speak_out_aloud_model.dart';
 
-class LearnRemoteDataSourceImpl extends ILearnRemoteDataSource {
+class SentenceRemoteDataSource extends ISentenceRemoteDataSource {
   final GoogleGemini _gemini;
   final FirebaseFirestore _firestore;
   final FirebaseAuth _firebaseAuth;
 
-  LearnRemoteDataSourceImpl(
+  SentenceRemoteDataSource(
     this._gemini,
-    this._firestore,
     this._firebaseAuth,
+    this._firestore,
   );
 
   @override
-  Future<WordOfTheDayModel> generateWordOfTheDay({
+  Future<SpeakOutAloudModel> generateSentence({
     Complexity? complexity,
   }) async {
     final usedContent = await _getUsedContent();
@@ -39,26 +35,26 @@ class LearnRemoteDataSourceImpl extends ILearnRemoteDataSource {
     }
 
     // fallback to gemini here
-    final generatedWord =
-        await _generateWordFromGemini(complexity, usedContent);
-    final generatedWordWithId = await _saveToGlobalPool(generatedWord);
-    await _addToUsedContent(generatedWordWithId.toUsedContent());
+    final generatedSentence =
+        await _generateSentenceFromGemini(complexity, usedContent);
+    final generatedSentenceWithId = await _saveToGlobalPool(generatedSentence);
+    await _addToUsedContent(generatedSentenceWithId.toUsedContent());
 
-    return generatedWordWithId;
+    return generatedSentenceWithId;
   }
 
-  Future<WordOfTheDayModel> _generateWordFromGemini(
+  Future<SpeakOutAloudModel> _generateSentenceFromGemini(
     Complexity? complexity,
     List<UsedContentModel> usedContent,
   ) async {
     final res = await _gemini.generateFromText(
-      wordGenPrompt(
+      prompt(
         complexity ?? Complexity.easy,
         blacklist: usedContent.map((e) => e.generation).toList(),
       ),
     );
 
-    return WordOfTheDayModel.fromJson(res.text);
+    return SpeakOutAloudModel.fromJson(res.text);
   }
 
   Future<List<UsedContentModel>> _getUsedContent() async {
@@ -83,51 +79,27 @@ class LearnRemoteDataSourceImpl extends ILearnRemoteDataSource {
         .add(content.toMap());
   }
 
-  Future<List<WordOfTheDayModel>> _getUnusedContent(
+  Future<List<SpeakOutAloudModel>> _getUnusedContent(
     List<UsedContentModel> usedContent,
     Complexity complexity,
   ) async {
     final usedIds = usedContent.map((e) => e.usedContentId).toList();
 
     final res = await _firestore
-        .collection("wordPool")
+        .collection("sentencePool")
         .where(FieldPath.fromString("complexity"), isEqualTo: complexity.name)
         .get();
 
     return res.docs
-        .map((e) => WordOfTheDayModel.fromMap(e.id, e.data()))
+        .map((e) => SpeakOutAloudModel.fromFirestoreMap(e.id, e.data()))
         .where((e) => !usedIds.contains(e.id))
         .toList();
   }
 
   /// returns the element with id
-  Future<WordOfTheDayModel> _saveToGlobalPool(WordOfTheDayModel word) async {
-    final res = await _firestore.collection("wordPool").add(word.toMap());
+  Future<SpeakOutAloudModel> _saveToGlobalPool(SpeakOutAloudModel word) async {
+    final res = await _firestore.collection("sentencePool").add(word.toMap());
 
     return word.copyWith(id: res.id);
-  }
-
-  @override
-  Future<List<LessonModel>> getLessons({
-    Complexity? complexity = Complexity.easy,
-  }) async {
-    final doc = await _firestore.collection('lessons').get();
-
-    return (doc.docs)
-        .map((e) => LessonModel.fromMap(e.id, e.data(), complexity))
-        .toList();
-  }
-
-  @override
-  Future<List<Exercise>> getExercises({
-    Complexity complexity = Complexity.easy,
-    required LessonModel lesson,
-  }) async {
-    final res = await _gemini.generateFromText(
-      excerciseGenPrompt(lesson, complexity),
-    );
-    final json = jsonDecode(res.text) as List;
-
-    return (json).map((e) => Exercise.fromMap(e)).toList();
   }
 }

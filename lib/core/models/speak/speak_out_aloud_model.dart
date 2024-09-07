@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:practly/core/enums/enums.dart';
 import 'package:practly/core/models/excercise.dart';
+import 'package:practly/core/models/used_content_model.dart';
 
 class SpeakOutAloudModel implements Exercise {
   final String? id;
@@ -18,26 +19,20 @@ class SpeakOutAloudModel implements Exercise {
     required this.tip,
   });
 
-  factory SpeakOutAloudModel.fromJson(
-    String source,
-    Complexity? complexity,
-  ) {
+  factory SpeakOutAloudModel.fromJson(String source) {
     final Map<String, dynamic> data = json.decode(source);
 
-    return SpeakOutAloudModel.fromMap(data, complexity);
+    return SpeakOutAloudModel.fromMap(data);
   }
 
   factory SpeakOutAloudModel.fromMap(
     Map<String, dynamic> map,
-    Complexity? complexity,
   ) {
     return SpeakOutAloudModel(
       id: map['id'],
       sentence: map['sentence'] ?? '',
       explanation: map['explanation'] ?? '',
-      complexity: map['complexity'] != null
-          ? Complexity.fromString(map['complexity'])
-          : Complexity.easy,
+      complexity: Complexity.fromString(map['complexity']),
       tip: map['tip'] ?? '',
     );
   }
@@ -50,10 +45,16 @@ class SpeakOutAloudModel implements Exercise {
       id: id,
       sentence: map['sentence'] ?? '',
       explanation: map['explanation'] ?? '',
-      complexity: map['complexity'] != null
-          ? Complexity.fromString(map['complexity'])
-          : Complexity.easy,
+      complexity: Complexity.fromString(map['complexity']),
       tip: map['tip'] ?? '',
+    );
+  }
+
+  UsedContentModel toUsedContent() {
+    return UsedContentModel(
+      usedContentId: id!,
+      type: type,
+      generation: sentence,
     );
   }
 
@@ -96,4 +97,20 @@ class SpeakOutAloudModel implements Exercise {
 
   @override
   String get type => "sentence";
+
+  SpeakOutAloudModel copyWith({
+    String? id,
+    String? sentence,
+    String? explanation,
+    String? tip,
+    Complexity? complexity,
+  }) {
+    return SpeakOutAloudModel(
+      id: id ?? this.id,
+      sentence: sentence ?? this.sentence,
+      explanation: explanation ?? this.explanation,
+      tip: tip ?? this.tip,
+      complexity: complexity ?? this.complexity,
+    );
+  }
 }

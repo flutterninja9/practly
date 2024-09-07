@@ -126,7 +126,7 @@ class RemoteDatabaseService {
 
     final inProgressExercises = res?["progress"]["excercises"] as List?;
 
-    return inProgressExercises?.map((e) => Exercise.fromMap(e, null)).toList();
+    return inProgressExercises?.map((e) => Exercise.fromMap(e)).toList();
   }
 
   Future<void> setCachedExercise(List<Exercise> exercises) async {

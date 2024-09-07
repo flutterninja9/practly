@@ -52,11 +52,7 @@ class LessonModel {
       description: map['description'] as String,
       exercises: List<Exercise>.from(
         (map['exercises'] as List?)?.map<Exercise>(
-              (x) => Exercise.fromMap(
-                x as Map<String, dynamic>,
-                complexity,
-              ),
-            ) ??
+                (x) => Exercise.fromMap(x as Map<String, dynamic>)) ??
             [],
       ),
     );
