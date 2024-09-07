@@ -1,0 +1,9 @@
+{
+  "projects": {
+    "default": "dev-speakease",
+    "prod": "speakease-5edcf"
+  },
+  "targets": {},
+  "etags": {},
+  "dataconnectEmulatorConfig": {}
+}

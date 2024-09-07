@@ -1,0 +1,61 @@
+const generateSentences = async (model, complexity, numberOfGenerations, blacklist = []) => {
+    const prompt = `
+    You are a helpful language learning assistant. Your task is to generate sentences for speaking practice based on the given complexity level: ${complexity} (easy/medium/hard).
+    Generate ${numberOfGenerations} sentences appropriate for the ${complexity} level, but avoid the following sentences: ${blacklist.join(", ")}.
+    Provide a brief explanation of any challenging words or phrases in the sentence.
+    Offer a pronunciation tip for a word or sound in the sentence that might be difficult for language learners.
+    Output **only** the JSON in the following format:
+    [
+     {
+      "sentence": "[Generated Sentence]",
+      "explanation": "[Brief explanation of any challenging words or phrases]",
+      "tip": "[Tip for pronouncing a difficult word or sound]",
+      "complexity": [Value of complexity<easy/medium/hard> for which this was generated]
+     }
+    ]
+    `;
+
+    const result = await model.generateContent(prompt);
+    const responseText = await result.response.text();
+
+    try {
+        // Clean the response to remove any unwanted characters
+        const cleanedResponse = responseText
+            .replace(/```json/g, '')   // Remove the starting markdown if present
+            .replace(/```/g, '')       // Remove any ending markdown
+            .trim();                   // Trim any extra spaces or newlines
+
+        // Parse the cleaned response
+        const generatedSentences = JSON.parse(cleanedResponse);
+
+        // Convert both blacklist and generated sentences to lowercase for comparison
+        const filteredSentences = generatedSentences.filter(
+            (sentenceObj) =>
+                !blacklist
+                    .map((sentence) => sentence.toLowerCase())
+                    .includes(sentenceObj.sentence.toLowerCase())
+        );
+
+        // Check if the number of filtered sentences is less than the desired amount
+        if (filteredSentences.length < numberOfGenerations) {
+            console.warn("Some sentences were blacklisted, regenerating more sentences...");
+
+            // Recursively call the function with the updated history and blacklist
+            const newSentences = await generateSentences(
+                model,
+                complexity,
+                numberOfGenerations - filteredSentences.length,
+                [...blacklist, ...filteredSentences.map((sentenceObj) => sentenceObj.sentence)]
+            );
+            return [...filteredSentences, ...newSentences];
+        }
+
+        return filteredSentences;
+    } catch (e) {
+        console.error("Error parsing JSON:", e);
+        console.error("Response received:", responseText);
+        return [];
+    }
+};
+
+module.exports = generateSentences;
