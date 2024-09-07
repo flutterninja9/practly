@@ -19,6 +19,7 @@ const generateWords = async (
           "word": "[Generated word]",
           "definition": "[Clear, concise definition]",
           "example": "[Sentence using the word]",
+          "complexity": [Value of complexity<easy/medium/hard> for which this was generated],
           "usage": "[Brief explanation of common usage or connotations]"
         }
       ]

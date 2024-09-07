@@ -16,6 +16,9 @@ exports.getDataFromFirestore = functions
   .runWith({ secrets: ["GEMINI_KEY"] })
   .https.onRequest(async (req, res) => {
     try {
+      const complexity = req.query.complexity;
+      const generationCount = req.query.generationCount;
+
       const genAI = new GoogleGenerativeAI(process.env.GEMINI_KEY);
       const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
 
@@ -23,8 +26,8 @@ exports.getDataFromFirestore = functions
       const alreadyGeneratedWords = await getAlreadyGeneratedWords(db);
       const words = await generateWords(
         model,
-        "easy",
-        5,
+        complexity,
+        generationCount,
         alreadyGeneratedWords
       );
       await writeToFirestore(db, words, "wordPool");
@@ -33,8 +36,8 @@ exports.getDataFromFirestore = functions
       const alreadyGeneratedSentences = await getAlreadyGeneratedSentences(db);
       const sentences = await generateSentences(
         model,
-        "easy",
-        5,
+        complexity,
+        generationCount,
         alreadyGeneratedSentences
       );
       await writeToFirestore(db, sentences, "sentencePool");
@@ -43,13 +46,15 @@ exports.getDataFromFirestore = functions
       const alreadyGeneratedQuizzes = await getAlreadyGeneratedQuizzes(db);
       const quizzes = await generateQuizzes(
         model,
-        "easy",
-        5,
+        complexity,
+        generationCount,
         alreadyGeneratedQuizzes
       );
       await writeToFirestore(db, quizzes, "quizPool");
 
       res.status(200).json({
+        complexity : complexity,
+        generationCount : generationCount,
         words: words,
         sentences: sentences,
         quizzes: quizzes,

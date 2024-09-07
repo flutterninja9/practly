@@ -9,7 +9,8 @@ const generateSentences = async (model, complexity, numberOfGenerations, blackli
      {
       "sentence": "[Generated Sentence]",
       "explanation": "[Brief explanation of any challenging words or phrases]",
-      "tip": "[Tip for pronouncing a difficult word or sound]"
+      "tip": "[Tip for pronouncing a difficult word or sound]",
+      "complexity": [Value of complexity<easy/medium/hard> for which this was generated]
      }
     ]
     `;

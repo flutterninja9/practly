@@ -5,6 +5,7 @@ const generateQuizzes = async (model, complexity, numberOfGenerations, blacklist
     [
       {
         "sentence": "She is looking forward to ____ her vacation.",
+        "complexity": [Value of complexity<easy/medium/hard> for which this was generated],
         "options": {
           "a": "start",
           "b": "starting",
