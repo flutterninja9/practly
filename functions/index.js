@@ -1,66 +1,55 @@
 const functions = require("firebase-functions");
 const admin = require("firebase-admin");
-const generateWords = require("./generators/generateWords");
-const generateSentences = require("./generators/generateSentences");
-const generateQuizzes = require("./generators/generateQuizzes");
-const writeToFirestore = require("./db/writeToFirestore");
-const getAlreadyGeneratedWords = require("./db/getAlreadyGeneratedWords");
-const getAlreadyGeneratedSentences = require("./db/getAlreadyGeneratedSentences");
-const getAlreadyGeneratedQuizzes = require("./db/getAlreadyGeneratedQuizzes");
 const { GoogleGenerativeAI } = require("@google/generative-ai");
+const generateContent = require("./generators/generateContent");
+const writeToFirestore = require("./db/writeToFirestore");
+const getAlreadyGeneratedContent = require("./db/getAlreadyGeneratedContent.js");
 
 admin.initializeApp();
 const db = admin.firestore();
 
 exports.getDataFromFirestore = functions
-  .runWith({ secrets: ["GEMINI_KEY"] })
+  .runWith({ 
+    secrets: ["GEMINI_KEY"],
+    timeoutSeconds: 540, // Increase timeout to 9 minutes
+    memory: "1GB" // Increase memory if needed
+  })
   .https.onRequest(async (req, res) => {
     try {
       const complexity = req.query.complexity;
-      const generationCount = req.query.generationCount;
+      const generationCount = parseInt(req.query.generationCount);
 
       const genAI = new GoogleGenerativeAI(process.env.GEMINI_KEY);
       const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
 
-      /// Words
-      const alreadyGeneratedWords = await getAlreadyGeneratedWords(db);
-      const words = await generateWords(
-        model,
-        complexity,
-        generationCount,
-        alreadyGeneratedWords
-      );
-      await writeToFirestore(db, words, "wordPool");
+      const contentTypes = ["word", "sentence", "quiz"];
+      const results = {};
 
-      /// Sentences
-      const alreadyGeneratedSentences = await getAlreadyGeneratedSentences(db);
-      const sentences = await generateSentences(
-        model,
-        complexity,
-        generationCount,
-        alreadyGeneratedSentences
+      // Fetch all existing content in parallel
+      const existingContent = await Promise.all(
+        contentTypes.map(type => getAlreadyGeneratedContent(db, `${type}Pool`))
       );
-      await writeToFirestore(db, sentences, "sentencePool");
 
-      /// Quizzes
-      const alreadyGeneratedQuizzes = await getAlreadyGeneratedQuizzes(db);
-      const quizzes = await generateQuizzes(
-        model,
-        complexity,
-        generationCount,
-        alreadyGeneratedQuizzes
-      );
-      await writeToFirestore(db, quizzes, "quizPool");
+      // Generate new content for all types in parallel
+      await Promise.all(contentTypes.map(async (type, index) => {
+        const newContent = await generateContent(
+          model,
+          type,
+          complexity,
+          generationCount,
+          existingContent[index]
+        );
+        results[`${type}s`] = newContent;
+        await writeToFirestore(db, newContent, `${type}Pool`);
+      }));
 
       res.status(200).json({
-        complexity : complexity,
-        generationCount : generationCount,
-        words: words,
-        sentences: sentences,
-        quizzes: quizzes,
+        complexity,
+        generationCount,
+        ...results
       });
     } catch (error) {
-      console.error("Error reading data from Firestore:", error);
-      res.status(500).send("Error reading data from Firestore");
+      console.error("Error in cloud function:", error);
+      res.status(500).send("Error processing request");
     }
   });
