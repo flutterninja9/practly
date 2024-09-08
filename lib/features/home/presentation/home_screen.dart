@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:lucide_icons/lucide_icons.dart';
 import 'package:practly/core/extensions/context_extensions.dart';
 import 'package:practly/core/user/user_model.dart';
 import 'package:practly/features/home/widgets/credits_remaining_widget.dart';
@@ -40,15 +41,15 @@ class _HomeScreenState extends State<HomeScreen> {
 
   final List<BottomNavigationBarItem> _navItems = const [
     BottomNavigationBarItem(
-      icon: Icon(Icons.school),
+      icon: Icon(LucideIcons.school),
       label: 'Learn',
     ),
     BottomNavigationBarItem(
-      icon: Icon(Icons.record_voice_over),
+      icon: Icon(LucideIcons.mic2),
       label: 'Speak',
     ),
     BottomNavigationBarItem(
-      icon: Icon(Icons.quiz),
+      icon: Icon(LucideIcons.clipboardList),
       label: 'Quiz',
     ),
   ];
