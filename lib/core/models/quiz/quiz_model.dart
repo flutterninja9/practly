@@ -1,9 +1,10 @@
 import 'dart:convert';
 
 import 'package:flutter/foundation.dart';
-import 'package:practly/core/enums/enums.dart';
 
+import 'package:practly/core/enums/enums.dart';
 import 'package:practly/core/models/excercise.dart';
+import 'package:practly/core/models/used_content_model.dart';
 
 class QuizModel implements Exercise {
   final String? id;
@@ -58,6 +59,14 @@ class QuizModel implements Exercise {
     };
   }
 
+  UsedContentModel toUsedContent() {
+    return UsedContentModel(
+      usedContentId: id!,
+      type: type,
+      generation: sentence,
+    );
+  }
+
   @override
   String toString() {
     return 'QuizModel(id: $id, sentence: $sentence, options: $options, correctAnswer: $correctAnswer)';
@@ -83,4 +92,20 @@ class QuizModel implements Exercise {
 
   @override
   String get type => "quiz";
+
+  QuizModel copyWith({
+    String? id,
+    String? sentence,
+    Map<String, String>? options,
+    String? correctAnswer,
+    Complexity? complexity,
+  }) {
+    return QuizModel(
+      id: id ?? this.id,
+      sentence: sentence ?? this.sentence,
+      options: options ?? this.options,
+      correctAnswer: correctAnswer ?? this.correctAnswer,
+      complexity: complexity ?? this.complexity,
+    );
+  }
 }
