@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:google_gemini/google_gemini.dart';
 import 'package:practly/core/enums/enums.dart';
 import 'package:practly/core/models/quiz/quiz_model.dart';
@@ -10,9 +11,17 @@ class GeminiQuizDataSource extends IQuizRemoteDataSource {
 
   @override
   Future<QuizModel> generateQuiz({
-    Complexity complexity = Complexity.easy,
+    Complexity? complexity,
   }) async {
-    final res = await _gemini.generateFromText(prompt(complexity));
+    final res = await _gemini.generateFromText(prompt(
+      complexity ?? Complexity.easy,
+    ));
+
+    print(res.text);
+    debugPrint(prompt(
+      complexity ?? Complexity.easy,
+    ));
+
     return QuizModel.fromJson(res.text);
   }
 }

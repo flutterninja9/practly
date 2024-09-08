@@ -56,6 +56,7 @@ Expected output format:
     {
         "type": "quiz",
         "sentence": "<Sentence with a blank>",
+        "complexity": "<complexity for which this was generated (easy/medium/hard)>"
         "options": {
             "a": "<Option A>",
             "b": "<Option B>",
@@ -66,6 +67,7 @@ Expected output format:
     },
     {
         "type": "sentence",
+        "complexity": "<complexity for which this was generated (easy/medium/hard)>"
         "sentence": "<Useful sentence that improves vocabulary>",
         "explanation": "<Explanation of why this sentence is useful>",
         "tip": "<Optional Tip to improve speaking or understanding>"
@@ -82,6 +84,7 @@ Expected Output:
 [
     {
         "type": "quiz",
+        "complexity": "easy"
         "sentence": "I am accustomed ____ working in a team environment.",
         "options": {
             "a": "for",
