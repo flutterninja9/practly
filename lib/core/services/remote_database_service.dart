@@ -4,10 +4,7 @@ import 'package:practly/core/config/config.dart';
 import 'package:practly/core/models/excercise.dart';
 import 'package:practly/core/navigation/auth_notifier.dart';
 import 'package:practly/core/user/user_model.dart';
-import 'package:practly/core/models/quiz/quiz_model.dart';
-import 'package:practly/core/models/speak/speak_out_aloud_model.dart';
 import 'package:practly/di/di.dart';
-import 'package:practly/core/models/word/word_of_the_day_model.dart';
 
 class RemoteDatabaseService {
   final FirebaseFirestore _firestore;
@@ -43,27 +40,6 @@ class RemoteDatabaseService {
       );
     }
     return null;
-  }
-
-  Future<void> saveWordOfTheDay(WordOfTheDayModel word) async {
-    final doc = word.toMap();
-    doc.putIfAbsent("userId", () => _user!.uid);
-
-    await _firestore.collection('words').add(doc);
-  }
-
-  Future<void> saveSpeakOutLoud(SpeakOutAloudModel sentence) async {
-    final doc = sentence.toMap();
-    doc.putIfAbsent("userId", () => _user!.uid);
-
-    await _firestore.collection('sentences').add(doc);
-  }
-
-  Future<void> saveQuiz(QuizModel quiz) async {
-    final doc = quiz.toMap();
-    doc.putIfAbsent("userId", () => _user!.uid);
-
-    await _firestore.collection('quizzes').add(doc);
   }
 
   Future<void> updateSubscription(String type, DateTime? expiresAt) async {

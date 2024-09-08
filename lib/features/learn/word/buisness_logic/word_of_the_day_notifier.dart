@@ -35,10 +35,7 @@ class WordOfTheDayNotifier extends AsyncNotifier<WordOfTheDayModel> {
         () => _remoteDataSource
             .generateWordOfTheDay(complexity: complexity)
             .then((word) {
-          Future.wait([
-            _localDataSource.setWord(word),
-            _databaseService.saveWordOfTheDay(word),
-          ]);
+          _localDataSource.setWord(word);
 
           return word;
         }),
