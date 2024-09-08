@@ -4,7 +4,7 @@ import 'package:practly/core/complexity_selector/presentation/complexity_selecto
 import 'package:practly/core/constants.dart';
 import 'package:practly/core/enums/enums.dart';
 import 'package:practly/core/navigation/auth_notifier.dart';
-import 'package:practly/core/services/remote_database_service.dart';
+import 'package:practly/core/user/user_service.dart';
 import 'package:practly/di/di.dart';
 import 'package:shadcn_ui/shadcn_ui.dart';
 
@@ -19,7 +19,7 @@ class UserProfileScreen extends StatefulWidget {
 
 class _UserProfileScreenState extends State<UserProfileScreen> {
   late final FirebaseAuthNotifier authNotifier;
-  late final RemoteDatabaseService databaseService;
+  late final UserService databaseService;
   final _displayNameController = TextEditingController();
   final _emailController = TextEditingController();
   Complexity _selectedComplexity = Complexity.easy;

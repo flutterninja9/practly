@@ -6,20 +6,21 @@ import 'package:practly/core/navigation/auth_notifier.dart';
 import 'package:practly/core/user/user_model.dart';
 import 'package:practly/di/di.dart';
 
-class RemoteDatabaseService {
+/// Has methods to mutate the currently logged in user object
+class UserService {
   final FirebaseFirestore _firestore;
   final FirebaseAuth _firebaseAuth;
   final Config _config;
 
   User? get _user => _firebaseAuth.currentUser;
 
-  RemoteDatabaseService(
+  UserService(
     this._firestore,
     this._firebaseAuth,
     this._config,
   );
 
-  Future<void> createUserProfile(UserModel user) async {
+  Future<void> createProfile(UserModel user) async {
     await _firestore.collection('users').doc(user.id).set(user.toMap());
   }
 
@@ -40,19 +41,6 @@ class RemoteDatabaseService {
       );
     }
     return null;
-  }
-
-  Future<void> updateSubscription(String type, DateTime? expiresAt) async {
-    await _firestore.collection('users').doc(_user!.uid).update({
-      'subscription.type': type,
-      'subscription.expiresAt': expiresAt,
-    });
-  }
-
-  Future<Map<String, dynamic>?> getSubscription() async {
-    DocumentSnapshot doc =
-        await _firestore.collection('users').doc(_user!.uid).get();
-    return (doc.data() as Map<String, dynamic>)['subscription'];
   }
 
   Future<void> decrementGenerationLimit() async {

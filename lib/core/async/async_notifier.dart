@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:practly/core/services/ad_service.dart';
-import 'package:practly/core/services/remote_database_service.dart';
+import 'package:practly/core/user/user_service.dart';
 import 'async_value.dart';
 
 class AsyncNotifier<T> extends ChangeNotifier {
-  final RemoteDatabaseService _databaseService;
+  final UserService _databaseService;
   final AdService _adService;
 
   AsyncValue<T> _state = const AsyncValue.loading();

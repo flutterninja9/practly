@@ -2,13 +2,13 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/widgets.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:practly/core/config/config.dart';
-import 'package:practly/core/services/remote_database_service.dart';
+import 'package:practly/core/user/user_service.dart';
 import 'package:practly/core/user/user_model.dart';
 import 'package:practly/di/di.dart';
 
 class AuthState extends ChangeNotifier {
   final FirebaseAuth _auth = FirebaseAuth.instance;
-  final RemoteDatabaseService _databaseService = locator.get();
+  final UserService _databaseService = locator.get();
   final Config _config = locator.get();
   final GoogleSignIn _googleSignIn = GoogleSignIn();
 
@@ -55,7 +55,7 @@ class AuthState extends ChangeNotifier {
       );
 
       if (creds.additionalUserInfo?.isNewUser ?? false) {
-        await _databaseService.createUserProfile(
+        await _databaseService.createProfile(
           UserModel.fromEmailAndId(
             id: creds.user!.uid,
             creditsForNewUser: _config.creditsForNewUser,
@@ -86,7 +86,7 @@ class AuthState extends ChangeNotifier {
       final creds = await _auth.signInWithCredential(credential);
 
       if (creds.additionalUserInfo?.isNewUser ?? false) {
-        await _databaseService.createUserProfile(
+        await _databaseService.createProfile(
           UserModel.fromEmailAndId(
             id: creds.user!.uid,
             creditsForNewUser: _config.creditsForNewUser,
@@ -110,7 +110,7 @@ class AuthState extends ChangeNotifier {
       final creds = await _auth.signInAnonymously();
 
       if (creds.additionalUserInfo?.isNewUser ?? false) {
-        await _databaseService.createUserProfile(
+        await _databaseService.createProfile(
           UserModel.fromEmailAndId(
             id: creds.user!.uid,
             creditsForNewUser: _config.creditsForNewUser,
