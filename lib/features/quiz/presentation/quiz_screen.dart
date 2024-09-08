@@ -44,7 +44,10 @@ class _QuizScreenState extends State<QuizScreen> {
                       dataBuilder: (model) => QuizExcerciseScreen(
                         model: model,
                         autoNext: false,
-                        onRequestNext: notifier.generateQuiz,
+                        onRequestNext: () async {
+                          await notifier.clearOlderResults();
+                          notifier.generateQuiz();
+                        },
                       ),
                     );
                   }),

@@ -40,10 +40,7 @@ class SpeakOutAloudNotifier extends AsyncNotifier<SpeakOutAloudModel> {
         () => _remoteDataSource
             .generateSentence(complexity: complexity)
             .then((sentence) {
-          Future.wait([
-            _localDataSource.setSentence(sentence),
-            _databaseService.saveSpeakOutLoud(sentence),
-          ]);
+          _localDataSource.setSentence(sentence);
 
           return sentence;
         }),

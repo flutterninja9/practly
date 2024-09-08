@@ -4,22 +4,40 @@ import 'package:practly/core/services/ad_service.dart';
 import 'package:practly/core/services/remote_database_service.dart';
 import 'package:practly/core/models/quiz/quiz_model.dart';
 import 'package:practly/di/di.dart';
-import 'package:practly/features/quiz/data/quiz_repository.dart';
+import 'package:practly/features/quiz/data/i_quiz_local_data_source.dart';
+import 'package:practly/features/quiz/data/i_quiz_remote_data_source.dart';
 
 class QuizNotifier extends AsyncNotifier<QuizModel> {
-  final QuizRepository _repository;
+  final IQuizRemoteDataSource _remoteDataSource;
+  final IQuizLocalDataSource _localDataSource;
   final RemoteDatabaseService _databaseService;
   final AdService _adService;
 
-  QuizNotifier(this._repository, this._databaseService, this._adService)
-      : super(_databaseService, _adService);
+  QuizNotifier(
+    this._remoteDataSource,
+    this._localDataSource,
+    this._databaseService,
+    this._adService,
+  ) : super(_databaseService, _adService);
 
-  void generateQuiz() {
-    final complexity =
-        locator.get<FirebaseAuthNotifier>().signedInUser?.complexity;
+  Future<void> clearOlderResults() async {
+    _localDataSource.setQuiz(null);
+  }
 
-    execute(
-      () => _repository.getQuiz(complexity: complexity),
-    );
+  Future<void> generateQuiz() async {
+    final cachedData = await _localDataSource.getQuiz();
+
+    if (cachedData != null) {
+      execute(() async => cachedData, isAIGeneration: false);
+    } else {
+      final complexity =
+          locator.get<FirebaseAuthNotifier>().signedInUser?.complexity;
+
+      execute(() =>
+          _remoteDataSource.generateQuiz(complexity: complexity).then((quiz) {
+            _localDataSource.setQuiz(quiz);
+            return quiz;
+          }));
+    }
   }
 }

@@ -726,17 +726,402 @@ class SentencesTableCompanion extends UpdateCompanion<SentencesTableData> {
   }
 }
 
+class $QuizTableTable extends QuizTable
+    with TableInfo<$QuizTableTable, QuizTableData> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $QuizTableTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _idMeta = const VerificationMeta('id');
+  @override
+  late final GeneratedColumn<int> id = GeneratedColumn<int>(
+      'id', aliasedName, false,
+      hasAutoIncrement: true,
+      type: DriftSqlType.int,
+      requiredDuringInsert: false,
+      defaultConstraints:
+          GeneratedColumn.constraintIsAlways('PRIMARY KEY AUTOINCREMENT'));
+  static const VerificationMeta _sentenceMeta =
+      const VerificationMeta('sentence');
+  @override
+  late final GeneratedColumn<String> sentence = GeneratedColumn<String>(
+      'sentence', aliasedName, false,
+      type: DriftSqlType.string, requiredDuringInsert: true);
+  static const VerificationMeta _optionsMeta =
+      const VerificationMeta('options');
+  @override
+  late final GeneratedColumnWithTypeConverter<Map<String, String>, String>
+      options = GeneratedColumn<String>('options', aliasedName, false,
+              type: DriftSqlType.string, requiredDuringInsert: true)
+          .withConverter<Map<String, String>>(
+              $QuizTableTable.$converteroptions);
+  static const VerificationMeta _correctAnswerMeta =
+      const VerificationMeta('correctAnswer');
+  @override
+  late final GeneratedColumn<String> correctAnswer = GeneratedColumn<String>(
+      'correct_answer', aliasedName, false,
+      type: DriftSqlType.string, requiredDuringInsert: true);
+  static const VerificationMeta _complexityMeta =
+      const VerificationMeta('complexity');
+  @override
+  late final GeneratedColumn<String> complexity = GeneratedColumn<String>(
+      'complexity', aliasedName, false,
+      type: DriftSqlType.string, requiredDuringInsert: true);
+  static const VerificationMeta _typeMeta = const VerificationMeta('type');
+  @override
+  late final GeneratedColumn<String> type = GeneratedColumn<String>(
+      'type', aliasedName, false,
+      type: DriftSqlType.string, requiredDuringInsert: true);
+  static const VerificationMeta _createdAtMeta =
+      const VerificationMeta('createdAt');
+  @override
+  late final GeneratedColumn<DateTime> createdAt = GeneratedColumn<DateTime>(
+      'created_at', aliasedName, false,
+      type: DriftSqlType.dateTime,
+      requiredDuringInsert: false,
+      defaultValue: currentDateAndTime);
+  @override
+  List<GeneratedColumn> get $columns =>
+      [id, sentence, options, correctAnswer, complexity, type, createdAt];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'quiz_table';
+  @override
+  VerificationContext validateIntegrity(Insertable<QuizTableData> instance,
+      {bool isInserting = false}) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('id')) {
+      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
+    }
+    if (data.containsKey('sentence')) {
+      context.handle(_sentenceMeta,
+          sentence.isAcceptableOrUnknown(data['sentence']!, _sentenceMeta));
+    } else if (isInserting) {
+      context.missing(_sentenceMeta);
+    }
+    context.handle(_optionsMeta, const VerificationResult.success());
+    if (data.containsKey('correct_answer')) {
+      context.handle(
+          _correctAnswerMeta,
+          correctAnswer.isAcceptableOrUnknown(
+              data['correct_answer']!, _correctAnswerMeta));
+    } else if (isInserting) {
+      context.missing(_correctAnswerMeta);
+    }
+    if (data.containsKey('complexity')) {
+      context.handle(
+          _complexityMeta,
+          complexity.isAcceptableOrUnknown(
+              data['complexity']!, _complexityMeta));
+    } else if (isInserting) {
+      context.missing(_complexityMeta);
+    }
+    if (data.containsKey('type')) {
+      context.handle(
+          _typeMeta, type.isAcceptableOrUnknown(data['type']!, _typeMeta));
+    } else if (isInserting) {
+      context.missing(_typeMeta);
+    }
+    if (data.containsKey('created_at')) {
+      context.handle(_createdAtMeta,
+          createdAt.isAcceptableOrUnknown(data['created_at']!, _createdAtMeta));
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {id};
+  @override
+  QuizTableData map(Map<String, dynamic> data, {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return QuizTableData(
+      id: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}id'])!,
+      sentence: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}sentence'])!,
+      options: $QuizTableTable.$converteroptions.fromSql(attachedDatabase
+          .typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}options'])!),
+      correctAnswer: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}correct_answer'])!,
+      complexity: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}complexity'])!,
+      type: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}type'])!,
+      createdAt: attachedDatabase.typeMapping
+          .read(DriftSqlType.dateTime, data['${effectivePrefix}created_at'])!,
+    );
+  }
+
+  @override
+  $QuizTableTable createAlias(String alias) {
+    return $QuizTableTable(attachedDatabase, alias);
+  }
+
+  static TypeConverter<Map<String, String>, String> $converteroptions =
+      const MapConverter();
+}
+
+class QuizTableData extends DataClass implements Insertable<QuizTableData> {
+  final int id;
+  final String sentence;
+  final Map<String, String> options;
+  final String correctAnswer;
+  final String complexity;
+  final String type;
+  final DateTime createdAt;
+  const QuizTableData(
+      {required this.id,
+      required this.sentence,
+      required this.options,
+      required this.correctAnswer,
+      required this.complexity,
+      required this.type,
+      required this.createdAt});
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['id'] = Variable<int>(id);
+    map['sentence'] = Variable<String>(sentence);
+    {
+      map['options'] =
+          Variable<String>($QuizTableTable.$converteroptions.toSql(options));
+    }
+    map['correct_answer'] = Variable<String>(correctAnswer);
+    map['complexity'] = Variable<String>(complexity);
+    map['type'] = Variable<String>(type);
+    map['created_at'] = Variable<DateTime>(createdAt);
+    return map;
+  }
+
+  QuizTableCompanion toCompanion(bool nullToAbsent) {
+    return QuizTableCompanion(
+      id: Value(id),
+      sentence: Value(sentence),
+      options: Value(options),
+      correctAnswer: Value(correctAnswer),
+      complexity: Value(complexity),
+      type: Value(type),
+      createdAt: Value(createdAt),
+    );
+  }
+
+  factory QuizTableData.fromJson(Map<String, dynamic> json,
+      {ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return QuizTableData(
+      id: serializer.fromJson<int>(json['id']),
+      sentence: serializer.fromJson<String>(json['sentence']),
+      options: serializer.fromJson<Map<String, String>>(json['options']),
+      correctAnswer: serializer.fromJson<String>(json['correctAnswer']),
+      complexity: serializer.fromJson<String>(json['complexity']),
+      type: serializer.fromJson<String>(json['type']),
+      createdAt: serializer.fromJson<DateTime>(json['createdAt']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'id': serializer.toJson<int>(id),
+      'sentence': serializer.toJson<String>(sentence),
+      'options': serializer.toJson<Map<String, String>>(options),
+      'correctAnswer': serializer.toJson<String>(correctAnswer),
+      'complexity': serializer.toJson<String>(complexity),
+      'type': serializer.toJson<String>(type),
+      'createdAt': serializer.toJson<DateTime>(createdAt),
+    };
+  }
+
+  QuizTableData copyWith(
+          {int? id,
+          String? sentence,
+          Map<String, String>? options,
+          String? correctAnswer,
+          String? complexity,
+          String? type,
+          DateTime? createdAt}) =>
+      QuizTableData(
+        id: id ?? this.id,
+        sentence: sentence ?? this.sentence,
+        options: options ?? this.options,
+        correctAnswer: correctAnswer ?? this.correctAnswer,
+        complexity: complexity ?? this.complexity,
+        type: type ?? this.type,
+        createdAt: createdAt ?? this.createdAt,
+      );
+  QuizTableData copyWithCompanion(QuizTableCompanion data) {
+    return QuizTableData(
+      id: data.id.present ? data.id.value : this.id,
+      sentence: data.sentence.present ? data.sentence.value : this.sentence,
+      options: data.options.present ? data.options.value : this.options,
+      correctAnswer: data.correctAnswer.present
+          ? data.correctAnswer.value
+          : this.correctAnswer,
+      complexity:
+          data.complexity.present ? data.complexity.value : this.complexity,
+      type: data.type.present ? data.type.value : this.type,
+      createdAt: data.createdAt.present ? data.createdAt.value : this.createdAt,
+    );
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('QuizTableData(')
+          ..write('id: $id, ')
+          ..write('sentence: $sentence, ')
+          ..write('options: $options, ')
+          ..write('correctAnswer: $correctAnswer, ')
+          ..write('complexity: $complexity, ')
+          ..write('type: $type, ')
+          ..write('createdAt: $createdAt')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => Object.hash(
+      id, sentence, options, correctAnswer, complexity, type, createdAt);
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is QuizTableData &&
+          other.id == this.id &&
+          other.sentence == this.sentence &&
+          other.options == this.options &&
+          other.correctAnswer == this.correctAnswer &&
+          other.complexity == this.complexity &&
+          other.type == this.type &&
+          other.createdAt == this.createdAt);
+}
+
+class QuizTableCompanion extends UpdateCompanion<QuizTableData> {
+  final Value<int> id;
+  final Value<String> sentence;
+  final Value<Map<String, String>> options;
+  final Value<String> correctAnswer;
+  final Value<String> complexity;
+  final Value<String> type;
+  final Value<DateTime> createdAt;
+  const QuizTableCompanion({
+    this.id = const Value.absent(),
+    this.sentence = const Value.absent(),
+    this.options = const Value.absent(),
+    this.correctAnswer = const Value.absent(),
+    this.complexity = const Value.absent(),
+    this.type = const Value.absent(),
+    this.createdAt = const Value.absent(),
+  });
+  QuizTableCompanion.insert({
+    this.id = const Value.absent(),
+    required String sentence,
+    required Map<String, String> options,
+    required String correctAnswer,
+    required String complexity,
+    required String type,
+    this.createdAt = const Value.absent(),
+  })  : sentence = Value(sentence),
+        options = Value(options),
+        correctAnswer = Value(correctAnswer),
+        complexity = Value(complexity),
+        type = Value(type);
+  static Insertable<QuizTableData> custom({
+    Expression<int>? id,
+    Expression<String>? sentence,
+    Expression<String>? options,
+    Expression<String>? correctAnswer,
+    Expression<String>? complexity,
+    Expression<String>? type,
+    Expression<DateTime>? createdAt,
+  }) {
+    return RawValuesInsertable({
+      if (id != null) 'id': id,
+      if (sentence != null) 'sentence': sentence,
+      if (options != null) 'options': options,
+      if (correctAnswer != null) 'correct_answer': correctAnswer,
+      if (complexity != null) 'complexity': complexity,
+      if (type != null) 'type': type,
+      if (createdAt != null) 'created_at': createdAt,
+    });
+  }
+
+  QuizTableCompanion copyWith(
+      {Value<int>? id,
+      Value<String>? sentence,
+      Value<Map<String, String>>? options,
+      Value<String>? correctAnswer,
+      Value<String>? complexity,
+      Value<String>? type,
+      Value<DateTime>? createdAt}) {
+    return QuizTableCompanion(
+      id: id ?? this.id,
+      sentence: sentence ?? this.sentence,
+      options: options ?? this.options,
+      correctAnswer: correctAnswer ?? this.correctAnswer,
+      complexity: complexity ?? this.complexity,
+      type: type ?? this.type,
+      createdAt: createdAt ?? this.createdAt,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (id.present) {
+      map['id'] = Variable<int>(id.value);
+    }
+    if (sentence.present) {
+      map['sentence'] = Variable<String>(sentence.value);
+    }
+    if (options.present) {
+      map['options'] = Variable<String>(
+          $QuizTableTable.$converteroptions.toSql(options.value));
+    }
+    if (correctAnswer.present) {
+      map['correct_answer'] = Variable<String>(correctAnswer.value);
+    }
+    if (complexity.present) {
+      map['complexity'] = Variable<String>(complexity.value);
+    }
+    if (type.present) {
+      map['type'] = Variable<String>(type.value);
+    }
+    if (createdAt.present) {
+      map['created_at'] = Variable<DateTime>(createdAt.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('QuizTableCompanion(')
+          ..write('id: $id, ')
+          ..write('sentence: $sentence, ')
+          ..write('options: $options, ')
+          ..write('correctAnswer: $correctAnswer, ')
+          ..write('complexity: $complexity, ')
+          ..write('type: $type, ')
+          ..write('createdAt: $createdAt')
+          ..write(')'))
+        .toString();
+  }
+}
+
 abstract class _$AppDatabase extends GeneratedDatabase {
   _$AppDatabase(QueryExecutor e) : super(e);
   $AppDatabaseManager get managers => $AppDatabaseManager(this);
   late final $WordsTableTable wordsTable = $WordsTableTable(this);
   late final $SentencesTableTable sentencesTable = $SentencesTableTable(this);
+  late final $QuizTableTable quizTable = $QuizTableTable(this);
   @override
   Iterable<TableInfo<Table, Object?>> get allTables =>
       allSchemaEntities.whereType<TableInfo<Table, Object?>>();
   @override
   List<DatabaseSchemaEntity> get allSchemaEntities =>
-      [wordsTable, sentencesTable];
+      [wordsTable, sentencesTable, quizTable];
 }
 
 typedef $$WordsTableTableCreateCompanionBuilder = WordsTableCompanion Function({
@@ -1078,6 +1463,185 @@ typedef $$SentencesTableTableProcessedTableManager = ProcessedTableManager<
     ),
     SentencesTableData,
     PrefetchHooks Function()>;
+typedef $$QuizTableTableCreateCompanionBuilder = QuizTableCompanion Function({
+  Value<int> id,
+  required String sentence,
+  required Map<String, String> options,
+  required String correctAnswer,
+  required String complexity,
+  required String type,
+  Value<DateTime> createdAt,
+});
+typedef $$QuizTableTableUpdateCompanionBuilder = QuizTableCompanion Function({
+  Value<int> id,
+  Value<String> sentence,
+  Value<Map<String, String>> options,
+  Value<String> correctAnswer,
+  Value<String> complexity,
+  Value<String> type,
+  Value<DateTime> createdAt,
+});
+
+class $$QuizTableTableFilterComposer
+    extends FilterComposer<_$AppDatabase, $QuizTableTable> {
+  $$QuizTableTableFilterComposer(super.$state);
+  ColumnFilters<int> get id => $state.composableBuilder(
+      column: $state.table.id,
+      builder: (column, joinBuilders) =>
+          ColumnFilters(column, joinBuilders: joinBuilders));
+
+  ColumnFilters<String> get sentence => $state.composableBuilder(
+      column: $state.table.sentence,
+      builder: (column, joinBuilders) =>
+          ColumnFilters(column, joinBuilders: joinBuilders));
+
+  ColumnWithTypeConverterFilters<Map<String, String>, Map<String, String>,
+          String>
+      get options => $state.composableBuilder(
+          column: $state.table.options,
+          builder: (column, joinBuilders) => ColumnWithTypeConverterFilters(
+              column,
+              joinBuilders: joinBuilders));
+
+  ColumnFilters<String> get correctAnswer => $state.composableBuilder(
+      column: $state.table.correctAnswer,
+      builder: (column, joinBuilders) =>
+          ColumnFilters(column, joinBuilders: joinBuilders));
+
+  ColumnFilters<String> get complexity => $state.composableBuilder(
+      column: $state.table.complexity,
+      builder: (column, joinBuilders) =>
+          ColumnFilters(column, joinBuilders: joinBuilders));
+
+  ColumnFilters<String> get type => $state.composableBuilder(
+      column: $state.table.type,
+      builder: (column, joinBuilders) =>
+          ColumnFilters(column, joinBuilders: joinBuilders));
+
+  ColumnFilters<DateTime> get createdAt => $state.composableBuilder(
+      column: $state.table.createdAt,
+      builder: (column, joinBuilders) =>
+          ColumnFilters(column, joinBuilders: joinBuilders));
+}
+
+class $$QuizTableTableOrderingComposer
+    extends OrderingComposer<_$AppDatabase, $QuizTableTable> {
+  $$QuizTableTableOrderingComposer(super.$state);
+  ColumnOrderings<int> get id => $state.composableBuilder(
+      column: $state.table.id,
+      builder: (column, joinBuilders) =>
+          ColumnOrderings(column, joinBuilders: joinBuilders));
+
+  ColumnOrderings<String> get sentence => $state.composableBuilder(
+      column: $state.table.sentence,
+      builder: (column, joinBuilders) =>
+          ColumnOrderings(column, joinBuilders: joinBuilders));
+
+  ColumnOrderings<String> get options => $state.composableBuilder(
+      column: $state.table.options,
+      builder: (column, joinBuilders) =>
+          ColumnOrderings(column, joinBuilders: joinBuilders));
+
+  ColumnOrderings<String> get correctAnswer => $state.composableBuilder(
+      column: $state.table.correctAnswer,
+      builder: (column, joinBuilders) =>
+          ColumnOrderings(column, joinBuilders: joinBuilders));
+
+  ColumnOrderings<String> get complexity => $state.composableBuilder(
+      column: $state.table.complexity,
+      builder: (column, joinBuilders) =>
+          ColumnOrderings(column, joinBuilders: joinBuilders));
+
+  ColumnOrderings<String> get type => $state.composableBuilder(
+      column: $state.table.type,
+      builder: (column, joinBuilders) =>
+          ColumnOrderings(column, joinBuilders: joinBuilders));
+
+  ColumnOrderings<DateTime> get createdAt => $state.composableBuilder(
+      column: $state.table.createdAt,
+      builder: (column, joinBuilders) =>
+          ColumnOrderings(column, joinBuilders: joinBuilders));
+}
+
+class $$QuizTableTableTableManager extends RootTableManager<
+    _$AppDatabase,
+    $QuizTableTable,
+    QuizTableData,
+    $$QuizTableTableFilterComposer,
+    $$QuizTableTableOrderingComposer,
+    $$QuizTableTableCreateCompanionBuilder,
+    $$QuizTableTableUpdateCompanionBuilder,
+    (
+      QuizTableData,
+      BaseReferences<_$AppDatabase, $QuizTableTable, QuizTableData>
+    ),
+    QuizTableData,
+    PrefetchHooks Function()> {
+  $$QuizTableTableTableManager(_$AppDatabase db, $QuizTableTable table)
+      : super(TableManagerState(
+          db: db,
+          table: table,
+          filteringComposer:
+              $$QuizTableTableFilterComposer(ComposerState(db, table)),
+          orderingComposer:
+              $$QuizTableTableOrderingComposer(ComposerState(db, table)),
+          updateCompanionCallback: ({
+            Value<int> id = const Value.absent(),
+            Value<String> sentence = const Value.absent(),
+            Value<Map<String, String>> options = const Value.absent(),
+            Value<String> correctAnswer = const Value.absent(),
+            Value<String> complexity = const Value.absent(),
+            Value<String> type = const Value.absent(),
+            Value<DateTime> createdAt = const Value.absent(),
+          }) =>
+              QuizTableCompanion(
+            id: id,
+            sentence: sentence,
+            options: options,
+            correctAnswer: correctAnswer,
+            complexity: complexity,
+            type: type,
+            createdAt: createdAt,
+          ),
+          createCompanionCallback: ({
+            Value<int> id = const Value.absent(),
+            required String sentence,
+            required Map<String, String> options,
+            required String correctAnswer,
+            required String complexity,
+            required String type,
+            Value<DateTime> createdAt = const Value.absent(),
+          }) =>
+              QuizTableCompanion.insert(
+            id: id,
+            sentence: sentence,
+            options: options,
+            correctAnswer: correctAnswer,
+            complexity: complexity,
+            type: type,
+            createdAt: createdAt,
+          ),
+          withReferenceMapper: (p0) => p0
+              .map((e) => (e.readTable(table), BaseReferences(db, table, e)))
+              .toList(),
+          prefetchHooksCallback: null,
+        ));
+}
+
+typedef $$QuizTableTableProcessedTableManager = ProcessedTableManager<
+    _$AppDatabase,
+    $QuizTableTable,
+    QuizTableData,
+    $$QuizTableTableFilterComposer,
+    $$QuizTableTableOrderingComposer,
+    $$QuizTableTableCreateCompanionBuilder,
+    $$QuizTableTableUpdateCompanionBuilder,
+    (
+      QuizTableData,
+      BaseReferences<_$AppDatabase, $QuizTableTable, QuizTableData>
+    ),
+    QuizTableData,
+    PrefetchHooks Function()>;
 
 class $AppDatabaseManager {
   final _$AppDatabase _db;
@@ -1086,4 +1650,6 @@ class $AppDatabaseManager {
       $$WordsTableTableTableManager(_db, _db.wordsTable);
   $$SentencesTableTableTableManager get sentencesTable =>
       $$SentencesTableTableTableManager(_db, _db.sentencesTable);
+  $$QuizTableTableTableManager get quizTable =>
+      $$QuizTableTableTableManager(_db, _db.quizTable);
 }

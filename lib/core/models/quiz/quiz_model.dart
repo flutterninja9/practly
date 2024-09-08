@@ -2,18 +2,22 @@ import 'dart:convert';
 
 import 'package:flutter/foundation.dart';
 
+import 'package:practly/core/enums/enums.dart';
 import 'package:practly/core/models/excercise.dart';
+import 'package:practly/core/models/used_content_model.dart';
 
 class QuizModel implements Exercise {
   final String? id;
   final String sentence;
   final Map<String, String> options;
   final String correctAnswer;
+  final Complexity complexity;
 
   const QuizModel({
     this.id,
     required this.sentence,
     required this.options,
+    required this.complexity,
     required this.correctAnswer,
   });
 
@@ -27,6 +31,7 @@ class QuizModel implements Exercise {
     return QuizModel(
       id: map['id'],
       sentence: map['sentence'] ?? '',
+      complexity: Complexity.fromString(map['complexity']),
       options: Map<String, String>.from(map['options'] ?? {}),
       correctAnswer: map['correct_answer'] ?? '',
     );
@@ -35,6 +40,7 @@ class QuizModel implements Exercise {
   factory QuizModel.fromFirestoreMap(String id, Map<String, dynamic> map) {
     return QuizModel(
       id: id,
+      complexity: Complexity.fromString(map['complexity']),
       sentence: map['sentence'] ?? '',
       options: Map<String, String>.from(map['options'] ?? {}),
       correctAnswer: map['correct_answer'] ?? '',
@@ -47,9 +53,18 @@ class QuizModel implements Exercise {
       'id': id,
       'sentence': sentence,
       'options': options,
+      'complexity': complexity.name,
       'correct_answer': correctAnswer,
       'type': type,
     };
+  }
+
+  UsedContentModel toUsedContent() {
+    return UsedContentModel(
+      usedContentId: id!,
+      type: type,
+      generation: sentence,
+    );
   }
 
   @override
@@ -77,4 +92,20 @@ class QuizModel implements Exercise {
 
   @override
   String get type => "quiz";
+
+  QuizModel copyWith({
+    String? id,
+    String? sentence,
+    Map<String, String>? options,
+    String? correctAnswer,
+    Complexity? complexity,
+  }) {
+    return QuizModel(
+      id: id ?? this.id,
+      sentence: sentence ?? this.sentence,
+      options: options ?? this.options,
+      correctAnswer: correctAnswer ?? this.correctAnswer,
+      complexity: complexity ?? this.complexity,
+    );
+  }
 }
