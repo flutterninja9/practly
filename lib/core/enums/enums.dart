@@ -4,7 +4,7 @@ enum Complexity {
   hard;
 
   static Complexity fromString(String val) {
-    switch (val) {
+    switch (val.toLowerCase()) {
       case 'easy':
         return Complexity.easy;
       case 'medium':
