@@ -95,7 +95,7 @@ exports.generateDailyChallenge = functions
       const challenge = {
         questions: newContent,
         complexity: complexity,
-        createdOn: new Date().toISOString(),
+        createdOn: new Date(new Date().setUTCHours(0, 0, 0, 0)).toISOString(),
         expiresOn: new Date(
           new Date().setUTCHours(23, 59, 59, 999)
         ).toISOString(), // Expire at the end of the current UTC day

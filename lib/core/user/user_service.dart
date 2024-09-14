@@ -1,10 +1,12 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:practly/core/config/config.dart';
+import 'package:practly/core/extensions/datetime_exensions.dart';
 import 'package:practly/core/models/excercise.dart';
 import 'package:practly/core/navigation/auth_notifier.dart';
 import 'package:practly/core/user/user_model.dart';
 import 'package:practly/di/di.dart';
+import 'package:practly/features/learn/data/challenge_model.dart';
 
 /// Has methods to mutate the currently logged in user object
 class UserService {
@@ -104,5 +106,36 @@ class UserService {
     final authNotifier = locator.get<FirebaseAuthNotifier>();
     final user = await getUserProfile(authNotifier.signedInUser!.id);
     authNotifier.signedInUser = user;
+  }
+
+  Future<ChallengeModel?> getDailyChallenge() async {
+    final today = DateTime.now().isoCurrentDate;
+
+    final optedChallenges = await _firestore
+        .collection("users")
+        .doc(_user!.uid)
+        .collection("dailyChallenges")
+        .where("attemptedOn", isEqualTo: today)
+        .get();
+
+    if (optedChallenges.docs.isNotEmpty) {
+      final data = optedChallenges.docs.first.data();
+      return ChallengeModel.fromMap(data["challenge"]);
+    }
+    return null;
+  }
+
+  Future<void> setDailyChallenge(ChallengeModel challenge) async {
+    // map the fresh content with user data
+    await _firestore
+        .collection("users")
+        .doc(_user!.uid)
+        .collection("dailyChallenges")
+        .add({
+      "completed": false,
+      "completedOn": null,
+      "attemptedOn": DateTime.now().isoCurrentDate,
+      "challenge": challenge.toMap(),
+    });
   }
 }

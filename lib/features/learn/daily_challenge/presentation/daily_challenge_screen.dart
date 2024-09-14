@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:practly/core/async/async_page.dart';
 import 'package:practly/core/widgets/header.dart';
+import 'package:practly/di/di.dart';
+import 'package:practly/features/learn/daily_challenge/buisness_logic/daily_challenge_notifier.dart';
 import 'package:practly/features/learn/daily_challenge/presentation/daily_challenge_card.dart';
 
 class DailyChallengeScreen extends StatefulWidget {
@@ -11,17 +14,43 @@ class DailyChallengeScreen extends StatefulWidget {
 
 class _DailyChallengeScreenState extends State<DailyChallengeScreen>
     with AutomaticKeepAliveClientMixin {
+  late final DailyChallengeNotifier _dailyChallengeNotifier;
+
+  @override
+  void initState() {
+    super.initState();
+    _dailyChallengeNotifier = locator.get()..getDailyChallenge();
+  }
+
   @override
   Widget build(BuildContext context) {
     super.build(context);
 
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        const Header(title: 'Daily Challenge!'),
-        const SizedBox(height: 20),
-        DailyChallengeCard(onTap: () {}),
-      ],
+    return AnimatedBuilder(
+      animation: _dailyChallengeNotifier,
+      builder: (context, child) {
+        return AsyncPage(
+          asyncValue: _dailyChallengeNotifier.state,
+          loadingBuilder: () => const SizedBox.shrink(),
+          errorBuilder: () => const SizedBox.shrink(),
+          dataBuilder: (data) {
+            if (data == null) {
+              return const SizedBox.shrink();
+            }
+
+            return Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const Header(title: 'Daily Challenge!'),
+                const SizedBox(height: 20),
+                DailyChallengeCard(
+                  onTap: () => _dailyChallengeNotifier.onStartChallenge(data),
+                ),
+              ],
+            );
+          },
+        );
+      },
     );
   }
 
