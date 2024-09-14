@@ -97,7 +97,7 @@ class AppRouter {
           GoRoute(
             path: LearnScreen.route,
             pageBuilder: (context, state) =>
-                const NoTransitionPage(child: LearnScreen()),
+                NoTransitionPage(child: LearnScreen()),
           ),
           // speak
           GoRoute(
