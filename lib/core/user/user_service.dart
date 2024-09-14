@@ -4,6 +4,7 @@ import 'package:practly/core/config/config.dart';
 import 'package:practly/core/extensions/datetime_exensions.dart';
 import 'package:practly/core/models/excercise.dart';
 import 'package:practly/core/navigation/auth_notifier.dart';
+import 'package:practly/core/user/daily_challenge_model.dart';
 import 'package:practly/core/user/user_model.dart';
 import 'package:practly/di/di.dart';
 import 'package:practly/features/learn/data/challenge_model.dart';
@@ -108,7 +109,7 @@ class UserService {
     authNotifier.signedInUser = user;
   }
 
-  Future<ChallengeModel?> getDailyChallenge() async {
+  Future<DailyChallengeModel?> getDailyChallenge() async {
     final today = DateTime.now().isoCurrentDate;
 
     final optedChallenges = await _firestore
@@ -119,8 +120,8 @@ class UserService {
         .get();
 
     if (optedChallenges.docs.isNotEmpty) {
-      final data = optedChallenges.docs.first.data();
-      return ChallengeModel.fromMap(data["challenge"]);
+      final doc = optedChallenges.docs.first;
+      return DailyChallengeModel.fromMapAndId(doc.id, doc.data());
     }
     return null;
   }
