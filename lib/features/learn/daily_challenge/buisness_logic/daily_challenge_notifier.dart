@@ -79,6 +79,7 @@ class DailyChallengeNotifier extends AsyncNotifier<DailyChallengeModel?>
     }
 
     if (!context.mounted) return;
-    context.push(ChallengeScreen.route, extra: modelWithId ?? challenge);
+    await context.push(ChallengeScreen.route, extra: modelWithId ?? challenge);
+    getDailyChallenge();
   }
 }
