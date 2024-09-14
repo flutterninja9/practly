@@ -144,8 +144,8 @@ class LearnRemoteDataSourceImpl extends ILearnRemoteDataSource {
         .get();
 
     if (freshChallenges.docs.isNotEmpty) {
-      final data = freshChallenges.docs.first.data();
-      final res = ChallengeModel.fromMap(data);
+      final doc = freshChallenges.docs.first;
+      final res = ChallengeModel.fromMapAndId(doc.id, doc.data());
 
       return res;
     }

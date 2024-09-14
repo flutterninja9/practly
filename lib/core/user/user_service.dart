@@ -132,6 +132,7 @@ class UserService {
         .doc(_user!.uid)
         .collection("dailyChallenges")
         .add({
+      "challengeId": challenge.id,
       "completed": false,
       "completedOn": null,
       "attemptedOn": DateTime.now().isoCurrentDate,
