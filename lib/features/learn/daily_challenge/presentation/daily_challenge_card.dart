@@ -8,10 +8,14 @@ class DailyChallengeCard extends StatelessWidget {
     super.key,
     required this.onTap,
     this.complexity = Complexity.easy,
+    this.buttonLabel = "Start Challenge",
+    this.buttonIcon = LucideIcons.zap,
   });
 
   final Function() onTap;
   final Complexity complexity;
+  final String buttonLabel;
+  final IconData buttonIcon;
 
   @override
   Widget build(BuildContext context) {
@@ -56,8 +60,8 @@ class DailyChallengeCard extends StatelessWidget {
             width: double.infinity,
             variant: ShadButtonVariant.primary,
             onPressed: onTap,
-            icon: const Icon(LucideIcons.zap),
-            child: const Text("Start Challenge"),
+            icon: Icon(buttonIcon),
+            child: Text(buttonLabel),
           ),
         ],
       ),

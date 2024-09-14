@@ -22,6 +22,11 @@ class DailyChallengeNotifier extends AsyncNotifier<ChallengeModel?> {
   ) : super(_databaseService, _adService);
 
   Future<void> getDailyChallenge() async {
+    if ((await _databaseService.getGenerationLimit()) == 0) {
+      setOutOfCredits();
+      return;
+    }
+
     final complexity =
         locator.get<FirebaseAuthNotifier>().signedInUser?.complexity;
 
@@ -38,6 +43,10 @@ class DailyChallengeNotifier extends AsyncNotifier<ChallengeModel?> {
         isAIGeneration: false,
       );
     }
+  }
+
+  Future<void> watchAdAndContinue() async {
+    await _adService.loadAndShowRewardedAd(getDailyChallenge);
   }
 
   Future<void> onStartChallenge(ChallengeModel challenge) async {

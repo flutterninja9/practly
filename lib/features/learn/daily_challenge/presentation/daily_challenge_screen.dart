@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:lucide_icons/lucide_icons.dart';
 import 'package:practly/core/async/async_page.dart';
 import 'package:practly/core/widgets/header.dart';
 import 'package:practly/di/di.dart';
@@ -33,6 +34,20 @@ class _DailyChallengeScreenState extends State<DailyChallengeScreen>
           asyncValue: _dailyChallengeNotifier.state,
           loadingBuilder: () => const SizedBox.shrink(),
           errorBuilder: () => const SizedBox.shrink(),
+          outOfCreditsBuilder: () {
+            return Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const Header(title: 'Daily Challenge!'),
+                const SizedBox(height: 20),
+                DailyChallengeCard(
+                  onTap: _dailyChallengeNotifier.watchAdAndContinue,
+                  buttonLabel: "Watch ad to start challenge",
+                  buttonIcon: LucideIcons.play,
+                ),
+              ],
+            );
+          },
           dataBuilder: (data) {
             if (data == null) {
               return const SizedBox.shrink();
