@@ -23,7 +23,7 @@ The output should be a valid JSON array with the following structure:
 [
   {
     "type": "quiz",
-    "sentence": "<Sentence with a blank>",
+    "sentence": "<Sentence with a blank like ___>",
     "complexity": "${complexity.toLowerCase()}",
     "options": {
       "a": "<Option A>",
@@ -41,14 +41,6 @@ The output should be a valid JSON array with the following structure:
     "tip": "<Optional Tip to improve speaking or understanding>"
   }
 ]
-
-Ensure the following:
-1. The array contains exactly ${count} items.
-2. There's a mix of both "quiz" and "sentence" types.
-3. No duplicate items are generated.
-4. All JSON is correctly formatted and parseable.
-5. All fields are filled with appropriate content.
-6. The complexity level is consistent across all items.
 
 Return only the JSON array without any additional text or explanations.`,
   };
