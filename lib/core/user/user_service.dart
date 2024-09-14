@@ -7,7 +7,6 @@ import 'package:practly/core/navigation/auth_notifier.dart';
 import 'package:practly/core/user/daily_challenge_model.dart';
 import 'package:practly/core/user/user_model.dart';
 import 'package:practly/di/di.dart';
-import 'package:practly/features/learn/data/challenge_model.dart';
 
 /// Has methods to mutate the currently logged in user object
 class UserService {
@@ -123,21 +122,21 @@ class UserService {
       final doc = optedChallenges.docs.first;
       return DailyChallengeModel.fromMapAndId(doc.id, doc.data());
     }
+
     return null;
   }
 
-  Future<void> setDailyChallenge(ChallengeModel challenge) async {
+  Future<DailyChallengeModel> setDailyChallenge(
+      DailyChallengeModel challenge) async {
     // map the fresh content with user data
-    await _firestore
+    final withAttemptDate = challenge.copyWith(attemptedOn: DateTime.now());
+
+    final res = await _firestore
         .collection("users")
         .doc(_user!.uid)
         .collection("dailyChallenges")
-        .add({
-      "challengeId": challenge.id,
-      "completed": false,
-      "completedOn": null,
-      "attemptedOn": DateTime.now().isoCurrentDate,
-      "challenge": challenge.toMap(),
-    });
+        .add(withAttemptDate.toMap());
+
+    return withAttemptDate.copyWith(id: res.id);
   }
 }

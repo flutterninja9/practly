@@ -7,7 +7,6 @@ import 'package:practly/core/user/daily_challenge_model.dart';
 import 'package:practly/core/user/user_service.dart';
 import 'package:practly/di/di.dart';
 import 'package:practly/features/learn/daily_challenge/presentation/challenge_screen.dart';
-import 'package:practly/features/learn/data/challenge_model.dart';
 import 'package:practly/features/learn/data/learn_repository.dart';
 
 class DailyChallengeNotifier extends AsyncNotifier<DailyChallengeModel?> {
@@ -26,11 +25,6 @@ class DailyChallengeNotifier extends AsyncNotifier<DailyChallengeModel?> {
   ) : super(_databaseService, _adService);
 
   Future<void> getDailyChallenge() async {
-    if ((await _databaseService.getGenerationLimit()) == 0) {
-      setOutOfCredits();
-      return;
-    }
-
     final complexity =
         locator.get<FirebaseAuthNotifier>().signedInUser?.complexity;
 
@@ -42,6 +36,11 @@ class DailyChallengeNotifier extends AsyncNotifier<DailyChallengeModel?> {
         isAIGeneration: false,
       );
     } else {
+      if ((await _databaseService.getGenerationLimit()) == 0) {
+        setOutOfCredits();
+        return;
+      }
+
       execute(
         () => _repository.getDailyChallenge(complexity: complexity),
         isAIGeneration: false,
@@ -55,12 +54,13 @@ class DailyChallengeNotifier extends AsyncNotifier<DailyChallengeModel?> {
 
   Future<void> onStartChallenge(
     BuildContext context,
-    ChallengeModel challenge,
+    DailyChallengeModel challenge,
   ) async {
     if (!alreadyStartedChallenge) {
       alreadyStartedChallenge = true;
-      await _databaseService.setDailyChallenge(challenge);
+      final modelWithId = await _databaseService.setDailyChallenge(challenge);
       await _databaseService.decrementGenerationLimit();
+      execute(() async => modelWithId, isAIGeneration: false);
     }
 
     if (!context.mounted) return;

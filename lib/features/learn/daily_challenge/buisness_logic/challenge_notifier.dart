@@ -3,8 +3,8 @@ import 'package:go_router/go_router.dart';
 import 'package:practly/core/async/async_notifier.dart';
 import 'package:practly/core/models/excercise.dart';
 import 'package:practly/core/services/ad_service.dart';
+import 'package:practly/core/user/daily_challenge_model.dart';
 import 'package:practly/core/user/user_service.dart';
-import 'package:practly/features/learn/data/challenge_model.dart';
 import 'package:practly/features/learn/data/learn_repository.dart';
 import 'package:shadcn_ui/shadcn_ui.dart';
 
@@ -21,8 +21,8 @@ class ChallengeNotifier extends AsyncNotifier<List<Exercise>> {
 
   int currentExerciseIndex = 0;
 
-  Future<void> getExercises(ChallengeModel? challenge) async {
-    execute(() async => challenge!.questions!, isAIGeneration: false);
+  Future<void> getExercises(DailyChallengeModel? model) async {
+    execute(() async => model!.challenge.questions!, isAIGeneration: false);
   }
 
   Future<void> goToNextExercise(BuildContext context) async {

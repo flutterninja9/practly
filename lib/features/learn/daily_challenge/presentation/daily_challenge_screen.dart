@@ -68,7 +68,7 @@ class _DailyChallengeScreenState extends State<DailyChallengeScreen>
                     DailyChallengeCard(
                       onTap: () => _dailyChallengeNotifier.onStartChallenge(
                         context,
-                        data.challenge,
+                        data,
                       ),
                     ),
                   ],

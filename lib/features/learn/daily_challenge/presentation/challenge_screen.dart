@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:practly/core/async/async_page.dart';
+import 'package:practly/core/user/daily_challenge_model.dart';
 import 'package:practly/di/di.dart';
 import 'package:practly/features/learn/daily_challenge/buisness_logic/challenge_notifier.dart';
-import 'package:practly/features/learn/data/challenge_model.dart';
 import 'package:practly/features/learn/exercise/presentation/exercise_widget.dart';
 import 'package:shadcn_ui/shadcn_ui.dart';
 
@@ -13,7 +13,7 @@ class ChallengeScreen extends StatefulWidget {
     this.challengeModel,
   });
 
-  final ChallengeModel? challengeModel;
+  final DailyChallengeModel? challengeModel;
   static get route => "/challenge";
 
   @override

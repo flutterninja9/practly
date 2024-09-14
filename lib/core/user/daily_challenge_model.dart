@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:practly/core/extensions/datetime_exensions.dart';
 import 'package:practly/features/learn/data/challenge_model.dart';
 
 class DailyChallengeModel {
@@ -39,11 +40,11 @@ class DailyChallengeModel {
 
   Map<String, dynamic> toMap() {
     return <String, dynamic>{
-      'id': id,
+      // 'id': id,
       'challengeId': challengeId,
       'completed': completed,
-      'completedOn': completedOn?.millisecondsSinceEpoch,
-      'attemptedOn': attemptedOn?.millisecondsSinceEpoch,
+      'completedOn': completedOn?.isoCurrentDate,
+      'attemptedOn': attemptedOn?.isoCurrentDate,
       'challenge': challenge.toMap(),
     };
   }
