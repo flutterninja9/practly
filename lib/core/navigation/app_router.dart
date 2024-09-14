@@ -9,6 +9,8 @@ import 'package:practly/di/di.dart';
 import 'package:practly/core/navigation/auth_notifier.dart';
 import 'package:practly/features/auth/presentation/auth_screen.dart';
 import 'package:practly/features/home/presentation/home_screen.dart';
+import 'package:practly/features/learn/daily_challenge/presentation/challenge_screen.dart';
+import 'package:practly/features/learn/data/challenge_model.dart';
 import 'package:practly/features/learn/data/lesson_model.dart';
 import 'package:practly/features/learn/exercise/presentation/exercise_screen.dart';
 import 'package:practly/features/learn/presentation/learn_screen.dart';
@@ -72,6 +74,13 @@ class AppRouter {
             return ExerciseScreen(
               id: state.pathParameters["id"]!,
               lessonModel: state.extra as LessonModel?,
+            );
+          }),
+      GoRoute(
+          path: ChallengeScreen.route,
+          builder: (context, state) {
+            return ChallengeScreen(
+              challengeModel: state.extra as ChallengeModel,
             );
           }),
       GoRoute(

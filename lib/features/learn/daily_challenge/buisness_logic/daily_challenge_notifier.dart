@@ -1,8 +1,11 @@
+import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:practly/core/async/async_notifier.dart';
 import 'package:practly/core/navigation/auth_notifier.dart';
 import 'package:practly/core/services/ad_service.dart';
 import 'package:practly/core/user/user_service.dart';
 import 'package:practly/di/di.dart';
+import 'package:practly/features/learn/daily_challenge/presentation/challenge_screen.dart';
 import 'package:practly/features/learn/data/challenge_model.dart';
 import 'package:practly/features/learn/data/learn_repository.dart';
 
@@ -49,13 +52,17 @@ class DailyChallengeNotifier extends AsyncNotifier<ChallengeModel?> {
     await _adService.loadAndShowRewardedAd(getDailyChallenge);
   }
 
-  Future<void> onStartChallenge(ChallengeModel challenge) async {
+  Future<void> onStartChallenge(
+    BuildContext context,
+    ChallengeModel challenge,
+  ) async {
     if (!alreadyStartedChallenge) {
       alreadyStartedChallenge = true;
       await _databaseService.setDailyChallenge(challenge);
       await _databaseService.decrementGenerationLimit();
     }
 
-    // navigate to challenge screen
+    if (!context.mounted) return;
+    context.push(ChallengeScreen.route, extra: challenge);
   }
 }

@@ -59,7 +59,10 @@ class _DailyChallengeScreenState extends State<DailyChallengeScreen>
                 const Header(title: 'Daily Challenge!'),
                 const SizedBox(height: 20),
                 DailyChallengeCard(
-                  onTap: () => _dailyChallengeNotifier.onStartChallenge(data),
+                  onTap: () => _dailyChallengeNotifier.onStartChallenge(
+                    context,
+                    data,
+                  ),
                 ),
               ],
             );
