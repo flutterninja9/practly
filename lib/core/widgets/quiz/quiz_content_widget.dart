@@ -9,11 +9,13 @@ class QuizContentWidget extends StatelessWidget {
     required this.selectedAnswer,
     required this.isAnswerSelected,
     required this.onAnswerSelected,
+    this.showCorrectAnwer = true,
   });
 
   final QuizModel model;
   final String? selectedAnswer;
   final bool isAnswerSelected;
+  final bool showCorrectAnwer;
   final Function(String) onAnswerSelected;
   @override
   Widget build(BuildContext context) {
@@ -30,15 +32,7 @@ class QuizContentWidget extends StatelessWidget {
           ),
           const SizedBox(height: 20),
           ...model.options.entries.map((entry) {
-            final bool isSelected = selectedAnswer == entry.key;
-            final bool isCorrect = entry.key == model.correctAnswer;
-            final Color? tileColor = isAnswerSelected
-                ? (isCorrect
-                    ? const Color(0xFFA5D6A7)
-                    : isSelected
-                        ? const Color(0xFFEF9A9A)
-                        : null)
-                : null;
+            final tileColor = _getTileColor(entry);
 
             return ListTile(
               title: Text(
@@ -53,5 +47,25 @@ class QuizContentWidget extends StatelessWidget {
         ],
       ),
     );
+  }
+
+  Color? _getTileColor(MapEntry<String, String> entry) {
+    final bool isSelected = selectedAnswer == entry.key;
+    final bool isCorrect = entry.key == model.correctAnswer;
+    Color? tileColor;
+
+    if (isAnswerSelected) {
+      if (showCorrectAnwer) {
+        tileColor = (isCorrect
+            ? const Color(0xFFA5D6A7)
+            : isSelected
+                ? const Color(0xFFEF9A9A)
+                : null);
+      } else {
+        tileColor = isSelected ? Colors.grey[400] : null;
+      }
+    }
+
+    return tileColor;
   }
 }
