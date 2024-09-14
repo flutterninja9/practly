@@ -9,7 +9,7 @@ class QuizContentWidget extends StatelessWidget {
     required this.selectedAnswer,
     required this.isAnswerSelected,
     required this.onAnswerSelected,
-    this.showCorrectAnwer = true,
+    required this.showCorrectAnwer,
   });
 
   final QuizModel model;

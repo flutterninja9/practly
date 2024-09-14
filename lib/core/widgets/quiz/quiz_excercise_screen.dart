@@ -10,10 +10,12 @@ class QuizExcerciseScreen extends StatefulWidget {
     required this.model,
     required this.autoNext,
     required this.onRequestNext,
+    this.showCorrectAnswer = true,
   });
 
   final QuizModel model;
   final bool autoNext;
+  final bool showCorrectAnswer;
   final Function() onRequestNext;
 
   @override
@@ -44,6 +46,7 @@ class _QuizExcerciseScreenState extends State<QuizExcerciseScreen> {
               Expanded(
                 child: QuizContentWidget(
                   model: widget.model,
+                  showCorrectAnwer: widget.showCorrectAnswer,
                   selectedAnswer: viewModel.selectedAnswer,
                   isAnswerSelected: viewModel.isAnswerSelected,
                   onAnswerSelected: (val) =>

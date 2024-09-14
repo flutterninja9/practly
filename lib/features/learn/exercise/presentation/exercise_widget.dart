@@ -10,12 +10,14 @@ class ExerciseListWidget extends StatelessWidget {
   final int currentIndex;
   final List<Exercise> exercises;
   final Function() onCorrectAnswer;
+  final bool showCorrectAnswer;
 
   const ExerciseListWidget({
     super.key,
     required this.exercises,
     required this.currentIndex,
     required this.onCorrectAnswer,
+    this.showCorrectAnswer = true,
   });
 
   Widget _buildExerciseWidget(Exercise exercise) {
@@ -25,6 +27,7 @@ class ExerciseListWidget extends StatelessWidget {
           key: ObjectKey(exercise),
           model: exercise as QuizModel,
           autoNext: false,
+          showCorrectAnswer: showCorrectAnswer,
           onRequestNext: () => onCorrectAnswer(),
         );
       case 'sentence':

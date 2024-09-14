@@ -56,6 +56,7 @@ class ChallengeScreenState extends State<ChallengeScreen> {
                 onRetry: () => notifier.getExercises(widget.challengeModel),
                 dataBuilder: (model) => ExerciseListWidget(
                   exercises: model,
+                  showCorrectAnswer: false,
                   currentIndex: notifier.currentExerciseIndex,
                   onCorrectAnswer: () async {
                     await notifier.goToNextExercise(
