@@ -9,19 +9,25 @@ const readFromFirestore = require("./db/readFromFirestore.js");
 admin.initializeApp();
 const db = admin.firestore();
 
+// Common configuration for functions
+const functionConfig = {
+  secrets: ["GEMINI_KEY"],
+  timeoutSeconds: 540,
+  memory: "1GB",
+};
+
+// Helper function to initialize Gemini model
+const initializeGeminiModel = () => {
+  const genAI = new GoogleGenerativeAI(process.env.GEMINI_KEY);
+  return genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
+};
+
 exports.getDataFromFirestore = functions
-  .runWith({
-    secrets: ["GEMINI_KEY"],
-    timeoutSeconds: 540, // Increase timeout to 9 minutes
-    memory: "1GB", // Increase memory if needed
-  })
+  .runWith(functionConfig)
   .https.onRequest(async (req, res) => {
     try {
-      const complexity = req.query.complexity;
-      const generationCount = parseInt(req.query.generationCount);
-
-      const genAI = new GoogleGenerativeAI(process.env.GEMINI_KEY);
-      const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
+      const { complexity, generationCount } = req.query;
+      const model = initializeGeminiModel();
 
       const contentTypes = ["word", "sentence", "quiz"];
       const results = {};
@@ -60,29 +66,18 @@ exports.getDataFromFirestore = functions
   });
 
 exports.generateDailyChallenge = functions
-  .runWith({
-    secrets: ["GEMINI_KEY"],
-    timeoutSeconds: 540, // Increase timeout to 9 minutes
-    memory: "1GB", // Increase memory if needed
-  })
+  .runWith(functionConfig)
   .https.onRequest(async (req, res) => {
     try {
-      const complexity = req.query.complexity;
-      const generationCount = parseInt(req.query.generationCount);
-
-      const genAI = new GoogleGenerativeAI(process.env.GEMINI_KEY);
-      const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
+      const { complexity, generationCount } = req.query;
+      const model = initializeGeminiModel();
       const type = "challenge";
 
       // Fetch all existing content
-      const existingContent = await readFromFirestore(
-        db,
-        `${type}Pool`
-      );
+      const existingContent = await readFromFirestore(db,`${type}Pool`);
 
-      // Filter to only use contents inside the 'questions' key and extract the relevant field
       const blackList = existingContent
-        .flatMap((item) => item.questions) // Flatten out the questions array from each challenge object
+        .flatMap((item) => item.questions)
         .map((question) => question.sentence)
         .filter(Boolean);
 
