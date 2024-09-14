@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:lucide_icons/lucide_icons.dart';
 import 'package:practly/core/async/async_page.dart';
-import 'package:practly/core/mixins/feature_toggle_mixin.dart';
 import 'package:practly/core/widgets/header.dart';
 import 'package:practly/di/di.dart';
 import 'package:practly/features/learn/daily_challenge/buisness_logic/daily_challenge_notifier.dart';
@@ -15,7 +14,7 @@ class DailyChallengeScreen extends StatefulWidget {
 }
 
 class _DailyChallengeScreenState extends State<DailyChallengeScreen>
-    with AutomaticKeepAliveClientMixin, FeatureToggleMixin {
+    with AutomaticKeepAliveClientMixin {
   late final DailyChallengeNotifier _dailyChallengeNotifier;
 
   @override
@@ -27,10 +26,6 @@ class _DailyChallengeScreenState extends State<DailyChallengeScreen>
   @override
   Widget build(BuildContext context) {
     super.build(context);
-    if (!isEnabled("challenge")) {
-      return const SizedBox.shrink();
-    }
-
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -52,6 +47,7 @@ class _DailyChallengeScreenState extends State<DailyChallengeScreen>
                       buttonLabel: "Watch ad to start challenge",
                       buttonIcon: LucideIcons.play,
                     ),
+                    const SizedBox(height: 40),
                   ],
                 );
               },
@@ -71,13 +67,13 @@ class _DailyChallengeScreenState extends State<DailyChallengeScreen>
                         data,
                       ),
                     ),
+                    const SizedBox(height: 40),
                   ],
                 );
               },
             );
           },
         ),
-        const SizedBox(height: 40),
       ],
     );
   }

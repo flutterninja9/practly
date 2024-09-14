@@ -58,7 +58,10 @@ class ChallengeScreenState extends State<ChallengeScreen> {
                   exercises: model,
                   currentIndex: notifier.currentExerciseIndex,
                   onCorrectAnswer: () async {
-                    await notifier.goToNextExercise(context);
+                    await notifier.goToNextExercise(
+                      context,
+                      widget.challengeModel!.id!,
+                    );
                   },
                 ),
               );

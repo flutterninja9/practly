@@ -52,10 +52,10 @@ class UserService {
         .update({'subscription.generationLimit': FieldValue.increment(-1)});
   }
 
-  Future<void> updateGenerationLimit() async {
+  Future<void> updateGenerationLimit({int? by}) async {
     await _firestore.collection('users').doc(_user!.uid).update({
       'subscription.generationLimit': FieldValue.increment(
-        _config.creditsForAdWatch,
+        by ?? _config.creditsForAdWatch,
       )
     });
   }
@@ -127,7 +127,8 @@ class UserService {
   }
 
   Future<DailyChallengeModel> setDailyChallenge(
-      DailyChallengeModel challenge) async {
+    DailyChallengeModel challenge,
+  ) async {
     // map the fresh content with user data
     final withAttemptDate = challenge.copyWith(attemptedOn: DateTime.now());
 
@@ -138,5 +139,17 @@ class UserService {
         .add(withAttemptDate.toMap());
 
     return withAttemptDate.copyWith(id: res.id);
+  }
+
+  Future<void> markDailyChallengeComplete(String challengeId) async {
+    await _firestore
+        .collection("users")
+        .doc(_user!.uid)
+        .collection("dailyChallenges")
+        .doc(challengeId)
+        .update({
+      "completed": true,
+      "completedOn": DateTime.now().isoCurrentDate,
+    });
   }
 }

@@ -12,6 +12,7 @@ class ChallengeNotifier extends AsyncNotifier<List<Exercise>> {
   final LearnRepository _repository;
   final UserService _databaseService;
   final AdService _adService;
+  static const _quizCompletePoints = 5;
 
   ChallengeNotifier(
     this._repository,
@@ -25,13 +26,18 @@ class ChallengeNotifier extends AsyncNotifier<List<Exercise>> {
     execute(() async => model!.challenge.questions!, isAIGeneration: false);
   }
 
-  Future<void> goToNextExercise(BuildContext context) async {
+  Future<void> goToNextExercise(
+    BuildContext context,
+    String challengeId,
+  ) async {
     await state.mapOrNull(data: (val) async {
       if (currentExerciseIndex < val.value.length - 1) {
         currentExerciseIndex++;
         notifyListeners();
       } else {
-        // Add credits here
+        await _databaseService.markDailyChallengeComplete(challengeId);
+        await _databaseService.updateGenerationLimit(by: _quizCompletePoints);
+
         if (!context.mounted) return;
         _showCompletionDialog(context);
       }
