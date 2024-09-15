@@ -43,7 +43,6 @@ class _DailyChallengeScreenState extends State<DailyChallengeScreen>
                     const Header(title: 'Daily Challenge!'),
                     const SizedBox(height: 20),
                     DailyChallengeCard(
-                      attempts: 0,
                       onTap: _dailyChallengeNotifier.watchAdAndContinue,
                       buttonLabel: "Watch ad to start challenge",
                       buttonIcon: LucideIcons.play,
@@ -63,7 +62,7 @@ class _DailyChallengeScreenState extends State<DailyChallengeScreen>
                     const Header(title: 'Daily Challenge!'),
                     const SizedBox(height: 20),
                     DailyChallengeCard(
-                      attempts: data.attempts,
+                      model: data,
                       onTap: () => _dailyChallengeNotifier.onStartChallenge(
                         context,
                         data,

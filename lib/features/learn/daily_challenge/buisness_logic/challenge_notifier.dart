@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:practly/core/async/async_notifier.dart';
+import 'package:practly/core/constants.dart';
 import 'package:practly/core/models/excercise.dart';
 import 'package:practly/core/services/ad_service.dart';
 import 'package:practly/core/user/daily_challenge_model.dart';
@@ -12,7 +13,6 @@ class ChallengeNotifier extends AsyncNotifier<List<Exercise>> {
   final LearnRepository _repository;
   final UserService _databaseService;
   final AdService _adService;
-  static const _quizCompletePoints = 5;
 
   ChallengeNotifier(
     this._repository,
@@ -36,7 +36,9 @@ class ChallengeNotifier extends AsyncNotifier<List<Exercise>> {
         notifyListeners();
       } else {
         await _databaseService.markDailyChallengeComplete(challengeId);
-        await _databaseService.updateGenerationLimit(by: _quizCompletePoints);
+        await _databaseService.updateGenerationLimit(
+          by: kDailyChallengeCompletePoints,
+        );
 
         if (!context.mounted) return;
         _showCompletionDialog(context);

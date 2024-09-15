@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:practly/core/constants.dart';
 import 'package:practly/core/enums/enums.dart';
 import 'package:practly/core/extensions/string_extensions.dart';
+import 'package:practly/core/user/daily_challenge_model.dart';
 import 'package:shadcn_ui/shadcn_ui.dart';
 
 class DailyChallengeCard extends StatelessWidget {
@@ -11,13 +12,13 @@ class DailyChallengeCard extends StatelessWidget {
     this.complexity = Complexity.easy,
     this.buttonLabel = "Start Challenge",
     this.buttonIcon = LucideIcons.zap,
-    this.attempts,
+    this.model,
   });
 
   final Function() onTap;
   final Complexity complexity;
   final String buttonLabel;
-  final int? attempts;
+  final DailyChallengeModel? model;
   final IconData buttonIcon;
 
   @override
@@ -46,21 +47,24 @@ class DailyChallengeCard extends StatelessWidget {
                 const TextSpan(
                     text: "🎯 Challenge: ",
                     style: TextStyle(fontWeight: FontWeight.bold)),
-                const TextSpan(text: "5 questions\n"),
+                TextSpan(
+                    text:
+                        "${model?.challenge.questions?.length ?? 5} questions\n"),
                 const TextSpan(
                     text: "💪 Difficulty: ",
                     style: TextStyle(fontWeight: FontWeight.bold)),
                 TextSpan(text: "${complexity.name.capitalize()}\n"),
-                if (attempts != null)
+                if (model != null)
                   const TextSpan(
                       text: "🔄 Attempts: ",
                       style: TextStyle(fontWeight: FontWeight.bold)),
-                if (attempts != null)
-                  TextSpan(text: "$attempts/$kMaxDailyChallengeAttempts\n"),
+                if (model != null)
+                  TextSpan(
+                      text: "${model?.attempts}/$kMaxDailyChallengeAttempts\n"),
                 const TextSpan(
                     text: "🏆 Reward: ",
                     style: TextStyle(fontWeight: FontWeight.bold)),
-                const TextSpan(text: "5 Credits"),
+                const TextSpan(text: "$kDailyChallengeCompletePoints Credits"),
               ],
             ),
           ),
