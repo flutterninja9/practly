@@ -50,26 +50,26 @@ class QuizContentWidget extends StatelessWidget {
   }
 
   Color? _getTileColor(MapEntry<String, String> entry) {
+    if (!isAnswerSelected) return null;
+
     final bool isSelected = selectedAnswer == entry.key;
     final bool isCorrect = entry.key == model.correctAnswer;
-    Color? tileColor;
 
-    if (isAnswerSelected) {
-      if (showCorrectAnwer) {
-        tileColor = (isCorrect
-            ? const Color(0xFFA5D6A7)
-            : isSelected
-                ? const Color(0xFFEF9A9A)
-                : null);
-      } else {
-        tileColor = isSelected
-            ? isCorrect
-                ? const Color(0xFFA5D6A7)
-                : const Color(0xFFEF9A9A)
-            : null;
-      }
+    if (showCorrectAnwer) {
+      return _getColorForCorrectAnswerShown(isCorrect, isSelected);
+    } else {
+      return _getColorForSelectedAnswer(isSelected, isCorrect);
     }
+  }
 
-    return tileColor;
+  Color? _getColorForCorrectAnswerShown(bool isCorrect, bool isSelected) {
+    if (isCorrect) return const Color(0xFFA5D6A7);
+    if (isSelected) return const Color(0xFFEF9A9A);
+    return null;
+  }
+
+  Color? _getColorForSelectedAnswer(bool isSelected, bool isCorrect) {
+    if (!isSelected) return null;
+    return isCorrect ? const Color(0xFFA5D6A7) : const Color(0xFFEF9A9A);
   }
 }
