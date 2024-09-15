@@ -9,13 +9,15 @@ import 'package:practly/core/widgets/speak/speak_excercise_screen.dart';
 class ExerciseListWidget extends StatelessWidget {
   final int currentIndex;
   final List<Exercise> exercises;
-  final Function() onCorrectAnswer;
+  final Function((Exercise question, bool correct)) onAnswer;
+  final bool showCorrectAnswer;
 
   const ExerciseListWidget({
     super.key,
     required this.exercises,
     required this.currentIndex,
-    required this.onCorrectAnswer,
+    required this.onAnswer,
+    this.showCorrectAnswer = true,
   });
 
   Widget _buildExerciseWidget(Exercise exercise) {
@@ -25,14 +27,16 @@ class ExerciseListWidget extends StatelessWidget {
           key: ObjectKey(exercise),
           model: exercise as QuizModel,
           autoNext: false,
-          onRequestNext: () => onCorrectAnswer(),
+          showCorrectAnswer: showCorrectAnswer,
+          onRequestNext: (isCorrect) async =>
+              await onAnswer((exercise, isCorrect)),
         );
       case 'sentence':
         return SpeakExcerciseScreen(
           key: ObjectKey(exercise),
           model: exercise as SpeakOutAloudModel,
           onRequestNext: () async {
-            await onCorrectAnswer();
+            await onAnswer((exercise, true));
           },
         );
       default:

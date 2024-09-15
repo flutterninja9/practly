@@ -1,10 +1,10 @@
 import 'package:flutter/foundation.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:practly/core/config/config.dart';
-import 'remote_database_service.dart';
+import '../user/user_service.dart';
 
 class AdService {
-  final RemoteDatabaseService _databaseService;
+  final UserService _databaseService;
   final MobileAds _adService;
   final Config _config;
 
@@ -57,10 +57,5 @@ class AdService {
       await _databaseService.updateGenerationLimit();
       await onRewardEarned();
     });
-  }
-
-  Future<bool> canWatchAd() async {
-    int adWatchCount = await _databaseService.getGenerationLimit();
-    return adWatchCount < 5; // Assuming a limit of 5 ad watches
   }
 }

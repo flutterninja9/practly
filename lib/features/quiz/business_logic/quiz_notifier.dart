@@ -1,7 +1,7 @@
 import 'package:practly/core/async/async_notifier.dart';
 import 'package:practly/core/navigation/auth_notifier.dart';
 import 'package:practly/core/services/ad_service.dart';
-import 'package:practly/core/services/remote_database_service.dart';
+import 'package:practly/core/user/user_service.dart';
 import 'package:practly/core/models/quiz/quiz_model.dart';
 import 'package:practly/di/di.dart';
 import 'package:practly/features/quiz/data/i_quiz_local_data_source.dart';
@@ -10,7 +10,7 @@ import 'package:practly/features/quiz/data/i_quiz_remote_data_source.dart';
 class QuizNotifier extends AsyncNotifier<QuizModel> {
   final IQuizRemoteDataSource _remoteDataSource;
   final IQuizLocalDataSource _localDataSource;
-  final RemoteDatabaseService _databaseService;
+  final UserService _databaseService;
   final AdService _adService;
 
   QuizNotifier(

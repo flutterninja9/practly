@@ -1,19 +1,7 @@
-async function readFromFirestore(db, collection) {
-    try {
-        const snapshot = await db.collection(collection).get();
-        const items = [];
+const readFromFirestore = async (db, collectionName) => {
+  const snapshot = await db.collection(collectionName).get();
 
-        snapshot.forEach(doc => {
-            items.push({ id: doc.id, ...doc.data() });
-        });
-
-        console.log("✅ Words retrieved from Firestore successfully.");
-        return items;
-        
-    } catch (error) {
-        console.error("🛑 Error reading words from Firestore:", error);
-        return [];
-    }
-}
+  return snapshot.docs.map(doc => doc.data());
+};
 
 module.exports = readFromFirestore;

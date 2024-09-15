@@ -4,8 +4,10 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_gemini/google_gemini.dart';
 import 'package:practly/core/enums/enums.dart';
+import 'package:practly/core/extensions/datetime_exensions.dart';
 import 'package:practly/core/models/excercise.dart';
 import 'package:practly/core/models/used_content_model.dart';
+import 'package:practly/features/learn/data/challenge_model.dart';
 import 'package:practly/features/learn/data/lesson_model.dart';
 import 'package:practly/features/learn/data/i_learn_remote_data_source.dart';
 import 'package:practly/core/models/word/word_of_the_day_model.dart';
@@ -129,5 +131,25 @@ class LearnRemoteDataSourceImpl extends ILearnRemoteDataSource {
     final json = jsonDecode(res.text) as List;
 
     return (json).map((e) => Exercise.fromMap(e)).toList();
+  }
+
+  @override
+  Future<ChallengeModel?> getDailyChallenge(Complexity complexity) async {
+    final today = DateTime.now().isoCurrentDate;
+
+    final freshChallenges = await _firestore
+        .collection("challengePool")
+        .where("createdOn", isEqualTo: today)
+        .where("complexity", isEqualTo: complexity.name)
+        .get();
+
+    if (freshChallenges.docs.isNotEmpty) {
+      final doc = freshChallenges.docs.first;
+      final res = ChallengeModel.fromMapAndId(doc.id, doc.data());
+
+      return res;
+    }
+
+    return null;
   }
 }

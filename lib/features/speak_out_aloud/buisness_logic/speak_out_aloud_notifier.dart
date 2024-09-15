@@ -1,7 +1,7 @@
 import 'package:practly/core/async/async_notifier.dart';
 import 'package:practly/core/navigation/auth_notifier.dart';
 import 'package:practly/core/services/ad_service.dart';
-import 'package:practly/core/services/remote_database_service.dart';
+import 'package:practly/core/user/user_service.dart';
 import 'package:practly/di/di.dart';
 import 'package:practly/features/speak_out_aloud/data/i_sentence_local_data_source.dart';
 import 'package:practly/features/speak_out_aloud/data/i_sentence_remote_data_source.dart';
@@ -10,7 +10,7 @@ import 'package:practly/core/models/speak/speak_out_aloud_model.dart';
 class SpeakOutAloudNotifier extends AsyncNotifier<SpeakOutAloudModel> {
   final ISentenceRemoteDataSource _remoteDataSource;
   final ISentenceLocalDataSource _localDataSource;
-  final RemoteDatabaseService _databaseService;
+  final UserService _databaseService;
   final AdService _adService;
 
   SpeakOutAloudNotifier(

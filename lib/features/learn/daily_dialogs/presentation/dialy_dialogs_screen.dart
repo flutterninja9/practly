@@ -72,6 +72,7 @@ class _DailyDialogsScreenState extends State<DailyDialogsScreen>
             );
           },
         ),
+        const SizedBox(height: 40),
       ],
     );
   }

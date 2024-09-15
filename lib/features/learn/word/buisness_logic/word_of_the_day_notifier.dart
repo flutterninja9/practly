@@ -2,7 +2,7 @@ import 'package:practly/core/async/async_notifier.dart';
 import 'package:practly/core/enums/enums.dart';
 import 'package:practly/core/navigation/auth_notifier.dart';
 import 'package:practly/core/services/ad_service.dart';
-import 'package:practly/core/services/remote_database_service.dart';
+import 'package:practly/core/user/user_service.dart';
 import 'package:practly/di/di.dart';
 import 'package:practly/core/models/word/word_of_the_day_model.dart';
 import 'package:practly/features/learn/data/i_learn_local_data_source.dart';
@@ -11,7 +11,7 @@ import 'package:practly/features/learn/data/i_learn_remote_data_source.dart';
 class WordOfTheDayNotifier extends AsyncNotifier<WordOfTheDayModel> {
   final ILearnRemoteDataSource _remoteDataSource;
   final ILearnLocalDataSource _localDataSource;
-  final RemoteDatabaseService _databaseService;
+  final UserService _databaseService;
   final AdService _adService;
 
   WordOfTheDayNotifier(

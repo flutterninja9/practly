@@ -3,12 +3,14 @@ import 'package:go_router/go_router.dart';
 import 'package:practly/core/complexity_selector/presentation/complexity_selector_screen.dart';
 import 'package:practly/core/config/config.dart';
 import 'package:practly/core/services/app_info_service.dart';
+import 'package:practly/core/user/daily_challenge_model.dart';
 import 'package:practly/core/widgets/force_update_screen.dart';
 import 'package:practly/core/widgets/maintainence_screen.dart';
 import 'package:practly/di/di.dart';
 import 'package:practly/core/navigation/auth_notifier.dart';
 import 'package:practly/features/auth/presentation/auth_screen.dart';
 import 'package:practly/features/home/presentation/home_screen.dart';
+import 'package:practly/features/learn/daily_challenge/presentation/challenge_screen.dart';
 import 'package:practly/features/learn/data/lesson_model.dart';
 import 'package:practly/features/learn/exercise/presentation/exercise_screen.dart';
 import 'package:practly/features/learn/presentation/learn_screen.dart';
@@ -75,6 +77,13 @@ class AppRouter {
             );
           }),
       GoRoute(
+          path: ChallengeScreen.route,
+          builder: (context, state) {
+            return ChallengeScreen(
+              challengeModel: state.extra as DailyChallengeModel,
+            );
+          }),
+      GoRoute(
           path: ComplexitySelectorScreen.route,
           builder: (context, state) {
             return const ComplexitySelectorScreen();
@@ -88,7 +97,7 @@ class AppRouter {
           GoRoute(
             path: LearnScreen.route,
             pageBuilder: (context, state) =>
-                const NoTransitionPage(child: LearnScreen()),
+                NoTransitionPage(child: LearnScreen()),
           ),
           // speak
           GoRoute(

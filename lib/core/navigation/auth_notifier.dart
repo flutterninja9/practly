@@ -1,6 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
-import 'package:practly/core/services/remote_database_service.dart';
+import 'package:practly/core/user/user_service.dart';
 import 'package:practly/core/user/user_model.dart';
 import 'package:practly/di/di.dart';
 
@@ -10,7 +10,7 @@ class FirebaseAuthNotifier extends ChangeNotifier {
   }
 
   final FirebaseAuth _auth;
-  final RemoteDatabaseService _databaseService = locator.get();
+  final UserService _databaseService = locator.get();
 
   void _onAuthStateChanged(User? user) async {
     if (user != null) {

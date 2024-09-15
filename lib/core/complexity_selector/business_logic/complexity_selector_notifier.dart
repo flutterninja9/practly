@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:practly/core/enums/enums.dart';
 import 'package:practly/core/navigation/auth_notifier.dart';
-import 'package:practly/core/services/remote_database_service.dart';
+import 'package:practly/core/user/user_service.dart';
 
 class ComplexitySelectorNotifier with ChangeNotifier {
-  final RemoteDatabaseService _databaseService;
+  final UserService _databaseService;
   final FirebaseAuthNotifier _firebaseAuthNotifier;
 
   ComplexitySelectorNotifier(

@@ -51,6 +51,7 @@ class _WordOfTheDayScreenState extends State<WordOfTheDayScreen>
             );
           },
         ),
+        const SizedBox(height: 40),
       ],
     );
   }

@@ -1,25 +1,28 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:practly/core/config/config.dart';
+import 'package:practly/core/extensions/datetime_exensions.dart';
 import 'package:practly/core/models/excercise.dart';
 import 'package:practly/core/navigation/auth_notifier.dart';
+import 'package:practly/core/user/daily_challenge_model.dart';
 import 'package:practly/core/user/user_model.dart';
 import 'package:practly/di/di.dart';
 
-class RemoteDatabaseService {
+/// Has methods to mutate the currently logged in user object
+class UserService {
   final FirebaseFirestore _firestore;
   final FirebaseAuth _firebaseAuth;
   final Config _config;
 
   User? get _user => _firebaseAuth.currentUser;
 
-  RemoteDatabaseService(
+  UserService(
     this._firestore,
     this._firebaseAuth,
     this._config,
   );
 
-  Future<void> createUserProfile(UserModel user) async {
+  Future<void> createProfile(UserModel user) async {
     await _firestore.collection('users').doc(user.id).set(user.toMap());
   }
 
@@ -42,19 +45,6 @@ class RemoteDatabaseService {
     return null;
   }
 
-  Future<void> updateSubscription(String type, DateTime? expiresAt) async {
-    await _firestore.collection('users').doc(_user!.uid).update({
-      'subscription.type': type,
-      'subscription.expiresAt': expiresAt,
-    });
-  }
-
-  Future<Map<String, dynamic>?> getSubscription() async {
-    DocumentSnapshot doc =
-        await _firestore.collection('users').doc(_user!.uid).get();
-    return (doc.data() as Map<String, dynamic>)['subscription'];
-  }
-
   Future<void> decrementGenerationLimit() async {
     await _firestore
         .collection('users')
@@ -62,10 +52,10 @@ class RemoteDatabaseService {
         .update({'subscription.generationLimit': FieldValue.increment(-1)});
   }
 
-  Future<void> updateGenerationLimit() async {
+  Future<void> updateGenerationLimit({int? by}) async {
     await _firestore.collection('users').doc(_user!.uid).update({
       'subscription.generationLimit': FieldValue.increment(
-        _config.creditsForAdWatch,
+        by ?? _config.creditsForAdWatch,
       )
     });
   }
@@ -116,5 +106,62 @@ class RemoteDatabaseService {
     final authNotifier = locator.get<FirebaseAuthNotifier>();
     final user = await getUserProfile(authNotifier.signedInUser!.id);
     authNotifier.signedInUser = user;
+  }
+
+  Future<DailyChallengeModel?> getDailyChallenge() async {
+    final today = DateTime.now().isoCurrentDate;
+
+    final optedChallenges = await _firestore
+        .collection("users")
+        .doc(_user!.uid)
+        .collection("dailyChallenges")
+        .where("attemptedOn", isEqualTo: today)
+        .get();
+
+    if (optedChallenges.docs.isNotEmpty) {
+      final doc = optedChallenges.docs.first;
+      return DailyChallengeModel.fromMapAndId(doc.id, doc.data());
+    }
+
+    return null;
+  }
+
+  Future<DailyChallengeModel> setDailyChallenge(
+    DailyChallengeModel challenge,
+  ) async {
+    // map the fresh content with user data
+    final withAttemptDate = challenge.copyWith(
+      attemptedOn: DateTime.now(),
+      attempts: 1,
+    );
+
+    final res = await _firestore
+        .collection("users")
+        .doc(_user!.uid)
+        .collection("dailyChallenges")
+        .add(withAttemptDate.toMap());
+
+    return withAttemptDate.copyWith(id: res.id);
+  }
+
+  Future<void> markDailyChallengeComplete(String challengeId) async {
+    await _firestore
+        .collection("users")
+        .doc(_user!.uid)
+        .collection("dailyChallenges")
+        .doc(challengeId)
+        .update({
+      "completed": true,
+      "completedOn": DateTime.now().isoCurrentDate,
+    });
+  }
+
+  Future<void> updateAttempts(String challengeId, int attemptNumber) async {
+    await _firestore
+        .collection("users")
+        .doc(_user!.uid)
+        .collection("dailyChallenges")
+        .doc(challengeId)
+        .update({"attempts": attemptNumber});
   }
 }
