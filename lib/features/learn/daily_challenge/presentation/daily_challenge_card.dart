@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:practly/core/constants.dart';
 import 'package:practly/core/enums/enums.dart';
 import 'package:practly/core/extensions/string_extensions.dart';
 import 'package:shadcn_ui/shadcn_ui.dart';
@@ -10,11 +11,13 @@ class DailyChallengeCard extends StatelessWidget {
     this.complexity = Complexity.easy,
     this.buttonLabel = "Start Challenge",
     this.buttonIcon = LucideIcons.zap,
+    this.attempts,
   });
 
   final Function() onTap;
   final Complexity complexity;
   final String buttonLabel;
+  final int? attempts;
   final IconData buttonIcon;
 
   @override
@@ -48,6 +51,12 @@ class DailyChallengeCard extends StatelessWidget {
                     text: "💪 Difficulty: ",
                     style: TextStyle(fontWeight: FontWeight.bold)),
                 TextSpan(text: "${complexity.name.capitalize()}\n"),
+                if (attempts != null)
+                  const TextSpan(
+                      text: "🔄 Attempts: ",
+                      style: TextStyle(fontWeight: FontWeight.bold)),
+                if (attempts != null)
+                  TextSpan(text: "$attempts/$kMaxDailyChallengeAttempts\n"),
                 const TextSpan(
                     text: "🏆 Reward: ",
                     style: TextStyle(fontWeight: FontWeight.bold)),

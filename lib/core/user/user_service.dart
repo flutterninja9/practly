@@ -130,7 +130,10 @@ class UserService {
     DailyChallengeModel challenge,
   ) async {
     // map the fresh content with user data
-    final withAttemptDate = challenge.copyWith(attemptedOn: DateTime.now());
+    final withAttemptDate = challenge.copyWith(
+      attemptedOn: DateTime.now(),
+      attempts: 1,
+    );
 
     final res = await _firestore
         .collection("users")
@@ -151,5 +154,14 @@ class UserService {
       "completed": true,
       "completedOn": DateTime.now().isoCurrentDate,
     });
+  }
+
+  Future<void> updateAttempts(String challengeId, int attemptNumber) async {
+    await _firestore
+        .collection("users")
+        .doc(_user!.uid)
+        .collection("dailyChallenges")
+        .doc(challengeId)
+        .update({"attempts": attemptNumber});
   }
 }

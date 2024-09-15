@@ -7,6 +7,7 @@ class DailyChallengeModel {
   final String? id;
   final String challengeId;
   final bool completed;
+  final int attempts;
   final DateTime? completedOn;
   final DateTime? attemptedOn;
   final ChallengeModel challenge;
@@ -15,6 +16,7 @@ class DailyChallengeModel {
     this.id,
     required this.challengeId,
     required this.completed,
+    required this.attempts,
     this.completedOn,
     this.attemptedOn,
     required this.challenge,
@@ -23,6 +25,7 @@ class DailyChallengeModel {
   DailyChallengeModel copyWith({
     String? id,
     String? challengeId,
+    int? attempts,
     bool? completed,
     DateTime? completedOn,
     DateTime? attemptedOn,
@@ -30,6 +33,7 @@ class DailyChallengeModel {
   }) {
     return DailyChallengeModel(
       id: id ?? this.id,
+      attempts: attempts ?? this.attempts,
       challengeId: challengeId ?? this.challengeId,
       completed: completed ?? this.completed,
       completedOn: completedOn ?? this.completedOn,
@@ -42,6 +46,7 @@ class DailyChallengeModel {
     return <String, dynamic>{
       // 'id': id,
       'challengeId': challengeId,
+      'attempts': attempts,
       'completed': completed,
       'completedOn': completedOn?.isoCurrentDate,
       'attemptedOn': attemptedOn?.isoCurrentDate,
@@ -52,6 +57,7 @@ class DailyChallengeModel {
   factory DailyChallengeModel.fromChallengeModel(ChallengeModel model) {
     return DailyChallengeModel(
       challengeId: model.id!,
+      attempts: 0,
       completed: false,
       challenge: model,
     );
@@ -61,6 +67,7 @@ class DailyChallengeModel {
     return DailyChallengeModel(
       id: map['id'] != null ? map['id'] as String : null,
       challengeId: map['challengeId'] as String,
+      attempts: map['attempts'] as int,
       completed: map['completed'] as bool,
       completedOn: map['completedOn'] != null
           ? DateTime.parse(map['completedOn']).toLocal()
@@ -81,6 +88,7 @@ class DailyChallengeModel {
       id: id,
       challengeId: map['challengeId'] as String,
       completed: map['completed'] as bool,
+      attempts: map['attempts'] as int,
       completedOn: map['completedOn'] != null
           ? DateTime.parse(map['completedOn']).toLocal()
           : null,
@@ -99,7 +107,7 @@ class DailyChallengeModel {
 
   @override
   String toString() {
-    return 'DailyChallengeModel(id: $id, challengeId: $challengeId, completed: $completed, completedOn: $completedOn, attemptedOn: $attemptedOn, challenge: $challenge)';
+    return 'DailyChallengeModel(id: $id, challengeId: $challengeId, completed: $completed, attempts: $attempts, completedOn: $completedOn, attemptedOn: $attemptedOn, challenge: $challenge)';
   }
 
   @override
@@ -109,6 +117,7 @@ class DailyChallengeModel {
     return other.id == id &&
         other.challengeId == challengeId &&
         other.completed == completed &&
+        other.attempts == attempts &&
         other.completedOn == completedOn &&
         other.attemptedOn == attemptedOn &&
         other.challenge == challenge;
@@ -119,6 +128,7 @@ class DailyChallengeModel {
     return id.hashCode ^
         challengeId.hashCode ^
         completed.hashCode ^
+        attempts.hashCode ^
         completedOn.hashCode ^
         attemptedOn.hashCode ^
         challenge.hashCode;

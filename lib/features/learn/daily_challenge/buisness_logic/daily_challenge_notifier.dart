@@ -1,6 +1,9 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:practly/core/async/async_notifier.dart';
+import 'package:practly/core/constants.dart';
 import 'package:practly/core/mixins/feature_toggle_mixin.dart';
 import 'package:practly/core/navigation/auth_notifier.dart';
 import 'package:practly/core/services/ad_service.dart';
@@ -14,7 +17,6 @@ class DailyChallengeNotifier extends AsyncNotifier<DailyChallengeModel?>
     with FeatureToggleMixin {
   final LearnRepository _repository;
   final UserService _databaseService;
-  final FirebaseAuthNotifier _authNotifier;
   final AdService _adService;
 
   bool alreadyStartedChallenge = false;
@@ -22,43 +24,56 @@ class DailyChallengeNotifier extends AsyncNotifier<DailyChallengeModel?>
   DailyChallengeNotifier(
     this._repository,
     this._databaseService,
-    this._authNotifier,
     this._adService,
   ) : super(_databaseService, _adService);
 
   Future<void> getDailyChallenge() async {
-    if (!isEnabled("challenge")) {
+    if (!isEnabled(kDialyChallengeFeatureConstant)) {
       setLoading();
+      return;
+    }
+
+    final alreadyOptedChallenge = await _fetchExistingChallenge();
+    if (alreadyOptedChallenge != null) {
+      _handleExistingChallenge(alreadyOptedChallenge);
+    } else {
+      _handleNewChallenge();
+    }
+  }
+
+  Future<DailyChallengeModel?> _fetchExistingChallenge() async {
+    return await _databaseService.getDailyChallenge();
+  }
+
+  void _handleExistingChallenge(DailyChallengeModel challenge) {
+    if (challenge.completed) {
+      setLoading(); // Challenge already completed
+      return;
+    }
+
+    /// If reached max attempts return
+    final maxAttemptsReached = _checkMaxAttempts(challenge);
+    if (maxAttemptsReached) {
+      setLoading();
+      return;
+    }
+
+    alreadyStartedChallenge = true;
+    execute(() async => challenge, isAIGeneration: false);
+  }
+
+  Future<void> _handleNewChallenge() async {
+    if ((await _databaseService.getGenerationLimit()) == 0) {
+      setOutOfCredits();
       return;
     }
 
     final complexity =
         locator.get<FirebaseAuthNotifier>().signedInUser?.complexity;
-
-    final alreadyOptedChallege = await _databaseService.getDailyChallenge();
-    if (alreadyOptedChallege != null) {
-      if (alreadyOptedChallege.completed) {
-        // use has already completed challenge for the day
-        setLoading();
-        return;
-      }
-
-      alreadyStartedChallenge = true;
-      execute(
-        () async => alreadyOptedChallege,
-        isAIGeneration: false,
-      );
-    } else {
-      if ((await _databaseService.getGenerationLimit()) == 0) {
-        setOutOfCredits();
-        return;
-      }
-
-      execute(
-        () => _repository.getDailyChallenge(complexity: complexity),
-        isAIGeneration: false,
-      );
-    }
+    execute(
+      () => _repository.getDailyChallenge(complexity: complexity),
+      isAIGeneration: false,
+    );
   }
 
   Future<void> watchAdAndContinue() async {
@@ -69,17 +84,44 @@ class DailyChallengeNotifier extends AsyncNotifier<DailyChallengeModel?>
     BuildContext context,
     DailyChallengeModel challenge,
   ) async {
-    DailyChallengeModel? modelWithId;
-
     if (!alreadyStartedChallenge) {
-      alreadyStartedChallenge = true;
-      modelWithId = await _databaseService.setDailyChallenge(challenge);
-      await _databaseService.decrementGenerationLimit();
-      execute(() async => modelWithId, isAIGeneration: false);
+      final modelWithId = await _startNewChallenge(challenge);
+      await _proceedToChallenge(context, modelWithId ?? challenge);
+    } else {
+      await _incrementChallengeAttempts(challenge);
+      await _proceedToChallenge(context, challenge);
     }
 
-    if (!context.mounted) return;
-    await context.push(ChallengeScreen.route, extra: modelWithId ?? challenge);
     getDailyChallenge();
+  }
+
+  Future<DailyChallengeModel?> _startNewChallenge(
+    DailyChallengeModel challenge,
+  ) async {
+    alreadyStartedChallenge = true;
+    final modelWithId = await _databaseService.setDailyChallenge(challenge);
+    await _databaseService.decrementGenerationLimit();
+    execute(() async => modelWithId, isAIGeneration: false);
+    return modelWithId;
+  }
+
+  Future<void> _proceedToChallenge(
+    BuildContext context,
+    DailyChallengeModel challenge,
+  ) async {
+    if (!context.mounted) return;
+    await context.push(ChallengeScreen.route, extra: challenge);
+  }
+
+  bool _checkMaxAttempts(DailyChallengeModel challenge) {
+    final attempts = challenge.attempts;
+    return attempts >= kMaxDailyChallengeAttempts;
+  }
+
+  Future<void> _incrementChallengeAttempts(
+    DailyChallengeModel challenge,
+  ) async {
+    await _databaseService.updateAttempts(
+        challenge.id!, challenge.attempts + 1);
   }
 }
