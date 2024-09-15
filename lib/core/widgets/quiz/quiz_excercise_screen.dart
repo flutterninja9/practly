@@ -16,7 +16,7 @@ class QuizExcerciseScreen extends StatefulWidget {
   final QuizModel model;
   final bool autoNext;
   final bool showCorrectAnswer;
-  final Function() onRequestNext;
+  final Function(bool isPreviousCorrect) onRequestNext;
 
   @override
   State<QuizExcerciseScreen> createState() => _QuizExcerciseScreenState();
@@ -58,7 +58,12 @@ class _QuizExcerciseScreenState extends State<QuizExcerciseScreen> {
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
                     ShadButton.link(
-                      onPressed: widget.onRequestNext,
+                      onPressed: () async {
+                        final isCorrect = viewModel.selectedAnswer ==
+                            widget.model.correctAnswer;
+
+                        await widget.onRequestNext(isCorrect);
+                      },
                       child: const Text("Next"),
                     )
                   ],

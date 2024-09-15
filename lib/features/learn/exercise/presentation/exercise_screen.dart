@@ -65,7 +65,7 @@ class _ExerciseScreenState extends State<ExerciseScreen> {
                 dataBuilder: (model) => ExerciseListWidget(
                   exercises: model,
                   currentIndex: notifier.currentExerciseIndex,
-                  onCorrectAnswer: () async {
+                  onAnswer: (correct) async {
                     await notifier.goToNextExercise(context, widget.id);
                   },
                 ),

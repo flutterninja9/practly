@@ -27,11 +27,16 @@ class QuizExcerciseViewModel with ChangeNotifier {
     notifyListeners();
   }
 
-  void handleOptionSelected(String selectedOption, Function() onRequestNext) {
+  void handleOptionSelected(
+    String selectedOption,
+    Function(bool isPreviousCorrect) onRequestNext,
+  ) {
     _selectedAnswer = selectedOption;
     isAnswerSelected = true;
     if (autoNext) {
-      onRequestNext();
+      final isCorrect = model.correctAnswer == selectedOption;
+
+      onRequestNext(isCorrect);
     }
   }
 }
