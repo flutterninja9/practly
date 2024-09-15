@@ -62,7 +62,11 @@ class QuizContentWidget extends StatelessWidget {
                 ? const Color(0xFFEF9A9A)
                 : null);
       } else {
-        tileColor = isSelected ? Colors.grey[400] : null;
+        tileColor = isSelected
+            ? isCorrect
+                ? const Color(0xFFA5D6A7)
+                : const Color(0xFFEF9A9A)
+            : null;
       }
     }
 

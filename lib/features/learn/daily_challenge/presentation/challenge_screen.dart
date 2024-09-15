@@ -16,7 +16,14 @@ class ChallengeScreen extends StatefulWidget {
   final DailyChallengeModel? challengeModel;
   static get route => "/challenge";
 
-  static Function(BuildContext context) onExit = (context) async {
+  @override
+  State<ChallengeScreen> createState() => ChallengeScreenState();
+}
+
+class ChallengeScreenState extends State<ChallengeScreen> {
+  late final ChallengeNotifier notifier;
+
+  Future<void> _onExit() async {
     final wantsToExit = (await showShadDialog(
           context: context,
           builder: (context) => Padding(
@@ -44,15 +51,10 @@ class ChallengeScreen extends StatefulWidget {
         ) ??
         false);
 
-    return wantsToExit;
-  };
-
-  @override
-  State<ChallengeScreen> createState() => ChallengeScreenState();
-}
-
-class ChallengeScreenState extends State<ChallengeScreen> {
-  late final ChallengeNotifier notifier;
+    if (wantsToExit) {
+      context.pop();
+    }
+  }
 
   @override
   void initState() {
@@ -63,43 +65,45 @@ class ChallengeScreenState extends State<ChallengeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        centerTitle: true,
-        leading: const SizedBox.shrink(),
-        actions: [
-          IconButton(
-            icon: const Icon(LucideIcons.circleX),
-            onPressed: () {
-              context.pop();
-            },
-          ),
-        ],
-      ),
-      body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.all(16),
-          child: AnimatedBuilder(
-            animation: notifier,
-            builder: (context, child) {
-              return AsyncPage(
-                asyncValue: notifier.state,
-                onRetry: () => notifier.getExercises(widget.challengeModel),
-                dataBuilder: (model) => ExerciseListWidget(
-                  exercises: model,
-                  showCorrectAnswer: false,
-                  currentIndex: notifier.currentExerciseIndex,
-                  onAnswer: (doc) async {
-                    debugPrint("${doc.$1.toMap()}->${doc.$2}");
-
-                    await notifier.goToNextExercise(
-                      context,
-                      widget.challengeModel!.id!,
-                    );
-                  },
-                ),
-              );
-            },
+    return PopScope(
+      canPop: false,
+      child: Scaffold(
+        appBar: AppBar(
+          centerTitle: true,
+          leading: const SizedBox.shrink(),
+          actions: [
+            IconButton(
+              icon: const Icon(LucideIcons.circleX),
+              onPressed: _onExit,
+            ),
+          ],
+        ),
+        body: SafeArea(
+          child: Padding(
+            padding: const EdgeInsets.all(16),
+            child: AnimatedBuilder(
+              animation: notifier,
+              builder: (context, child) {
+                return AsyncPage(
+                  asyncValue: notifier.state,
+                  onRetry: () => notifier.getExercises(widget.challengeModel),
+                  dataBuilder: (model) => ExerciseListWidget(
+                    exercises: model,
+                    showCorrectAnswer: false,
+                    currentIndex: notifier.currentExerciseIndex,
+                    onAnswer: (doc) async {
+                      await notifier.goToNextExercise(
+                        context,
+                        widget.challengeModel!.id!,
+                        doc.$1,
+                        doc.$2,
+                        widget.challengeModel!.attempts + 1,
+                      );
+                    },
+                  ),
+                );
+              },
+            ),
           ),
         ),
       ),

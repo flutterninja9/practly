@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:practly/core/async/async_notifier.dart';
@@ -13,6 +15,7 @@ class ChallengeNotifier extends AsyncNotifier<List<Exercise>> {
   final LearnRepository _repository;
   final UserService _databaseService;
   final AdService _adService;
+  final Map<Exercise, bool> _results = {};
 
   ChallengeNotifier(
     this._repository,
@@ -26,37 +29,88 @@ class ChallengeNotifier extends AsyncNotifier<List<Exercise>> {
     execute(() async => model!.challenge.questions!, isAIGeneration: false);
   }
 
+  bool allCorrect() {
+    return _results.values.every((result) => result);
+  }
+
+  int correctCount() {
+    return _results.values.where((result) => result).length;
+  }
+
   Future<void> goToNextExercise(
     BuildContext context,
     String challengeId,
+    Exercise lastQuestion,
+    bool answeredCorrectly,
+    int currentAttempt,
   ) async {
+    _results[lastQuestion] = answeredCorrectly;
+
     await state.mapOrNull(data: (val) async {
       if (currentExerciseIndex < val.value.length - 1) {
         currentExerciseIndex++;
         notifyListeners();
       } else {
-        await _databaseService.markDailyChallengeComplete(challengeId);
-        await _databaseService.updateGenerationLimit(
-          by: kDailyChallengeCompletePoints,
-        );
+        if (allCorrect()) {
+          await _markCompleteAndCreditPoints(challengeId);
+          _showCompletionDialog(context);
+        } else {
+          if (currentAttempt >= kMaxDailyChallengeAttempts) {
+            await _markComplete(challengeId);
+          }
 
-        if (!context.mounted) return;
-        _showCompletionDialog(context);
+          _showIncorrectAnswersDialog(
+            context,
+            kMaxDailyChallengeAttempts - currentAttempt,
+          );
+        }
+
+        await Future.delayed(const Duration(seconds: 1), () {
+          context.pop();
+        });
       }
     });
   }
 
+  Future<void> _markCompleteAndCreditPoints(String challengeId) async {
+    await _markComplete(challengeId);
+    await _databaseService.updateGenerationLimit(
+      by: kDailyChallengeCompletePoints,
+    );
+  }
+
+  Future<void> _markComplete(String challengeId) async {
+    await _databaseService.markDailyChallengeComplete(challengeId);
+  }
+
   void _showCompletionDialog(BuildContext context) {
-    final toast = ShadToast.raw(
-      title: const Text('Congratulations!'),
+    const toast = ShadToast.raw(
+      title: Text('Congratulations!'),
       variant: ShadToastVariant.primary,
-      description: const Text('You have completed all challenges.'),
-      action: ShadButton(
-        onPressed: () {
-          context.pop();
-        },
-        child: const Text('Close'),
-      ),
+      description: Text('You have completed all challenges. 🎉'),
+    );
+
+    ShadToaster.maybeOf(context)?.show(toast);
+  }
+
+  void _showIncorrectAnswersDialog(
+    BuildContext context,
+    int remainingAttempts,
+  ) {
+    final incorrectAnswers = _results.values.length - correctCount();
+    final description = incorrectAnswers > 0
+        ? 'You have completed the quiz with $incorrectAnswers incorrect answers.'
+        : 'You have completed the quiz with all correct answers.';
+
+    final retryMessage = remainingAttempts > 0
+        ? ' You still have $remainingAttempts attempt(s) remaining.'
+        : '';
+
+    final toast = ShadToast.raw(
+      title: const Text('Quiz Completed!'),
+      duration: const Duration(seconds: 6),
+      variant: ShadToastVariant.primary,
+      description: Text(description + retryMessage),
     );
 
     ShadToaster.maybeOf(context)?.show(toast);
