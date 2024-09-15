@@ -78,6 +78,9 @@ class AppRouter {
           }),
       GoRoute(
           path: ChallengeScreen.route,
+          onExit: (context, state) async {
+            return await ChallengeScreen.onExit(context);
+          },
           builder: (context, state) {
             return ChallengeScreen(
               challengeModel: state.extra as DailyChallengeModel,

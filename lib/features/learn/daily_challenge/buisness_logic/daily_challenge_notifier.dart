@@ -122,6 +122,8 @@ class DailyChallengeNotifier extends AsyncNotifier<DailyChallengeModel?>
     DailyChallengeModel challenge,
   ) async {
     await _databaseService.updateAttempts(
-        challenge.id!, challenge.attempts + 1);
+      challenge.id!,
+      challenge.attempts + 1,
+    );
   }
 }

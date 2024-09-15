@@ -16,6 +16,37 @@ class ChallengeScreen extends StatefulWidget {
   final DailyChallengeModel? challengeModel;
   static get route => "/challenge";
 
+  static Function(BuildContext context) onExit = (context) async {
+    final wantsToExit = (await showShadDialog(
+          context: context,
+          builder: (context) => Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16),
+            child: ShadDialog.alert(
+              title: const Text('Exit Challenge?'),
+              description: const Padding(
+                padding: EdgeInsets.only(bottom: 8),
+                child: Text(
+                  'You’re in the middle of today’s challenge. If you exit now, your progress will be lost and one attempt will be used. Do you still want to leave?',
+                ),
+              ),
+              actions: [
+                ShadButton.outline(
+                  child: const Text('Stay and Continue'),
+                  onPressed: () => Navigator.of(context).pop(false),
+                ),
+                ShadButton(
+                  child: const Text('Exit Challenge'),
+                  onPressed: () => Navigator.of(context).pop(true),
+                ),
+              ],
+            ),
+          ),
+        ) ??
+        false);
+
+    return wantsToExit;
+  };
+
   @override
   State<ChallengeScreen> createState() => ChallengeScreenState();
 }
