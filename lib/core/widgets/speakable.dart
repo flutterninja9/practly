@@ -22,13 +22,18 @@ class SpeakableText extends StatelessWidget {
     BuildContext context,
     List<String> spokenWords,
   ) {
+    final lowerCaseSpokenWords =
+        spokenWords.map((e) => e.normalized.toLowerCase()).toList();
+
     return sentence.split(" ").map((word) {
       String normalizedWord = word.normalized.toLowerCase();
 
       return TextSpan(
         text: "$word ",
         style: ShadTheme.of(context).textTheme.h2.copyWith(
-            color: spokenWords.contains(normalizedWord) ? Colors.green : null),
+            color: lowerCaseSpokenWords.contains(normalizedWord)
+                ? Colors.green
+                : null),
       );
     }).toList();
   }
